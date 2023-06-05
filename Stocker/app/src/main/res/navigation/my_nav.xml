@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/allStocksFragment">
+
+    <fragment
+        android:id="@+id/detailedStockFragment"
+        android:name="com.example.stocker.ui.detailedstock.DetailedStockFragment"
+        android:label="detailed_stock"
+        tools:layout="@layout/detailed_stock_fragment" />
+    <fragment
+        android:id="@+id/addStockFragment"
+        android:name="com.example.stocker.ui.addstock.AddStockFragment"
+        android:label="add_stock_fragment"
+        tools:layout="@layout/add_stock_fragment" >
+        <action
+            android:id="@+id/action_addStockFragment_to_allStocksFragment"
+            app:destination="@id/allStocksFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/allStocksFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/allStocksFragment"
+        android:name="com.example.stocker.ui.allstocks.AllStocksFragment"
+        android:label="all_stocks_fragment"
+        tools:layout="@layout/all_stocks_fragment" >
+        <action
+            android:id="@+id/action_allStocksFragment_to_addStockFragment"
+            app:destination="@id/addStockFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_allStocksFragment_to_detailedStockFragment"
+            app:destination="@id/detailedStockFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+</navigation>

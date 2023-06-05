@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Stocker</string>
+
+
+
+
+
+
+
+    //General
+
+    //Add stock Fragment
+    <string name="enter_stock_ticker_symbol">Enter stock ticker symbol</string>
+    <string name="enter_stock_description">Enter stock Description</string>
+    <string name="enter_stock_buying_price">Enter stock buying price (in USD)</string>
+    <string name="select_buying_date">Select buying date</string>
+    <string name="pick_image">Pick Image</string>
+    <string name="finish">Finish</string>
+    <string name="ticker_symbol">Ticker Symbol</string>
+
+
+
+    //All stocks Fragment
+
+
+
+    //Detailed stock Fragment
+    <string name="stock_description">Description</string>
+    <string name="buying_price">Buying Price: $</string>
+    <string name="buying_date">Buying Date:</string>
+    <string name="stock_image">Stock image</string>
+    <string name="price_zero">0.00</string>
+    <string name="date_format">DD/MM/YYYY</string>
+</resources>
+
