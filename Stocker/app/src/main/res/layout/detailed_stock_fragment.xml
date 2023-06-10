@@ -178,6 +178,7 @@
                         android:id="@+id/current_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        style="@style/TextAppearance.MaterialComponents.Body2"
                         android:text="@string/stock_card_currentPrice_placeholder"/>
                 </LinearLayout>
             </LinearLayout>
@@ -311,10 +312,6 @@
                     style="@style/TextAppearance.MaterialComponents.Body2"
                     />
             </LinearLayout>
-
-
-
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -63,14 +63,14 @@ class DetailedStockFragment : Fragment(){
         val toleranceFactor = 0.01
         val maxRange = currentPrice + 1 * toleranceFactor * currentPrice
         val random = Random(42)
-        return random.nextInt(currentPrice, maxRange.toInt())
+        return random.nextInt(currentPrice, maxRange.toInt() + 1)
     }
 
     private fun getRandomDayLow(currentPrice: Int) : Int{
         val toleranceFactor = 0.01
         val minRange = currentPrice - 1 * toleranceFactor * currentPrice
         val random = Random(42)
-        return random.nextInt(minRange.toInt(), currentPrice)
+        return random.nextInt(minRange.toInt() - 1, currentPrice)
     }
 
     private fun setBalance(buyingPrice: Float, currentPrice: Int) {

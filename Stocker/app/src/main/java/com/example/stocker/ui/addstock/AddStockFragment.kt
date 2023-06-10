@@ -77,6 +77,7 @@ class AddStockFragment : Fragment() {
                 buyingDateEditText.setText(formattedDate)
             }, year, month, day)
 
+        datePickerDialog.datePicker.maxDate = System.currentTimeMillis()
         datePickerDialog.show()
     }
 
