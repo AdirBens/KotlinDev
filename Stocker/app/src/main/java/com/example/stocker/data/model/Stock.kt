@@ -20,21 +20,8 @@ data class Stock (
 
     @ColumnInfo(name = "image_uri")
     val imageUri:String?)
+
 {
     @PrimaryKey(autoGenerate = true)
         var id:Long = 0
     }
-
-/*
-//    object StockManager{
-//        val stocks = mutableListOf<Stock>()
-//
-//        fun add(stock:Stock){
-//            stocks.add(stock)
-//        }
-//
-//        fun remove(index:Int){
-//            stocks.removeAt(index)
-//        }
-
-}*/

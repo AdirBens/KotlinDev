@@ -1,17 +1,27 @@
 package com.example.stocker.ui.allstocks
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.Adapter
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import androidx.recyclerview.widget.RecyclerView.RecyclerListener
 import com.example.stocker.R
 import com.example.stocker.data.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
@@ -24,6 +34,7 @@ class AllStocksFragment : Fragment() {
 
     private val viewModel: StockViewModel by activityViewModels()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,16 +46,17 @@ class AllStocksFragment : Fragment() {
         arguments?.getString("title")?.let {
             Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
         }
-        binding.floatingAction.setOnClickListener {
+
+        binding.floatingAdd.setOnClickListener {
             findNavController().navigate(R.id.action_allStocksFragment_to_addStockFragment)
         }
+
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val menuHost: MenuHost = requireActivity()
 
@@ -66,6 +78,7 @@ class AllStocksFragment : Fragment() {
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+
         viewModel.stocks?.observe(viewLifecycleOwner) {
             binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
                 override fun onItemClicked(index: Int) {
@@ -74,32 +87,32 @@ class AllStocksFragment : Fragment() {
                 }
 
                 override fun onItemLongClick(index: Int) {
-                    TODO("Not yet implemented, implement if long click needed")
+                    viewModel.setChosenStock(it[index])
+                    findNavController().navigate(R.id.action_allStocksFragment_to_detailedStockFragment)
                 }
             })
 
             binding.recycler.layoutManager = LinearLayoutManager(requireContext())
 
             ItemTouchHelper(object : ItemTouchHelper.Callback() {
-
                 override fun getMovementFlags(
-                    recyclerView: androidx.recyclerview.widget.RecyclerView,
-                    viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
                 ) = makeFlag(
                     ItemTouchHelper.ACTION_STATE_SWIPE,
                     ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
                 )
 
                 override fun onMove(
-                    recyclerView: androidx.recyclerview.widget.RecyclerView,
-                    viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
-                    target: androidx.recyclerview.widget.RecyclerView.ViewHolder
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
                 ): Boolean {
                     TODO("Not yet implemented, add implementation if moving items up or down wanted")
                 }
 
                 override fun onSwiped(
-                    viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
+                    viewHolder: RecyclerView.ViewHolder,
                     direction: Int
                 ) {
                     viewModel.deleteStock(
@@ -109,19 +122,18 @@ class AllStocksFragment : Fragment() {
                     binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(binding.recycler)
-
         }
     }
 
-    fun showDeleteAllConfirmationDialog() {
+    private fun showDeleteAllConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Delete All Stocks")
-        builder.setMessage("Are you sure you want to delete all stocks?")
-        builder.setPositiveButton("Delete") { dialog, _ ->
+        builder.setTitle(R.string.delete_all_title)
+        builder.setMessage(R.string.delete_all_msg)
+        builder.setPositiveButton(R.string.delete_all_del_btn) { dialog, _ ->
             viewModel.deleteAllStocks()
             dialog.dismiss()
         }
-        builder.setNegativeButton("Cancel") { dialog, _ ->
+        builder.setNegativeButton(R.string.delete_all_cancel_btn) { dialog, _ ->
             dialog.dismiss()
         }
         val dialog = builder.create()

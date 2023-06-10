@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.stocker.R
 import com.example.stocker.data.model.Stock
 import com.example.stocker.databinding.SingleStockLayoutBinding
 
-class StockAdapter(val stocks:List<Stock>, private val callback: ItemListener) : RecyclerView.Adapter<StockAdapter.ItemViewHolder>() {
+class StockAdapter(val stocks:List<Stock>, private val callback: ItemListener)
+    : RecyclerView.Adapter<StockAdapter.ItemViewHolder>() {
 
     interface ItemListener {
         fun onItemClicked(index:Int)
@@ -17,7 +19,6 @@ class StockAdapter(val stocks:List<Stock>, private val callback: ItemListener) :
 
     inner class ItemViewHolder(private val binding: SingleStockLayoutBinding) :
             RecyclerView.ViewHolder(binding.root), View.OnClickListener,View.OnLongClickListener {
-
 
             override fun onClick(p0: View?) {
                 callback.onItemClicked(adapterPosition)
@@ -39,7 +40,6 @@ class StockAdapter(val stocks:List<Stock>, private val callback: ItemListener) :
                 binding.buyingDate.text = stock.buyingDate
                 binding.buyingPrice.text = stock.buyingPrice
                 Glide.with(binding.root).load(stock.imageUri).circleCrop().into(binding.stockImage)
-
             }
     }
 

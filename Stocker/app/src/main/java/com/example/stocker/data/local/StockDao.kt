@@ -18,9 +18,7 @@ interface StockDao {
     @Delete
     suspend fun deleteStock(vararg stock: Stock)
 
-
     @Update
-//    TODO: Not implemented yet
     suspend fun updateStock(stock: Stock)
 
     @Query("SELECT * FROM stocks_table ORDER BY ticker_symbol ASC")

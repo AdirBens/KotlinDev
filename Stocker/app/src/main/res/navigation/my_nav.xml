@@ -9,7 +9,17 @@
         android:id="@+id/detailedStockFragment"
         android:name="com.example.stocker.ui.detailedstock.DetailedStockFragment"
         android:label="detailed_stock"
-        tools:layout="@layout/detailed_stock_fragment" />
+        tools:layout="@layout/detailed_stock_fragment" >
+        <action
+            android:id="@+id/action_detailedStockFragment_to_addStockFragment"
+            app:destination="@id/addStockFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left"
+            app:popUpTo="@id/allStocksFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
     <fragment
         android:id="@+id/addStockFragment"
         android:name="com.example.stocker.ui.addstock.AddStockFragment"

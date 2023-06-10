@@ -18,14 +18,13 @@ import com.example.stocker.data.model.Stock
 import com.example.stocker.data.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
 import com.example.stocker.databinding.AddStockFragmentBinding
+import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
 class AddStockFragment : Fragment() {
 
     private val viewModel: StockViewModel by activityViewModels()
-
     private var binding: AddStockFragmentBinding by autoCleared()
-
     private lateinit var buyingDateEditText: EditText
     private var imageUri: Uri? = null
 
@@ -42,7 +41,6 @@ class AddStockFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,26 +51,15 @@ class AddStockFragment : Fragment() {
         buyingDateEditText = binding.buyingDate
 
         binding.finishBtn.setOnClickListener {
-
-            val stock = Stock(
-                binding.tickerSymbol.text.toString(),
-                binding.stockDescription.text.toString(),
-                binding.stockBuyingPrice.text.toString(),
-                binding.buyingDate.text.toString(),
-                imageUri.toString()
-            )
-            viewModel.addStock(stock)
-            findNavController().navigate(R.id.action_addStockFragment_to_allStocksFragment)
+            addStock()
         }
 
         binding.buyingDate.setOnClickListener {
             showDatePicker()
         }
 
-
         binding.imageBtn.setOnClickListener {
             pickItemLauncher.launch(arrayOf("image/*"))
-
         }
         return binding.root
     }
@@ -91,5 +78,44 @@ class AddStockFragment : Fragment() {
             }, year, month, day)
 
         datePickerDialog.show()
+    }
+
+    private fun addStock() {
+        val stock = Stock(
+            binding.tickerSymbol.text.toString(),
+            binding.stockDescription.text.toString(),
+            binding.stockBuyingPrice.text.toString(),
+            binding.buyingDate.text.toString(),
+            imageUri.toString()
+        )
+
+        if (isEntryValid(stock))
+        {
+            viewModel.addStock(stock)
+            findNavController().navigate(R.id.action_addStockFragment_to_allStocksFragment)
+        }
+        else {
+            raiseIncompleteForm()
+        }
+    }
+
+    private fun isEntryValid(stock: Stock) : Boolean{
+        if (stock.tickerSymbol.isEmpty()) {
+            binding.tickerSymbol.error = getString(R.string.required)
+        }
+        if (stock.buyingPrice.isEmpty()) {
+            binding.stockBuyingPrice.error = getString(R.string.required)
+        }
+        if (stock.buyingDate.isEmpty()) {
+            binding.buyingDate.error = getString(R.string.required)
+        }
+
+        return viewModel.isStockEntryValid (stock)
+    }
+
+    private fun raiseIncompleteForm() {
+        Snackbar.make(this.requireView(),
+                      R.string.incomplete_add_stock_form,
+                      Snackbar.LENGTH_LONG).show()
     }
 }

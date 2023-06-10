@@ -24,6 +24,10 @@ class StockRepository(application: Application){
             stockDao?.addStock(stock);
     }
 
+    suspend fun updateStock(stock: Stock) {
+        stockDao?.updateStock(stock);
+    }
+
     suspend fun deleteStock(stock: Stock) {
             stockDao?.deleteStock(stock)
     }

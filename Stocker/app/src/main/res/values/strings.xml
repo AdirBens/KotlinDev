@@ -1,35 +1,78 @@
 <resources>
     <string name="app_name">Stocker</string>
 
+    // symbols
+    <string name="currency_suffix">"$"</string>
+    <string name="percents">"%"</string>
 
 
+    // PageTitles
+    <string name="title_your_stocks">Your Stocks</string>
+    <string name="title_stock_detail">Stock Details</string>
+    <string name="title_add_stock">Add Stock</string>
+
+    // Action and bottoms
+    <string name="delete_all_btn">Delete All Stocks</string>
+
+    // Stocks main
+    <string name="track_list_empty">There are no stocks on your tracking list.</string>
+    <string name="track_list_add_inst">No panic! Click the + button to add your shares to the watch list</string>
+    <string name="title_stocks_list">Your Tracking Stocks List</string>
 
 
+    // OverView Card
+    <string name="ov_title">"Portfolio Value"</string>
+    <string name="ov_totalShares_label">"Total Shares"</string>
+    <string name="ov_currentValue_placeholder">"current value"</string>
+    <string name="ov_currentBalance_placeholder">"current balance"</string>
+    <string name="ov_num_Documented_Shares">"Num. Documented Shares"</string>
+
+    // Stock Card
+    <string name="stock_card_currentPrice_placeholder">CurrentPrice</string>
+    <string name="stock_card_balance_placeholder">Balance</string>
+
+    // Stocks Details
+    <string name="stock_details_ov_title">Stock Details</string>
+    <string name="day_low">Day Low</string>
+    <string name="day_high">Day High</string>
+    <string name="day_start">Day Start</string>
 
 
     //General
 
     //Add stock Fragment
-    <string name="enter_stock_ticker_symbol">Enter stock ticker symbol</string>
-    <string name="enter_stock_description">Enter stock Description</string>
-    <string name="enter_stock_buying_price">Enter stock buying price (in USD)</string>
-    <string name="select_buying_date">Select buying date</string>
+    <string name="enter_stock_ticker_symbol">Ticker Symbol *</string>
+    <string name="enter_stock_description">Stock Description</string>
+    <string name="enter_stock_buying_price">Stock buying price *</string>
+    <string name="select_buying_date">Stock buying date *</string>
+    <string name="select_number_of_shares">Shares *</string>
     <string name="pick_image">Pick Image</string>
     <string name="finish">Finish</string>
     <string name="ticker_symbol">Ticker Symbol</string>
-
+    <string name="required">"Required"</string>
 
 
     //All stocks Fragment
 
 
-
     //Detailed stock Fragment
     <string name="stock_description">Description</string>
-    <string name="buying_price">Buying Price: $</string>
-    <string name="buying_date">Buying Date:</string>
+    <string name="buying_price">Buying Price: </string>
+    <string name="buying_date">Buying Date: </string>
     <string name="stock_image">Stock image</string>
     <string name="price_zero">0.00</string>
     <string name="date_format">DD/MM/YYYY</string>
+    <string name="edit_stock">edit stock</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!-- Dialog's Strings   -->
+    <string name="incomplete_add_stock_form">"Incomplete Form! Please Enter the required field"</string>
+    <string name="delete_all_title">Delete All Stocks</string>
+    <string name="delete_all_msg">Are you sure you want to delete all stocks?</string>
+    <string name="delete_all_del_btn">Delete</string>
+    <string name="delete_all_cancel_btn">Cancel</string>
+
 </resources>
 
