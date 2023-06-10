@@ -32,7 +32,6 @@ class DetailedStockFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.chosenStock.observe(viewLifecycleOwner) {
             val currentPrice = getRandomCurrentPrice(it.buyingPrice.toFloat())
-            val balance = calcBalance(it.buyingPrice.toFloat(), currentPrice.toFloat())
 
             binding.tickerSymbol.text = it.tickerSymbol
             binding.stockDescription.text = it.description
