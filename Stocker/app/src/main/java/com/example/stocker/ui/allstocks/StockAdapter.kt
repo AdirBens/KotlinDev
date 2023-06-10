@@ -22,17 +22,14 @@ class StockAdapter(val stocks:List<Stock>, private val callback: ItemListener)
             override fun onClick(p0: View?) {
                 callback.onItemClicked(adapterPosition)
             }
-
             override fun onLongClick(p0: View?): Boolean {
                 callback.onItemLongClick(adapterPosition)
                 return true
             }
-
             init {
                 binding.root.setOnClickListener(this)
                 binding.root.setOnLongClickListener(this)
             }
-
             fun bind(stock: Stock){
                 binding.tickerSymbol.text = stock.tickerSymbol
                 binding.stockDescription.text = stock.description

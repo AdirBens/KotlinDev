@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -77,11 +78,11 @@ class DetailedStockFragment : Fragment(){
         binding.balance.text = calcBalance(buyingPrice, currentPrice.toFloat()).toString()
         if (buyingPrice > currentPrice) {
             binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_downward_24)
-            binding.balance.setTextColor(resources.getColor(R.color.red))
+            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
         else {
             binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_upward_24)
-            binding.balance.setTextColor(resources.getColor(R.color.teal_200))
+            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.teal_700))
         }
     }
 }

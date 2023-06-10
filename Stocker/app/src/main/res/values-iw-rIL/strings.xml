@@ -60,6 +60,9 @@
     <string name="incomplete_add_stock_form">הטופס לא הושלם! יש למלא את הפרטים הנדרשים</string>
     <string name="delete_all_title">מחק הכל</string>
     <string name="delete_all_msg">האם אתה בטוח שאתה רוצה למחוק את כל המניות?</string>
-    <string name="delete_all_del_btn">מחיקה</string>
-    <string name="delete_all_cancel_btn">ביטול</string>
+    <string name="delete_del_btn">מחיקה</string>
+    <string name="delete_cancel_btn">ביטול</string>
+
+    <string name="delete_one_stock">מחק מניה</string>
+    <string name="delete_one_stock_msg">האם אתה בטוח שאתה רוצה למחוק את המניה?</string>
 </resources>

@@ -66,8 +66,11 @@
     <string name="incomplete_add_stock_form">"Incomplete Form! Please Enter the required field"</string>
     <string name="delete_all_title">Delete All Stocks</string>
     <string name="delete_all_msg">Are you sure you want to delete all stocks?</string>
-    <string name="delete_all_del_btn">Delete</string>
-    <string name="delete_all_cancel_btn">Cancel</string>
+    <string name="delete_del_btn">Delete</string>
+    <string name="delete_cancel_btn">Cancel</string>
+
+    <string name="delete_one_stock">Delete Stock</string>
+    <string name="delete_one_stock_msg">Are you sure you want to delete this stock?</string>
 
 </resources>
 
