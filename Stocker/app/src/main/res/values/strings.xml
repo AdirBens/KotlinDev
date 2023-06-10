@@ -5,18 +5,13 @@
     <string name="currency_suffix">"$"</string>
     <string name="percents">"%"</string>
 
-
     // PageTitles
     <string name="title_your_stocks">Your Stocks</string>
     <string name="title_stock_detail">Stock Details</string>
     <string name="title_add_stock">Add Stock</string>
 
-    // Action and bottoms
-    <string name="delete_all_btn">Delete All Stocks</string>
-
     // Stocks main
     <string name="title_stocks_list">Your Tracking Stocks List</string>
-
 
     // OverView Card
     <string name="ov_title">"Portfolio Value"</string>
@@ -35,9 +30,6 @@
     <string name="day_high">Day High</string>
     <string name="day_start">Day Start</string>
 
-
-    //General
-
     //Add stock Fragment
     <string name="enter_stock_ticker_symbol">Ticker Symbol *</string>
     <string name="enter_stock_description">Stock Description</string>
@@ -48,10 +40,6 @@
     <string name="ticker_symbol">Ticker Symbol</string>
     <string name="required">"Required"</string>
 
-
-    //All stocks Fragment
-
-
     //Detailed stock Fragment
     <string name="stock_description">Description</string>
     <string name="buying_price">Buying Price: </string>
@@ -60,7 +48,6 @@
     <string name="price_zero">0.00</string>
     <string name="date_format">DD/MM/YYYY</string>
     <string name="edit_stock">edit stock</string>
-
 
     <!-- Dialog's Strings   -->
     <string name="incomplete_add_stock_form">"Incomplete Form! Please Enter the required field"</string>

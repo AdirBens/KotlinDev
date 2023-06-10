@@ -6,14 +6,10 @@
     <string name="currency_suffix">₪</string>
     <string name="percents">%</string>
 
-
     // PageTitles
     <string name="title_your_stocks">המניות שלך</string>
     <string name="title_stock_detail">פרטי המניה</string>
     <string name="title_add_stock">הוסף מניה</string>
-
-    // Action and bottoms
-    <string name="delete_all_btn">מחק את כל המניות</string>
 
     // Stocks main
     <string name="title_stocks_list">רשימת המניות במעקב</string>
@@ -35,7 +31,6 @@
     <string name="day_high">יומי גבוה</string>
     <string name="day_start">יומי התחלתי</string>
 
-
     //Add stock Fragment
     <string name="enter_stock_ticker_symbol">מזהה המניה *</string>
     <string name="enter_stock_description">תיאור המניה</string>
@@ -46,7 +41,6 @@
     <string name="ticker_symbol">מזהה המניה</string>
     <string name="required">"נדרש"</string>
 
-    //All stocks Fragment
     //Detailed stock Fragment
     <string name="stock_description">תיאור</string>
     <string name="buying_price">מחיר הקניה: </string>
