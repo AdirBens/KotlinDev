@@ -76,7 +76,7 @@ class DetailedStockFragment : Fragment(){
 
     private fun setBalance(buyingPrice: Float, currentPrice: Int) {
         binding.balance.text = calcBalance(buyingPrice, currentPrice.toFloat()).toString()
-        if (buyingPrice < currentPrice) {
+        if (buyingPrice > currentPrice) {
             binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_downward_24)
             binding.balance.setTextColor(resources.getColor(R.color.red))
         }
