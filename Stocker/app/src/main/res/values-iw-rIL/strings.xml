@@ -1,4 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">Stocker</string>
 
+    // symbols
+    <string name="currency_suffix">"$"</string>
+    <string name="percents">"%"</string>
+
+
+    // PageTitles
+    <string name="title_your_stocks">המניות שלך</string>
+    <string name="title_stock_detail">פרטי המניה</string>
+    <string name="title_add_stock">הוסף מניה</string>
+
+    // Action and bottoms
+    <string name="delete_all_btn">מחק את כל המניות</string>
+
+    // Stocks main
+    <string name="title_stocks_list">רשימת המניות במעקב</string>
+
+    // OverView Card
+    <string name="ov_title">"ערך תיק המניות"</string>
+    <string name="ov_totalShares_label">"כמות המניות"</string>
+    <string name="ov_currentValue_placeholder">"ערך נוכחי"</string>
+    <string name="ov_currentBalance_placeholder">"מאזן נוכחי"</string>
+    <string name="ov_num_Documented_Shares">"כמות המניות המתועדות"</string>
+
+    // Stock Card
+    <string name="stock_card_currentPrice_placeholder">המחיר הנוכחי</string>
+    <string name="stock_card_balance_placeholder">מאזן</string>
+
+    // Stocks Details
+    <string name="stock_details_ov_title">פרטי המניה</string>
+    <string name="day_low">יומי נמוך</string>
+    <string name="day_high">יומי גבוה</string>
+    <string name="day_start">יומי התחלתי</string>
+
+
+    //Add stock Fragment
+    <string name="enter_stock_ticker_symbol">מזהה המניה *</string>
+    <string name="enter_stock_description">תיאור המניה</string>
+    <string name="enter_stock_buying_price">מחיר הרכישה *</string>
+    <string name="select_buying_date">תאריך הרכישה *</string>
+    <string name="pick_image">בחר תמונה</string>
+    <string name="finish">סיים</string>
+    <string name="ticker_symbol">מזהה המניה</string>
+    <string name="required">"נדרש"</string>
+
+    //All stocks Fragment
+    //Detailed stock Fragment
+    <string name="stock_description">תיאור</string>
+    <string name="buying_price">מחיר הקניה: </string>
+    <string name="buying_date">תאריך הקניה: </string>
+    <string name="stock_image">תמונה</string>
+    <string name="price_zero">0.00</string>
+    <string name="date_format">DD/MM/YYYY</string>
+    <string name="edit_stock">ערוך מניה</string>
+
+    <!-- Dialog's Strings   -->
+    <string name="incomplete_add_stock_form">הטופס לא הושלם! יש למלא את הפרטים הנדרשים</string>
+    <string name="delete_all_title">מחק הכל</string>
+    <string name="delete_all_msg">האם אתה בטוח שאתה רוצה למחוק את כל המניות?</string>
+    <string name="delete_all_del_btn">מחיקה</string>
+    <string name="delete_all_cancel_btn">ביטול</string>
 </resources>

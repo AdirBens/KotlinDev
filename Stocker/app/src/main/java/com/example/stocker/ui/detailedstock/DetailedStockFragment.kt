@@ -12,7 +12,7 @@ import com.example.stocker.R
 import com.example.stocker.data.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
 import com.example.stocker.databinding.DetailedStockFragmentBinding
-import kotlin.math.max
+
 import kotlin.random.Random
 
 class DetailedStockFragment : Fragment(){

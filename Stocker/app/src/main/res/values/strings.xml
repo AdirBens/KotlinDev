@@ -45,7 +45,6 @@
     <string name="enter_stock_description">Stock Description</string>
     <string name="enter_stock_buying_price">Stock buying price *</string>
     <string name="select_buying_date">Stock buying date *</string>
-    <string name="select_number_of_shares">Shares *</string>
     <string name="pick_image">Pick Image</string>
     <string name="finish">Finish</string>
     <string name="ticker_symbol">Ticker Symbol</string>
@@ -63,8 +62,6 @@
     <string name="price_zero">0.00</string>
     <string name="date_format">DD/MM/YYYY</string>
     <string name="edit_stock">edit stock</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <!-- Dialog's Strings   -->
