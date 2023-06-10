@@ -73,8 +73,7 @@
                 android:inputType="textMultiLine"
                 android:maxLines="2"
                 android:hint="@string/enter_stock_description"
-                android:id="@+id/stock_description"
-                android:singleLine="true"/>
+                android:id="@+id/stock_description" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

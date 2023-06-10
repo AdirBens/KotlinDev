@@ -15,8 +15,6 @@
     <string name="delete_all_btn">Delete All Stocks</string>
 
     // Stocks main
-    <string name="track_list_empty">There are no stocks on your tracking list.</string>
-    <string name="track_list_add_inst">No panic! Click the + button to add your shares to the watch list</string>
     <string name="title_stocks_list">Your Tracking Stocks List</string>
 
 

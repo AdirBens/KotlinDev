@@ -3,8 +3,8 @@
     <string name="app_name">Stocker</string>
 
     // symbols
-    <string name="currency_suffix">"$"</string>
-    <string name="percents">"%"</string>
+    <string name="currency_suffix">₪</string>
+    <string name="percents">%</string>
 
 
     // PageTitles
