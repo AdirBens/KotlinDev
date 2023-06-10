@@ -1,27 +1,18 @@
 package com.example.stocker.ui.allstocks
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.*
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
-import android.widget.Adapter
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
-import androidx.recyclerview.widget.RecyclerView.RecyclerListener
 import com.example.stocker.R
 import com.example.stocker.data.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
@@ -115,11 +106,20 @@ class AllStocksFragment : Fragment() {
                     viewHolder: RecyclerView.ViewHolder,
                     direction: Int
                 ) {
-                    viewModel.deleteStock(
-                        (binding.recycler.adapter as StockAdapter)
-                            .itemAt(viewHolder.adapterPosition)
-                    )
-                    binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setTitle("Delete Stock")
+                    builder.setMessage("Are you sure you want to delete this stock?")
+                    builder.setPositiveButton("Delete") { dialog, _ ->
+                        viewModel.deleteStock(
+                            (binding.recycler.adapter as StockAdapter)
+                                .itemAt(viewHolder.adapterPosition)
+                        )
+                        binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
+                        dialog.dismiss()
+                    }
+                    builder.setNegativeButton(R.string.delete_all_cancel_btn) { dialog, _ ->
+                        dialog.dismiss()
+                    }
                 }
             }).attachToRecyclerView(binding.recycler)
         }
@@ -138,5 +138,22 @@ class AllStocksFragment : Fragment() {
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun showDeleteStockDialog(viewHolder: RecyclerView.ViewHolder) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Delete Stock")
+        builder.setMessage("Are you sure you want to delete this stock?")
+        builder.setPositiveButton("Delete") { dialog, _ ->
+            viewModel.deleteStock(
+                (binding.recycler.adapter as StockAdapter)
+                    .itemAt(viewHolder.adapterPosition)
+            )
+            binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
+            dialog.dismiss()
+        }
+        builder.setNegativeButton(R.string.delete_all_cancel_btn) { dialog, _ ->
+            dialog.dismiss()
+        }
     }
 }
