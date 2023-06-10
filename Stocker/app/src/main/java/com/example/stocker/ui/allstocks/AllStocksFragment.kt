@@ -106,20 +106,11 @@ class AllStocksFragment : Fragment() {
                     viewHolder: RecyclerView.ViewHolder,
                     direction: Int
                 ) {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setTitle("Delete Stock")
-                    builder.setMessage("Are you sure you want to delete this stock?")
-                    builder.setPositiveButton("Delete") { dialog, _ ->
-                        viewModel.deleteStock(
-                            (binding.recycler.adapter as StockAdapter)
-                                .itemAt(viewHolder.adapterPosition)
-                        )
-                        binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
-                        dialog.dismiss()
-                    }
-                    builder.setNegativeButton(R.string.delete_all_cancel_btn) { dialog, _ ->
-                        dialog.dismiss()
-                    }
+                    viewModel.deleteStock(
+                        (binding.recycler.adapter as StockAdapter)
+                            .itemAt(viewHolder.adapterPosition)
+                    )
+                    binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
                 }
             }).attachToRecyclerView(binding.recycler)
         }
@@ -140,20 +131,4 @@ class AllStocksFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showDeleteStockDialog(viewHolder: RecyclerView.ViewHolder) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Delete Stock")
-        builder.setMessage("Are you sure you want to delete this stock?")
-        builder.setPositiveButton("Delete") { dialog, _ ->
-            viewModel.deleteStock(
-                (binding.recycler.adapter as StockAdapter)
-                    .itemAt(viewHolder.adapterPosition)
-            )
-            binding.recycler.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
-            dialog.dismiss()
-        }
-        builder.setNegativeButton(R.string.delete_all_cancel_btn) { dialog, _ ->
-            dialog.dismiss()
-        }
-    }
 }
