@@ -4,10 +4,6 @@ import android.app.Application
 import com.example.stocker.data.local.StockDao
 import com.example.stocker.data.local.StocksDatabase
 import com.example.stocker.data.model.Stock
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 class StockRepository(application: Application){
 
@@ -21,11 +17,7 @@ class StockRepository(application: Application){
     fun getStocks() = stockDao?.getStocks()
 
     suspend fun addStock(stock: Stock) {
-            stockDao?.addStock(stock);
-    }
-
-    suspend fun updateStock(stock: Stock) {
-        stockDao?.updateStock(stock);
+            stockDao?.addStock(stock)
     }
 
     suspend fun deleteStock(stock: Stock) {

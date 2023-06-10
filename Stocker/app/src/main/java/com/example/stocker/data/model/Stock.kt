@@ -21,7 +21,7 @@ data class Stock (
     @ColumnInfo(name = "image_uri")
     val imageUri:String?)
 
-{
+    {
     @PrimaryKey(autoGenerate = true)
         var id:Long = 0
     }

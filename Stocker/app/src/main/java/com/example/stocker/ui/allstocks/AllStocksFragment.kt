@@ -34,10 +34,6 @@ class AllStocksFragment : Fragment() {
 
         binding = AllStocksFragmentBinding.inflate(inflater, container, false)
 
-        arguments?.getString("title")?.let {
-            Toast.makeText(requireActivity(), it, Toast.LENGTH_SHORT).show()
-        }
-
         binding.floatingAdd.setOnClickListener {
             findNavController().navigate(R.id.action_allStocksFragment_to_addStockFragment)
         }
@@ -99,7 +95,7 @@ class AllStocksFragment : Fragment() {
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
                 ): Boolean {
-                    TODO("Not yet implemented, add implementation if moving items up or down wanted")
+                    TODO("Not yet implemented, Will Be Implemented in project3")
                 }
 
                 override fun onSwiped(
@@ -130,5 +126,4 @@ class AllStocksFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
-
 }
