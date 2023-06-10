@@ -35,12 +35,12 @@
         android:id="@+id/stock_ov_card"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleDivider"
-        app:contentPadding="20dp"
+        app:contentPadding="10dp"
         app:cardCornerRadius="15dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -121,7 +121,6 @@
                             android:text="@string/date_format"
                             android:textSize="14sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
 
                     <LinearLayout
