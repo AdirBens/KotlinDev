@@ -1,4 +1,4 @@
-package com.example.stocker.ui.addstock
+package com.example.stocker.ui.addeditstock
 
 import android.app.DatePickerDialog
 import android.content.ContentResolver
@@ -9,9 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -22,15 +23,16 @@ import com.example.stocker.R
 import com.example.stocker.data.model.Stock
 import com.example.stocker.data.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
-import com.example.stocker.databinding.AddStockFragmentBinding
+import com.example.stocker.databinding.AddEditStockFragmentBinding
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 
-class AddStockFragment : Fragment() {
+class AddEditStockFragment : Fragment() {
 
     private val viewModel: StockViewModel by activityViewModels()
-    private var binding: AddStockFragmentBinding by autoCleared()
+    private var binding: AddEditStockFragmentBinding by autoCleared()
     private var tempImageUri: Uri? = null
+    private var isEditFragment: Boolean = false
 
     private lateinit var buyingDateEditText: EditText
 
@@ -47,23 +49,40 @@ class AddStockFragment : Fragment() {
         }
     }
 
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (isEditFragment) {
+                showDiscardChangesDialog()
+            } else {
+                showAbortAddDialog()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val chosenStock = viewModel.chosenStock
-        binding = AddStockFragmentBinding.inflate(inflater, container, false)
+        binding = AddEditStockFragmentBinding.inflate(inflater, container, false)
         buyingDateEditText = binding.buyingDate
+        isEditFragment =
+            (findNavController().previousBackStackEntry?.destination?.id == R.id.detailedStockFragment)
 
-        if (findNavController().previousBackStackEntry?.destination?.id == R.id.detailedStockFragment) {
+
+
+
+        if (isEditFragment) {
             binding.tickerSymbol.setText(chosenStock.value?.tickerSymbol)
             binding.stockDescription.setText(chosenStock.value?.description)
             binding.stockBuyingPrice.setText(chosenStock.value?.buyingPrice)
             binding.buyingDate.setText(chosenStock.value?.buyingDate)
             if (chosenStock.value?.imageUri != getDefaultUri().toString()) {
                 binding.chosenStockImage.setImageURI(chosenStock.value?.imageUri?.toUri())
-                Glide.with(requireContext()).load(chosenStock.value?.imageUri).into(binding.chosenStockImage)
+                Glide.with(requireContext()).load(chosenStock.value?.imageUri)
+                    .into(binding.chosenStockImage)
                 tempImageUri = chosenStock.value?.imageUri?.toUri()
             }
         }
@@ -84,9 +103,11 @@ class AddStockFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //TODO: For some reason not working?????
-        val toolbar = (activity as AppCompatActivity).supportActionBar
-        toolbar?.setTitle(R.string.title_add_stock)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
+        setupToolbar()
 
         val currentDate = Calendar.getInstance()
         val dayOfMonth = currentDate.get(Calendar.DAY_OF_MONTH)
@@ -95,6 +116,15 @@ class AddStockFragment : Fragment() {
 
         val formattedDate = String.format("%02d/%02d/%04d", dayOfMonth, monthOfYear + 1, year)
         buyingDateEditText.setText(formattedDate)
+    }
+
+    private fun setupToolbar() {
+        val toolbar = (activity as AppCompatActivity).supportActionBar
+        if (isEditFragment) {
+            toolbar?.setTitle(R.string.title_edit_stock)
+        } else {
+            toolbar?.setTitle(R.string.title_add_stock)
+        }
     }
 
     private fun showDatePicker(View: View? = null) {
@@ -117,15 +147,20 @@ class AddStockFragment : Fragment() {
     private fun addStock() {
         if (tempImageUri == null)
             tempImageUri = getDefaultUri()
-        if (findNavController().previousBackStackEntry?.destination?.id == R.id.detailedStockFragment) {
+        if (isEditFragment) {
             val stock = viewModel.chosenStock.value!!
             stock.tickerSymbol = binding.tickerSymbol.text.toString()
             stock.description = binding.stockDescription.text.toString()
             stock.buyingPrice = binding.stockBuyingPrice.text.toString()
             stock.buyingDate = binding.buyingDate.text.toString()
             stock.imageUri = tempImageUri.toString()
-            viewModel.updateStock(stock)
-            findNavController().navigate(R.id.action_addStockFragment_to_detailedStockFragment)
+
+            if (isEntryValid(stock)) {
+                viewModel.updateStock(stock)
+                findNavController().navigate(R.id.action_addStockFragment_to_detailedStockFragment)
+            } else {
+                raiseIncompleteForm()
+            }
         } else {
             val stock = Stock(
                 binding.tickerSymbol.text.toString(),
@@ -150,6 +185,30 @@ class AddStockFragment : Fragment() {
                 "/" + requireContext().resources.getResourceTypeName(drawableResId) +
                 "/" + requireContext().resources.getResourceEntryName(drawableResId)
         return Uri.parse(uriString)
+    }
+
+    private fun showAbortAddDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Abort Adding Stock")
+            .setMessage("Are you sure you want to cancel adding a new stock?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                // Navigate without adding a stock
+                findNavController().navigate(R.id.action_addStockFragment_to_allStocksFragment)
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    private fun showDiscardChangesDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Discard Changes")
+            .setMessage("Are you sure you want to discard the changes?")
+            .setPositiveButton("Discard") { dialog, _ ->
+                // Discard changes and navigate
+                findNavController().navigate(R.id.action_addStockFragment_to_detailedStockFragment)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun isEntryValid(stock: Stock): Boolean {

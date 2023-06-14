@@ -19,8 +19,6 @@ abstract class StocksDatabase : RoomDatabase(){
         fun getDatabase(context: Context) = instance ?: synchronized(StocksDatabase::class.java) {
             Room.databaseBuilder(context.applicationContext,
                 StocksDatabase::class.java,"stocks_database")
-
-                /*.allowMainThreadQueries() should be used in project 3!*/
                 .build().also { instance = it }
         }
     }

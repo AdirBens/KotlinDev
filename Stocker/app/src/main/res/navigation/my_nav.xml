@@ -29,9 +29,9 @@
     </fragment>
     <fragment
         android:id="@+id/addStockFragment"
-        android:name="com.example.stocker.ui.addstock.AddStockFragment"
+        android:name="com.example.stocker.ui.addeditstock.AddEditStockFragment"
         android:label="add_stock_fragment"
-        tools:layout="@layout/add_stock_fragment" >
+        tools:layout="@layout/add_edit_stock_fragment" >
         <action
             android:id="@+id/action_addStockFragment_to_allStocksFragment"
             app:destination="@id/allStocksFragment"
