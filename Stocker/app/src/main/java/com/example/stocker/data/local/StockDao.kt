@@ -19,10 +19,15 @@ interface StockDao {
     suspend fun deleteStock(vararg stock: Stock)
 
     @Update
-    suspend fun updateStock(stock: Stock)
+    suspend fun updateStock(updatedStock: Stock)
+
 
     @Query("SELECT * FROM stocks_table ORDER BY ticker_symbol ASC")
     fun getStocks() : LiveData<List<Stock>>
+
+    //TODO: Is needed?
+    @Query("SELECT * FROM stocks_table WHERE favorite = 1 ORDER BY ticker_symbol ASC")
+    fun getFavoriteStocks(): LiveData<List<Stock>>
 
     @Query("SELECT * FROM stocks_table WHERE ticker_symbol like :tickerSymbol")
     suspend fun getStock(tickerSymbol:String) : Stock

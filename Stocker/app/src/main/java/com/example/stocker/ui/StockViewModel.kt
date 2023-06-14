@@ -13,8 +13,10 @@ class StockViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: StockRepository = StockRepository(application)
     val stocks : LiveData<List<Stock>>? = repository.getStocks()
+
     private val _chosenStock = MutableLiveData<Stock>()
-    val chosenStock: LiveData<Stock> get() = _chosenStock
+    val chosenStock: MutableLiveData<Stock> get() = _chosenStock
+
 
     fun setChosenStock(stock: Stock) {
         _chosenStock.value = stock
@@ -35,6 +37,13 @@ class StockViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteAllStocks() {
         viewModelScope.launch {
             repository.deleteAll()
+        }
+    }
+
+    fun updateStock(stock: Stock)
+    {
+        viewModelScope.launch {
+            repository.updateStock(stock)
         }
     }
 

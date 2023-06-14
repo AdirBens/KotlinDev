@@ -58,6 +58,13 @@
 
     <string name="delete_one_stock">Delete Stock</string>
     <string name="delete_one_stock_msg">Are you sure you want to delete this stock?</string>
+    <string name="edit_button">Edit button</string>
+    <string name="title_portfolio_summary">Portfolio Summary</string>
+    <string name="portfolio_value_title">Current Portfolio Value:</string>
+    <string name="current_portfolio_value_title">Portfolio Value:</string>
+    <string name="current_portfolio_value">00.00</string>
+    <string name="portfolio_change">Porfolio Change:</string>
+    <string name="refresh_button">REFRESH</string>
 
 </resources>
 

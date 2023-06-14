@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp">
-
+    android:layout_margin="20dp">
 
     <TextView
         android:id="@+id/yourListSubTitle"
@@ -16,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
         android:text="@string/title_stocks_list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,19 +22,18 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/yourListSubTitle"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintTop_toBottomOf="@+id/portfolio_summary_button" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floating_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        android:contentDescription="@string/title_add_stock"
+        android:id="@+id/floating_add_button"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/stock_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@android:drawable/ic_input_add"/>

@@ -7,20 +7,23 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "stocks_table")
 data class Stock (
     @ColumnInfo(name = "ticker_symbol")
-    val tickerSymbol:String,
+    var tickerSymbol:String,
 
     @ColumnInfo(name = "description")
-    val description:String,
+    var description:String,
 
     @ColumnInfo(name = "buying_price")
-    val buyingPrice:String,
+    var buyingPrice:String,
 
     @ColumnInfo(name = "buying_date")
-    val buyingDate:String,
+    var buyingDate:String,
 
     @ColumnInfo(name = "image_uri")
-    val imageUri:String?)
+    var imageUri:String?,
 
+    @ColumnInfo(name = "favorite")
+    var favorite:Boolean = false
+)
     {
     @PrimaryKey(autoGenerate = true)
         var id:Long = 0

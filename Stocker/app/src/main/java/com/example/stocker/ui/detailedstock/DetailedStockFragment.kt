@@ -1,19 +1,21 @@
 package com.example.stocker.ui.detailedstock
 
+import com.example.stocker.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.stocker.R
 import com.example.stocker.data.utils.autoCleared
-import com.example.stocker.ui.StockViewModel
 import com.example.stocker.databinding.DetailedStockFragmentBinding
-
+import com.example.stocker.ui.StockViewModel
 import kotlin.random.Random
+
 
 class DetailedStockFragment : Fragment(){
 
@@ -26,12 +28,18 @@ class DetailedStockFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = DetailedStockFragmentBinding.inflate(layoutInflater, container, false)
+        binding.editButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_detailedStockFragment_to_addStockFragment)
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar = (activity as AppCompatActivity).supportActionBar
+        toolbar?.setTitle(R.string.title_stock_detail)
+
         viewModel.chosenStock.observe(viewLifecycleOwner) {
-            val currentPrice = getRandomCurrentPrice(it.buyingPrice.toFloat())
+            val currentPrice = it?.buyingPrice?.let { it1 -> getRandomCurrentPrice(it1.toFloat()) }
 
             binding.tickerSymbol.text = it.tickerSymbol
             binding.stockDescription.text = it.description
@@ -40,10 +48,12 @@ class DetailedStockFragment : Fragment(){
             binding.buyingPrice.text = it.buyingPrice
             binding.currentPrice.text = currentPrice.toString()
             binding.dayStart.text = currentPrice.toString()
-            binding.dayLow.text = getRandomDayLow(currentPrice).toString()
-            binding.dayHigh.text = getRandomDayHigh(currentPrice).toString()
-            setBalance(it.buyingPrice.toFloat(), currentPrice)
-            Glide.with(requireContext()).load(it.imageUri).circleCrop().into(binding.stockImage)
+            binding.dayLow.text = currentPrice?.let { it1 -> getRandomDayLow(it1).toString() }
+            binding.dayHigh.text = currentPrice?.let { it1 -> getRandomDayHigh(it1).toString() }
+            if (currentPrice != null) {
+                setBalance(it?.buyingPrice!!.toFloat(), currentPrice)
+            }
+            Glide.with(requireContext()).load(it?.imageUri).circleCrop().into(binding.stockImage)
         }
     }
 
