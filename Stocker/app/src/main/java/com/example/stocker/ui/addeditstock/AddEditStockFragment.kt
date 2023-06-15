@@ -21,7 +21,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.stocker.R
 import com.example.stocker.data.model.Stock
-import com.example.stocker.data.utils.autoCleared
+import com.example.stocker.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
 import com.example.stocker.databinding.AddEditStockFragmentBinding
 import com.google.android.material.snackbar.Snackbar
@@ -36,30 +36,6 @@ class AddEditStockFragment : Fragment() {
 
     private lateinit var buyingDateEditText: EditText
 
-    private val pickItemLauncher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            binding.chosenStockImage.setImageURI(uri)
-            requireActivity().contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-            tempImageUri = uri
-        }
-    }
-
-
-    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            if (isEditFragment) {
-                showDiscardChangesDialog()
-            } else {
-                showAbortAddDialog()
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,22 +46,6 @@ class AddEditStockFragment : Fragment() {
         buyingDateEditText = binding.buyingDate
         isEditFragment =
             (findNavController().previousBackStackEntry?.destination?.id == R.id.detailedStockFragment)
-
-
-
-
-        if (isEditFragment) {
-            binding.tickerSymbol.setText(chosenStock.value?.tickerSymbol)
-            binding.stockDescription.setText(chosenStock.value?.description)
-            binding.stockBuyingPrice.setText(chosenStock.value?.buyingPrice)
-            binding.buyingDate.setText(chosenStock.value?.buyingDate)
-            if (chosenStock.value?.imageUri != getDefaultUri().toString()) {
-                binding.chosenStockImage.setImageURI(chosenStock.value?.imageUri?.toUri())
-                Glide.with(requireContext()).load(chosenStock.value?.imageUri)
-                    .into(binding.chosenStockImage)
-                tempImageUri = chosenStock.value?.imageUri?.toUri()
-            }
-        }
 
         binding.finishBtn.setOnClickListener {
             addStock()
@@ -118,6 +78,65 @@ class AddEditStockFragment : Fragment() {
         buyingDateEditText.setText(formattedDate)
     }
 
+
+
+    private fun addStock() {
+        if (tempImageUri == null)
+            tempImageUri = getDefaultUri()
+        if (isEditFragment) {
+            val stock = viewModel.chosenStock.value!!
+            stock.tickerSymbol = binding.tickerSymbol.text.toString()
+            stock.description = binding.stockDescription.text.toString()
+            stock.buyingPrice = binding.stockBuyingPrice.text.toString()
+            stock.buyingDate = binding.buyingDate.text.toString()
+            stock.imageUri = tempImageUri.toString()
+
+            if (isEntryValid(stock)) {
+                viewModel.updateStock(stock)
+                findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
+            } else {
+                raiseIncompleteForm()
+            }
+        } else {
+            val stock = Stock(
+                binding.tickerSymbol.text.toString(),
+                binding.stockDescription.text.toString(),
+                binding.stockBuyingPrice.text.toString(),
+                binding.buyingDate.text.toString(),
+                tempImageUri.toString()
+            )
+            if (isEntryValid(stock)) {
+                viewModel.addStock(stock)
+                findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
+            } else {
+                raiseIncompleteForm()
+            }
+        }
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (isEditFragment) {
+                showDiscardChangesDialog()
+            } else {
+                showAbortAddDialog()
+            }
+        }
+    }
+
+    private val pickItemLauncher: ActivityResultLauncher<Array<String>> = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            binding.chosenStockImage.setImageURI(uri)
+            requireActivity().contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            tempImageUri = uri
+        }
+    }
+
     private fun setupToolbar() {
         val toolbar = (activity as AppCompatActivity).supportActionBar
         if (isEditFragment) {
@@ -144,40 +163,6 @@ class AddEditStockFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private fun addStock() {
-        if (tempImageUri == null)
-            tempImageUri = getDefaultUri()
-        if (isEditFragment) {
-            val stock = viewModel.chosenStock.value!!
-            stock.tickerSymbol = binding.tickerSymbol.text.toString()
-            stock.description = binding.stockDescription.text.toString()
-            stock.buyingPrice = binding.stockBuyingPrice.text.toString()
-            stock.buyingDate = binding.buyingDate.text.toString()
-            stock.imageUri = tempImageUri.toString()
-
-            if (isEntryValid(stock)) {
-                viewModel.updateStock(stock)
-                findNavController().navigate(R.id.action_addStockFragment_to_detailedStockFragment)
-            } else {
-                raiseIncompleteForm()
-            }
-        } else {
-            val stock = Stock(
-                binding.tickerSymbol.text.toString(),
-                binding.stockDescription.text.toString(),
-                binding.stockBuyingPrice.text.toString(),
-                binding.buyingDate.text.toString(),
-                tempImageUri.toString()
-            )
-            if (isEntryValid(stock)) {
-                viewModel.addStock(stock)
-                findNavController().navigate(R.id.action_addStockFragment_to_allStocksFragment)
-            } else {
-                raiseIncompleteForm()
-            }
-        }
-    }
-
     private fun getDefaultUri(): Uri? {
         val drawableResId = R.drawable.defualt_stock_image
         val uriString = ContentResolver.SCHEME_ANDROID_RESOURCE +
@@ -192,8 +177,7 @@ class AddEditStockFragment : Fragment() {
             .setTitle("Abort Adding Stock")
             .setMessage("Are you sure you want to cancel adding a new stock?")
             .setPositiveButton("Yes") { dialog, _ ->
-                // Navigate without adding a stock
-                findNavController().navigate(R.id.action_addStockFragment_to_allStocksFragment)
+                findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             }
             .setNegativeButton("No", null)
             .show()
@@ -204,8 +188,7 @@ class AddEditStockFragment : Fragment() {
             .setTitle("Discard Changes")
             .setMessage("Are you sure you want to discard the changes?")
             .setPositiveButton("Discard") { dialog, _ ->
-                // Discard changes and navigate
-                findNavController().navigate(R.id.action_addStockFragment_to_detailedStockFragment)
+                findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
             }
             .setNegativeButton("Cancel", null)
             .show()

@@ -1,4 +1,4 @@
-package com.example.stocker.ui.allstocks
+package com.example.stocker.ui.mystocks
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,34 +9,38 @@ import com.example.stocker.R
 import com.example.stocker.data.model.Stock
 import com.example.stocker.databinding.SingleStockLayoutBinding
 
-class StockAdapter(private val stocks: List<Stock>, private val callback: ItemListener) :
+class StockAdapter(private val stocks: List<Stock>, private val listener: ItemListener) :
     RecyclerView.Adapter<StockAdapter.ItemViewHolder>() {
 
     interface ItemListener {
         fun onItemClicked(index: Int)
+        //TODO: Delete if unnecessary
         fun onItemLongClick(index: Int)
         fun onFavoriteClicked(index: Int)
     }
 
-    inner class ItemViewHolder(private val binding: SingleStockLayoutBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
+    inner class ItemViewHolder(
+        private val binding: SingleStockLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root),
+        View.OnClickListener,
+        View.OnLongClickListener {
 
         init {
             binding.root.setOnClickListener(this)
             binding.root.setOnLongClickListener(this)
-            binding.favButton?.setOnClickListener(this)
+            binding.favButton.setOnClickListener(this)
         }
 
         override fun onClick(view: View) {
             when (view) {
-                binding.root -> callback.onItemClicked(adapterPosition)
-                binding.favButton -> callback.onFavoriteClicked(adapterPosition)
+                binding.root -> listener.onItemClicked(adapterPosition)
+                binding.favButton -> listener.onFavoriteClicked(adapterPosition)
             }
         }
 
         //TODO: Delete if unnecessary
         override fun onLongClick(view: View): Boolean {
-            callback.onItemLongClick(adapterPosition)
+            listener.onItemLongClick(adapterPosition)
             return true
         }
 

@@ -1,4 +1,4 @@
-package com.example.stocker.data.utils
+package com.example.stocker.utils
 /*
  * Copyright (C) 2018 The Android Open Source Project
  *

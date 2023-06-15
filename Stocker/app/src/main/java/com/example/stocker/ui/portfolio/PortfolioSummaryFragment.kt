@@ -8,10 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.stocker.R
-import com.example.stocker.data.utils.autoCleared
+import com.example.stocker.utils.autoCleared
 import com.example.stocker.ui.StockViewModel
 import com.example.stocker.databinding.PortfolioSummaryFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PortfolioSummaryFragment : Fragment() {
 
     private val viewModel: StockViewModel by activityViewModels()

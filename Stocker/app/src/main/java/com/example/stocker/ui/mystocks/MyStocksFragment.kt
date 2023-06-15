@@ -1,9 +1,8 @@
-package com.example.stocker.ui.allstocks
+package com.example.stocker.ui.mystocks
 
 import  android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
-import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
@@ -16,13 +15,14 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stocker.R
-import com.example.stocker.data.model.Stock
-import com.example.stocker.data.utils.autoCleared
+import com.example.stocker.utils.autoCleared
+import com.example.stocker.databinding.MyStocksFragmentBinding
 import com.example.stocker.ui.StockViewModel
-import com.example.stocker.databinding.AllStocksFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class AllStocksFragment : Fragment() {
-    private var binding: AllStocksFragmentBinding by autoCleared()
+@AndroidEntryPoint
+class MyStocksFragment : Fragment() {
+    private var binding: MyStocksFragmentBinding by autoCleared()
     private val viewModel: StockViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -30,13 +30,12 @@ class AllStocksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = AllStocksFragmentBinding.inflate(inflater, container, false)
+        binding = MyStocksFragmentBinding.inflate(inflater, container, false)
         binding.floatingAddButton.setOnClickListener {
-            //TODO:Find a way to tell a fragment that it is being navigated to from another fragment
-            findNavController().navigate(R.id.action_allStocksFragment_to_addStockFragment)
+            findNavController().navigate(R.id.action_myStocksFragment_to_searchFragment)
         }
-        binding.portfolioSummaryButton?.setOnClickListener {
-            findNavController().navigate(R.id.action_allStocksFragment_to_portfolioSummaryFragment)
+        binding.portfolioSummaryButton.setOnClickListener {
+            findNavController().navigate(R.id.action_myStocksFragment_to_portfolioSummaryFragment)
         }
         return binding.root
     }
@@ -73,7 +72,7 @@ class AllStocksFragment : Fragment() {
 
                 override fun onItemClicked(index: Int) {
                     viewModel.setChosenStock(it[index])
-                    findNavController().navigate(R.id.action_allStocksFragment_to_detailedStockFragment)
+                    findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                 }
 
                 override fun onItemLongClick(index: Int) {

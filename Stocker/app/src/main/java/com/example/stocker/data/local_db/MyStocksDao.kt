@@ -1,4 +1,4 @@
-package com.example.stocker.data.local
+package com.example.stocker.data.local_db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -10,7 +10,7 @@ import androidx.room.Update
 import com.example.stocker.data.model.Stock
 
 @Dao
-interface StockDao {
+interface MyStocksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addStock(stock: Stock)
@@ -21,11 +21,9 @@ interface StockDao {
     @Update
     suspend fun updateStock(updatedStock: Stock)
 
-
     @Query("SELECT * FROM stocks_table ORDER BY ticker_symbol ASC")
     fun getStocks() : LiveData<List<Stock>>
 
-    //TODO: Is needed?
     @Query("SELECT * FROM stocks_table WHERE favorite = 1 ORDER BY ticker_symbol ASC")
     fun getFavoriteStocks(): LiveData<List<Stock>>
 

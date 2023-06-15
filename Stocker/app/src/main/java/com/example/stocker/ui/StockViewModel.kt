@@ -1,18 +1,20 @@
 package com.example.stocker.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stocker.data.model.Stock
 import com.example.stocker.data.repository.StockRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StockViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class StockViewModel @Inject constructor(
+    private val stockRepository : StockRepository) : ViewModel() {
 
-    private val repository: StockRepository = StockRepository(application)
-    val stocks : LiveData<List<Stock>>? = repository.getStocks()
+    val stocks : LiveData<List<Stock>>? = stockRepository.getStocks()
 
     private val _chosenStock = MutableLiveData<Stock>()
     val chosenStock: MutableLiveData<Stock> get() = _chosenStock
@@ -24,26 +26,26 @@ class StockViewModel(application: Application) : AndroidViewModel(application) {
 
     fun addStock(stock: Stock) {
         viewModelScope.launch {
-            repository.addStock(stock)
+            stockRepository.addStock(stock)
         }
     }
 
     fun deleteStock(stock: Stock) {
         viewModelScope.launch {
-            repository.deleteStock(stock)
+            stockRepository.deleteStock(stock)
         }
     }
 
     fun deleteAllStocks() {
         viewModelScope.launch {
-            repository.deleteAll()
+            stockRepository.deleteAll()
         }
     }
 
     fun updateStock(stock: Stock)
     {
         viewModelScope.launch {
-            repository.updateStock(stock)
+            stockRepository.updateStock(stock)
         }
     }
 

@@ -11,12 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.stocker.data.utils.autoCleared
+import com.example.stocker.utils.autoCleared
 import com.example.stocker.databinding.DetailedStockFragmentBinding
 import com.example.stocker.ui.StockViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.random.Random
 
-
+@AndroidEntryPoint
 class DetailedStockFragment : Fragment(){
 
     private var binding : DetailedStockFragmentBinding by autoCleared()
@@ -26,10 +27,10 @@ class DetailedStockFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DetailedStockFragmentBinding.inflate(layoutInflater, container, false)
         binding.editButton?.setOnClickListener {
-            findNavController().navigate(R.id.action_detailedStockFragment_to_addStockFragment)
+            findNavController().navigate(R.id.action_detailedStockFragment_to_addEditStockFragment)
         }
         return binding.root
     }

@@ -59,4 +59,10 @@
 
     <string name="delete_one_stock">מחק מניה</string>
     <string name="delete_one_stock_msg">האם אתה בטוח שאתה רוצה למחוק את המניה?</string>
+    <string name="company_name">Company Name</string>
+    <string name="exchange">Exchange</string>
+    <string name="search">Search</string>
+    <string name="title_search">Search</string>
+    <string name="country_name">Country Name</string>
+    <string name="currency">Currency\t\t</string>
 </resources>

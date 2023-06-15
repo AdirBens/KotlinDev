@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "stocks_table")
 data class Stock (
+    @PrimaryKey
     @ColumnInfo(name = "ticker_symbol")
     var tickerSymbol:String,
 
@@ -22,9 +23,17 @@ data class Stock (
     var imageUri:String?,
 
     @ColumnInfo(name = "favorite")
-    var favorite:Boolean = false
+    var favorite:Boolean = false,
+
+    @ColumnInfo(name = "exchange")
+    var exchange:String? = null,
+
+    @ColumnInfo(name = "exchange_timezone")
+    var exchangeTimezone:String? = null,
+
+    @ColumnInfo(name = "country")
+    var country:String? = null,
+
+    @ColumnInfo(name = "currency")
+    var currency:String? = null
 )
-    {
-    @PrimaryKey(autoGenerate = true)
-        var id:Long = 0
-    }

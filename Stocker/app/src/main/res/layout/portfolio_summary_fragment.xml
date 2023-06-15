@@ -9,10 +9,6 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-
-
-    <!-- Portfolio Value -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,8 +54,6 @@
             android:text="@string/current_portfolio_value"/>
     </LinearLayout>
 
-
-    <!-- Portfolio Graph -->
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/portfolio_graph"
         android:layout_width="match_parent"
@@ -67,7 +61,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp" />
 
-    <!-- Refresh Button -->
     <Button
         android:id="@+id/refresh_button"
         android:layout_width="wrap_content"

@@ -1,36 +1,51 @@
 package com.example.stocker.data.repository
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import com.example.stocker.data.local.StockDao
-import com.example.stocker.data.local.StocksDatabase
+import com.example.stocker.data.local_db.MyStocksDao
+import com.example.stocker.data.local_db.MyStocksDatabase
 import com.example.stocker.data.model.Stock
+import com.example.stocker.data.remote_db.StockRemoteDataSource
+import com.example.stocker.utils.performRemoteFetching
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class StockRepository(application: Application) {
-    // ...
-    private var stockDao: StockDao?
+@Singleton
+class StockRepository @Inject constructor(
+    application:Application,
+    private val remoteDataSource: StockRemoteDataSource,
+    private val localDataSource: MyStocksDao
+    ) {
 
-
-    init {
-        val db  = StocksDatabase.getDatabase(application)
-        stockDao = db.stockDao()
-    }
-    fun getStocks() = stockDao?.getStocks()
+    fun getStocks() = localDataSource.getStocks()
 
 
     suspend fun addStock(stock: Stock) {
-            stockDao?.addStock(stock)
+        localDataSource.addStock(stock)
     }
 
     suspend fun updateStock(stock: Stock) {
-        stockDao?.updateStock(stock)
+        localDataSource.updateStock(stock)
     }
 
     suspend fun deleteStock(stock: Stock) {
-            stockDao?.deleteStock(stock)
+        localDataSource.deleteStock(stock)
     }
 
     suspend fun deleteAll() {
-        stockDao?.deleteAll()
+        localDataSource.deleteAll()
+    }
+
+    fun getSymbolSearch (keyword: String) = performRemoteFetching {
+        remoteDataSource.getSymbolSearchResult(keyword)
+    }
+
+    fun getQuote(symbol: String) =performRemoteFetching { remoteDataSource.getQuote(symbol) }
+
+    fun getTimeSeries(symbol: String, interval: String) = performRemoteFetching {
+        remoteDataSource.getTimeSeries(symbol, interval)
+    }
+
+    fun getStockImage(symbol: String) = performRemoteFetching {
+        remoteDataSource.getStockImage(symbol)
     }
 }

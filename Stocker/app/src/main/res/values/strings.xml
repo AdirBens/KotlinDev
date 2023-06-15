@@ -66,6 +66,12 @@
     <string name="portfolio_change">Porfolio Change:</string>
     <string name="refresh_button">REFRESH</string>
     <string name="title_edit_stock">Edit Stock</string>
+    <string name="company_name">Company Name</string>
+    <string name="exchange">Exchange</string>
+    <string name="search">Search</string>
+    <string name="title_search">Search</string>
+    <string name="country_name">Country Name</string>
+    <string name="currency">Currency\t\t</string>
 
 </resources>
 
