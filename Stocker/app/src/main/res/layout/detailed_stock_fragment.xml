@@ -12,19 +12,18 @@
         android:id="@+id/stock_image"
         android:layout_width="141dp"
         android:layout_height="85dp"
-        android:layout_marginTop="16dp"
         android:src="@mipmap/stock_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/stock_ov_card" />
 
     <TextView
-        android:id="@+id/stock_description"
+        android:id="@+id/company_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:text="@string/stock_description"
+        android:text="@string/company_name"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/ticker_symbol"
         tools:layout_editor_absoluteX="5dp" />
@@ -52,7 +51,7 @@
         app:contentPadding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stock_description">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -181,20 +180,9 @@
         android:id="@+id/details_segment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stock_ov_card">
-
-        <TextView
-            android:id="@+id/details_seg_title"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="@string/stock_details_ov_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/company_name">
 
 
         <TextView
@@ -202,19 +190,20 @@
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:textSize="12dp"
+            android:layout_margin="5dp"
             android:gravity="start"
             android:text="@string/stock_description"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/details_seg_title" />
+
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"

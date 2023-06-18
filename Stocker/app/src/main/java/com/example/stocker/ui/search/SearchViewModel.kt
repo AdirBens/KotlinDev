@@ -26,6 +26,4 @@ class SearchViewModel @Inject constructor(
     fun setKeyword(keyword: String) {
         _keyword.value = keyword
     }
-
-
 }

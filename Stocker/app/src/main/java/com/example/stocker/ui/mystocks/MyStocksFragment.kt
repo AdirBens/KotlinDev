@@ -9,6 +9,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -18,12 +19,14 @@ import com.example.stocker.R
 import com.example.stocker.utils.autoCleared
 import com.example.stocker.databinding.MyStocksFragmentBinding
 import com.example.stocker.ui.StockViewModel
+import com.example.stocker.ui.StocksViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
-    private val viewModel: StockViewModel by activityViewModels()
+    private val stocksViewModel: StocksViewModel by activityViewModels()
+    private val stockViewModel: StockViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,25 +69,25 @@ class MyStocksFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
-        viewModel.stocks?.observe(viewLifecycleOwner) {
+        stocksViewModel.stocks.observe(viewLifecycleOwner) {
 
             binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
 
                 override fun onItemClicked(index: Int) {
-                    viewModel.setChosenStock(it[index])
+                    stockViewModel.setChosenStock(it[index])
                     findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                 }
 
                 override fun onItemLongClick(index: Int) {
-                    viewModel.setChosenStock(it[index])
+                    stockViewModel.setChosenStock(it[index])
                     //TODO: Implement this in project 03
                 }
 
                 override fun onFavoriteClicked(index: Int) {
-                    viewModel.setChosenStock(it[index])
+                    stockViewModel.setChosenStock(it[index])
                     val stock = it[index]
                     stock.favorite = !stock.favorite
-                    viewModel.updateStock(stock)
+                    stockViewModel.updateStock(stock)
                 }
             })
 
@@ -132,7 +135,7 @@ class MyStocksFragment : Fragment() {
                     dialogBuilder.setTitle(R.string.delete_one_stock)
                     dialogBuilder.setMessage(R.string.delete_one_stock_msg)
                     dialogBuilder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
-                        viewModel.deleteStock(stockToDelete)
+                        stocksViewModel.deleteStock(stockToDelete)
                         binding.recycler.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
                         dialog.dismiss()
                     }
@@ -160,7 +163,7 @@ class MyStocksFragment : Fragment() {
         builder.setTitle(R.string.delete_all_title)
         builder.setMessage(R.string.delete_all_msg)
         builder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
-            viewModel.deleteAllStocks()
+            stocksViewModel.deleteAllStocks()
             dialog.dismiss()
         }
         builder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->

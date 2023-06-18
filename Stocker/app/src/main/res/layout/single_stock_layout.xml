@@ -57,13 +57,13 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/stock_description"
+                    android:id="@+id/stock_company_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@string/stock_description"
+                    android:text="@string/company_name"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -96,7 +96,7 @@
                     android:layout_marginStart="6dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@string/date_format"
+                    android:text="@string/datetime_format"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 

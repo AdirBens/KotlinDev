@@ -1,5 +1,7 @@
 package com.example.stocker.data.model
 
+import androidx.room.TypeConverter
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 
 data class StockMetaData(
@@ -9,6 +11,19 @@ data class StockMetaData(
     val exchange_timezone: String,
     val country: String,
     val currency: String
-){
-
+) {
 }
+    class StockMetaDataConverter {
+        private val gson = Gson()
+
+        @TypeConverter
+        fun fromString(value: String?): StockMetaData? {
+            return gson.fromJson(value, StockMetaData::class.java)
+        }
+
+        @TypeConverter
+        fun toString(value: StockMetaData?): String? {
+            return gson.toJson(value)
+        }
+    }
+

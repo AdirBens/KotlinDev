@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -66,7 +67,6 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
             }
         }
 
-
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -81,9 +81,8 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
                     }
 
                     override fun onQueryTextChange(newText: String?): Boolean {
-                        if (newText != null && newText.length > 2) {
+                        if (newText != null) {
                             viewModel.setKeyword(newText)
-                            Toast.makeText(requireContext(), newText, Toast.LENGTH_SHORT).show()
                         }
                         return true
                     }
@@ -102,7 +101,7 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
         toolbar?.setTitle(R.string.title_search)
     }
 
-    override fun onItemClicked(stockIndex: Int) {
-        findNavController().navigate(R.id.action_searchFragment_to_addEditStockFragment)
+    override fun onItemClicked(stockSymbol: String) {
+        findNavController().navigate(R.id.action_searchFragment_to_addEditStockFragment, bundleOf("symbol" to stockSymbol))
     }
 }

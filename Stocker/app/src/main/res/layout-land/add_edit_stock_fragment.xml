@@ -88,7 +88,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:hint="@string/enter_stock_description"
-                            android:id="@+id/stock_description" />
+                            android:id="@+id/stock_name" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

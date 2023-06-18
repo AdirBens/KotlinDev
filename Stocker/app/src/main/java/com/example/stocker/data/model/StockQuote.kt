@@ -1,5 +1,8 @@
 package com.example.stocker.data.model
 
+import androidx.room.TypeConverter
+import com.google.gson.Gson
+
 data class StockQuote(
     val symbol: String,
     val name: String,
@@ -22,7 +25,21 @@ data class StockQuote(
     val rolling_period_change: String,
     val is_market_open: Boolean,
 
-)
+){
+}
+ class StockQuoteConverter {
+    private val gson = Gson()
+
+    @TypeConverter
+    fun fromString(value: String?): StockQuote? {
+        return gson.fromJson(value, StockQuote::class.java)
+    }
+
+    @TypeConverter
+    fun toString(value: StockQuote?): String? {
+        return gson.toJson(value)
+    }
+}
 //TODO: can add 52 weeks data if needed:
 //
 //data class FiftyTwoWeekData(

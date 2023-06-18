@@ -5,8 +5,10 @@ import com.example.stocker.data.model.StockQuote
 import com.example.stocker.data.model.StockTimeSeries
 import retrofit2.Response
 import com.example.stocker.data.model.SymbolSearch
+import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.HEAD
+import retrofit2.http.Headers
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface StockService {
@@ -18,17 +20,18 @@ interface StockService {
 
     @GET("quote")
     suspend fun getQuote(
-        @Query("symbol")symbol: String
+        @Query("symbol") symbol: String
     ): Response<StockQuote>
 
-    @GET("time_series")
+    @GET("avgprice")
     suspend fun getTimeSeries(
-        @Query("symbol")symbol: String,
-        @Query("interval")interval: String
-    ): Response<StockTimeSeries>
+        @Query("symbol") symbol: String,
+        @Query("interval") interval: String,
+        @Query("outputsize") outputSize: String? = null,
+        ): Response<StockTimeSeries>
 
     @GET("logo")
-    suspend fun getStockImageURL(
-        @Query("symbol")symbol: String
+    suspend fun getStockLogo(
+        @Query("symbol") symbol: String
     ): Response<StockImageURL>
 }

@@ -1,8 +1,10 @@
 package com.example.stocker.data.repository
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import com.example.stocker.data.local_db.MyStocksDao
-import com.example.stocker.data.local_db.MyStocksDatabase
 import com.example.stocker.data.model.Stock
 import com.example.stocker.data.remote_db.StockRemoteDataSource
 import com.example.stocker.utils.performRemoteFetching
@@ -23,6 +25,10 @@ class StockRepository @Inject constructor(
         localDataSource.addStock(stock)
     }
 
+    suspend fun getStock(symbol: String) {
+        localDataSource.getStock(symbol)
+    }
+
     suspend fun updateStock(stock: Stock) {
         localDataSource.updateStock(stock)
     }
@@ -39,13 +45,16 @@ class StockRepository @Inject constructor(
         remoteDataSource.getSymbolSearchResult(keyword)
     }
 
-    fun getQuote(symbol: String) =performRemoteFetching { remoteDataSource.getQuote(symbol) }
-
-    fun getTimeSeries(symbol: String, interval: String) = performRemoteFetching {
-        remoteDataSource.getTimeSeries(symbol, interval)
+    fun getQuote(symbol: String) = performRemoteFetching {
+        remoteDataSource.getQuote(symbol)
     }
 
-    fun getStockImage(symbol: String) = performRemoteFetching {
-        remoteDataSource.getStockImage(symbol)
+    fun getTimeSeries(symbol: String, interval: String, outputSize:String) = performRemoteFetching {
+        remoteDataSource.getTimeSeries(symbol, interval, outputSize)
     }
+
+    fun getStockLogo(symbol: String) = performRemoteFetching {
+        remoteDataSource.getStockLogo(symbol)
+    }
+
 }

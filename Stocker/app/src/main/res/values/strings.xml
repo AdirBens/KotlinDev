@@ -72,6 +72,8 @@
     <string name="title_search">Search</string>
     <string name="country_name">Country Name</string>
     <string name="currency">Currency\t\t</string>
+    <string name="enter_num_of_stocks">Enter number of stocks *</string>
+    <string name="datetime_format">DD/MM/YYYY    HH:MM</string>
 
 </resources>
 

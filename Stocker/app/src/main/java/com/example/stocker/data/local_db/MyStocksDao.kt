@@ -28,7 +28,7 @@ interface MyStocksDao {
     fun getFavoriteStocks(): LiveData<List<Stock>>
 
     @Query("SELECT * FROM stocks_table WHERE ticker_symbol like :tickerSymbol")
-    suspend fun getStock(tickerSymbol:String) : Stock
+    suspend fun getStock(tickerSymbol:String): Stock
 
     @Query("DELETE FROM stocks_table")
     suspend fun deleteAll()

@@ -1,7 +1,9 @@
 package com.example.stocker.data.remote_db
 
+import android.util.Log
 import javax.inject.Inject
 import javax.inject.Singleton
+import okhttp3.*
 
 @Singleton
 class StockRemoteDataSource @Inject constructor(
@@ -13,10 +15,10 @@ class StockRemoteDataSource @Inject constructor(
 
     suspend fun getQuote(symbol: String) = getResult { stockService.getQuote(symbol) }
 
-    suspend fun getTimeSeries(symbol: String, interval: String) =
-        getResult { stockService.getTimeSeries(symbol, interval) }
+    suspend fun getTimeSeries(symbol: String, interval: String, outputSize:String) =
+        getResult { stockService.getTimeSeries(symbol, interval, outputSize) }
 
-    suspend fun getStockImage(symbol: String) =
-        getResult { stockService.getStockImageURL(symbol) }
+    suspend fun getStockLogo(symbol: String) =
+        getResult { stockService.getStockLogo(symbol) }
 
 }

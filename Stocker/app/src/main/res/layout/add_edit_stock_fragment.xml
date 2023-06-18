@@ -32,6 +32,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/ticker_symbol"
+                            android:enabled="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/enter_stock_ticker_symbol"
@@ -69,10 +70,10 @@
                         app:suffixText="@string/currency_suffix">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/stock_buying_price"
+                            android:id="@+id/buying_amount"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/enter_stock_buying_price"
+                            android:hint="@string/enter_num_of_stocks"
                             android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,7 +92,7 @@
                             android:autofillHints=""
                             android:focusable="false"
                             android:hint="@string/select_buying_date"
-                            android:inputType="date"/>
+                            android:inputType="datetime"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,23 +105,27 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/buying_date">
 
-                        <Button
-                            android:id="@+id/image_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="10dp"
-                            android:required="false"
-                            android:text="@string/pick_image" />
-
                         <ImageView
                             android:id="@+id/chosen_stock_image"
-                            android:layout_width="150dp"
-                            android:layout_height="150dp"
+                            android:layout_width="182dp"
+                            android:layout_height="160dp"
                             android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:contentDescription="@string/stock_image"
                             android:src="@mipmap/stock_placeholder" />
+
+                        <ProgressBar
+                            android:id="@+id/progressBar_cyclic"
+                            android:layout_width="67dp"
+                            android:visibility="gone"
+                            android:layout_height="54dp"
+                            android:minWidth="50dp"
+                            android:minHeight="50dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/searchRecycler" />
+
                     </LinearLayout>
 
                     <Button

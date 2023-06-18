@@ -27,10 +27,13 @@
         tools:layout="@layout/add_edit_stock_fragment" >
         <action
             android:id="@+id/action_addEditStockFragment_to_detailedStockFragment"
-            app:destination="@id/detailedStockFragment" />
+            app:destination="@id/detailedStockFragment"
+            app:popUpTo="@id/detailedStockFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_addEditStockFragment_to_myStocksFragment"
-            app:destination="@id/myStocksFragment" />
+            app:destination="@id/myStocksFragment"
+            app:popUpTo="@id/myStocksFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailedStockFragment"
@@ -39,7 +42,8 @@
         tools:layout="@layout/detailed_stock_fragment" >
         <action
             android:id="@+id/action_detailedStockFragment_to_myStocksFragment"
-            app:destination="@id/myStocksFragment" />
+            app:destination="@id/myStocksFragment"
+            app:popUpTo="@id/myStocksFragment" />
         <action
             android:id="@+id/action_detailedStockFragment_to_addEditStockFragment"
             app:destination="@id/addEditStockFragment" />
@@ -51,7 +55,8 @@
         tools:layout="@layout/portfolio_summary_fragment" >
         <action
             android:id="@+id/action_portfolioSummaryFragment_to_myStocksFragment"
-            app:destination="@id/myStocksFragment" />
+            app:destination="@id/myStocksFragment"
+            app:popUpTo="@id/myStocksFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

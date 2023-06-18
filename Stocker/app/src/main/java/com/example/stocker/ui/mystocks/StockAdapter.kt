@@ -46,9 +46,9 @@ class StockAdapter(private val stocks: List<Stock>, private val listener: ItemLi
 
         fun bind(stock: Stock) {
             binding.tickerSymbol.text = stock.tickerSymbol
-            binding.stockDescription.text = stock.description
+            binding.stockCompanyName?.text = stock.stockQuote?.name
             binding.buyingDate.text = stock.buyingDate
-            binding.buyingPrice.text = stock.buyingPrice
+            binding.buyingPrice.text = stock.buyingPrice.toString()
             Glide.with(binding.root).load(stock.imageUri).circleCrop().into(binding.stockImage)
             binding.favButton?.apply {
                 if (stock.favorite) {

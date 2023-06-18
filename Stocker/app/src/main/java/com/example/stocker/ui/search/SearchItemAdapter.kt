@@ -13,8 +13,7 @@ class SearchItemAdapter(private val listener: SearchItemListener) :
         private val searchItems = ArrayList<StockMetaData>()
 
         interface SearchItemListener {
-            fun onItemClicked(index: Int)
-            //TODO: Delete if unnecessary
+            fun onItemClicked(stockSymbol: String)
         }
 
         class SearchItemViewHolder(
@@ -30,7 +29,7 @@ class SearchItemAdapter(private val listener: SearchItemListener) :
             }
 
             override fun onClick(v: View?) {
-                listener.onItemClicked(adapterPosition)
+                listener.onItemClicked(stockMetaData.symbol)
             }
 
             fun bind(stockMetaData: StockMetaData) {
