@@ -74,12 +74,11 @@ class MyStocksFragment : Fragment() {
             binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
 
                 override fun onItemClicked(index: Int) {
-                    stockViewModel.setChosenStock(it[index])
+                    stocksViewModel.setChosenStock(it[index])
                     findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                 }
 
                 override fun onItemLongClick(index: Int) {
-                    stockViewModel.setChosenStock(it[index])
                     //TODO: Implement this in project 03
                 }
 

@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.example.stocker.data.local_db.MyStocksDao
 import com.example.stocker.data.model.Stock
 import com.example.stocker.data.remote_db.StockRemoteDataSource
+import com.example.stocker.utils.performFetchingAndSaving
 import com.example.stocker.utils.performRemoteFetching
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,6 +56,10 @@ class StockRepository @Inject constructor(
 
     fun getStockLogo(symbol: String) = performRemoteFetching {
         remoteDataSource.getStockLogo(symbol)
+    }
+
+    fun getCurrentPrice(symbol: String) = performRemoteFetching {
+        remoteDataSource.getCurrentPrice(symbol)
     }
 
 }

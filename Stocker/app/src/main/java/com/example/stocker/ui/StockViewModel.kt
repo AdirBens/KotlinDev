@@ -1,11 +1,13 @@
 package com.example.stocker.ui
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.stocker.data.model.Stock
+import com.example.stocker.data.model.StockCurrentPrice
 import com.example.stocker.data.model.StockImageURL
 import com.example.stocker.data.model.StockQuote
 import com.example.stocker.data.model.StockTimeSeries
@@ -41,18 +43,18 @@ class StockViewModel @Inject constructor(
     }
     val stockTimeSeries: LiveData<Resource<StockTimeSeries>> = _stockTimeSeries
 
+    private var _stockCurrentPrice = _chosenStockSymbol.switchMap {
+        stockRepository.getCurrentPrice(it)
+    }
+    val stockCurrentPrice: LiveData<Resource<StockCurrentPrice>> = _stockCurrentPrice
+
     fun setSymbol(symbol: String) {
         _chosenStockSymbol.value = symbol
     }
 
     fun setChosenStock(stock: Stock) {
         _chosenStock.value = stock
-    }
-
-    fun getChosenStockBySymbol(symbol: String) {
-        viewModelScope.launch {
-            stockRepository.getStock(symbol)
-        }
+        setSymbol(stock.tickerSymbol)
     }
 
     fun updateStock(stock: Stock)
@@ -64,6 +66,9 @@ class StockViewModel @Inject constructor(
 
     fun isStockEntryValid(stock: Stock): Boolean {
         if (stock.buyingAmount?.equals("")==true) {
+            return false
+        }
+        if (stock.buyingDate?.equals("")==true) {
             return false
         }
         return true

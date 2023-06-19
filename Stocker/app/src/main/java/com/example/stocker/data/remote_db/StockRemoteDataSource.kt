@@ -21,4 +21,7 @@ class StockRemoteDataSource @Inject constructor(
     suspend fun getStockLogo(symbol: String) =
         getResult { stockService.getStockLogo(symbol) }
 
+    suspend fun getCurrentPrice(symbol: String) =
+        getResult { stockService.getCurrentPrice(symbol) }
+
 }

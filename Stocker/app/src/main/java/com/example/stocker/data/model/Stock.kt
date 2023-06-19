@@ -9,7 +9,8 @@ import androidx.room.TypeConverters
 @TypeConverters(
     StockMetaDataConverter::class,
     StockQuoteConverter::class,
-    StockTimeSeriesConverter::class
+    StockTimeSeriesConverter::class,
+    StockCurrentPriceConverter::class,
 )
 data class Stock(
     @PrimaryKey
@@ -38,5 +39,8 @@ data class Stock(
     var stockQuote: StockQuote? = null,
 
     @ColumnInfo(name = "stockTimeSeries")
-    var stockTimeSeries: StockTimeSeries? = null
+    var stockTimeSeries: StockTimeSeries? = null,
+
+    @ColumnInfo(name = "price")
+    var stockCurrentPrice: StockCurrentPrice? = null,
 )

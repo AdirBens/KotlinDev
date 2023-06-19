@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.stocker.data.model.SearchItemMetaData
 import com.example.stocker.data.model.StockMetaData
 import com.example.stocker.databinding.SearchItemLayoutBinding
 
 class SearchItemAdapter(private val listener: SearchItemListener) :
     RecyclerView.Adapter<SearchItemAdapter.SearchItemViewHolder>()
     {
-        private val searchItems = ArrayList<StockMetaData>()
+        private val searchItems = ArrayList<SearchItemMetaData>()
 
         interface SearchItemListener {
             fun onItemClicked(stockSymbol: String)
@@ -22,28 +23,33 @@ class SearchItemAdapter(private val listener: SearchItemListener) :
         ) : RecyclerView.ViewHolder(binding.root),
             View.OnClickListener {
 
-            private lateinit var stockMetaData: StockMetaData
+            private lateinit var searchItemMetaData: SearchItemMetaData
 
             init {
                 binding.root.setOnClickListener(this)
             }
 
             override fun onClick(v: View?) {
-                listener.onItemClicked(stockMetaData.symbol)
+                listener.onItemClicked(searchItemMetaData.symbol)
             }
 
-            fun bind(stockMetaData: StockMetaData) {
-                this.stockMetaData = stockMetaData
-                binding.searchItemSymbol.text = stockMetaData.symbol
-                binding.CountryName.text = stockMetaData.country
-                binding.searchItemCurrency.text = stockMetaData.currency
-                binding.searchItemExchange.text = stockMetaData.exchange
+            fun bind(searchItemMetaData: SearchItemMetaData) {
+                this.searchItemMetaData = searchItemMetaData
+                binding.searchItemSymbol.text = searchItemMetaData.symbol
+                binding.CountryName.text = searchItemMetaData.country
+                binding.searchItemCurrency.text = searchItemMetaData.currency
+                binding.searchItemExchange.text = searchItemMetaData.exchange
             }
         }
 
-        fun setStockSymbolList(stockMetaDataList: List<StockMetaData>) {
+        fun setStockSymbolList(searchItemList: List<SearchItemMetaData>) {
             this.searchItems.clear()
-            this.searchItems.addAll(stockMetaDataList)
+            for (SearchItemMetaData in searchItemList) {
+                //TODO: added a filter to only show US stocks due to API limitations
+                if (SearchItemMetaData.access.plan == "Basic") {
+                    this.searchItems.add(SearchItemMetaData)
+                }
+            }
             notifyDataSetChanged()
         }
 

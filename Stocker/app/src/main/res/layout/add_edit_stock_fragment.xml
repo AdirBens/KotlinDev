@@ -112,7 +112,7 @@
                             android:layout_gravity="center"
                             android:layout_margin="10dp"
                             android:contentDescription="@string/stock_image"
-                            android:src="@mipmap/stock_placeholder" />
+                            android:visibility="visible"/>
 
                         <ProgressBar
                             android:id="@+id/progressBar_cyclic"

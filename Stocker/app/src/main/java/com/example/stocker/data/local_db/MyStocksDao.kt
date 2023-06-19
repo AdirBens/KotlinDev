@@ -8,6 +8,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.stocker.data.model.Stock
+import com.example.stocker.data.model.StockQuote
+import retrofit2.Response
 
 @Dao
 interface MyStocksDao {

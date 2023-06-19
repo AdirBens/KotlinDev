@@ -6,9 +6,7 @@ import com.google.gson.Gson
 data class StockTimeSeries (
     val meta : StockMetaData,
     val values: List<StockTimeSeriesValue>
-        ){
-
-}
+        )
 
 class StockTimeSeriesConverter {
     private val gson = Gson()

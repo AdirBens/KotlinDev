@@ -4,6 +4,7 @@
     // symbols
     <string name="currency_suffix">"$"</string>
     <string name="percents">"%"</string>
+    <string name="add_percents">"%s%%"</string>
 
     // PageTitles
     <string name="title_your_stocks">Your Stocks</string>

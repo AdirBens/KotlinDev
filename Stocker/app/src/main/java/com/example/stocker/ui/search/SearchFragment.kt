@@ -19,7 +19,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stocker.R
-import com.example.stocker.databinding.MyStocksFragmentBinding
 import com.example.stocker.databinding.SearchFragmentBinding
 import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Success
@@ -66,6 +65,8 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
                 }
             }
         }
+        viewModel.setKeyword("")
+
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {

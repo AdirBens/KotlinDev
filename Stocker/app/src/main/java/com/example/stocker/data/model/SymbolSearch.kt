@@ -4,7 +4,7 @@ import androidx.room.Entity
 
 @Entity(tableName = "symbol_search_table")
 data class SymbolSearch(
-        val data: ArrayList<StockMetaData>,
+        val data: ArrayList<SearchItemMetaData>,
         val status: String
 ) {
 

@@ -11,7 +11,7 @@ import okhttp3.Request
 import okhttp3.MediaType
 import okhttp3.RequestBody
 
-fun <T,A> performFetchingAndSaving(localDbFetch: () -> LiveData<T>,
+fun <T,A> performFetchingAndSaving (localDbFetch: () -> LiveData<T>,
                                    remoteDbFetch: suspend () -> Resource<A>,
                                    localDbSave: suspend (A) -> Unit) : LiveData<Resource<T>> =
 
@@ -29,7 +29,7 @@ fun <T,A> performFetchingAndSaving(localDbFetch: () -> LiveData<T>,
 
         else if(fetchResource.status is Error)
         {
-            emit(Resource.error(fetchResource.status.message!!))
+            emit(Resource.error(fetchResource.status.message))
             emitSource(source)
         }
     }
