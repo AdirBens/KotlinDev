@@ -46,7 +46,6 @@ class SearchItemAdapter(private val listener: SearchItemListener) :
         fun setStockSymbolList(searchItemList: List<SearchItemMetaData>) {
             this.searchItems.clear()
             for (SearchItemMetaData in searchItemList) {
-                //TODO: added a filter to only show US stocks due to API limitations
                 if (SearchItemMetaData.access.plan == "Basic") {
                     this.searchItems.add(SearchItemMetaData)
                 }

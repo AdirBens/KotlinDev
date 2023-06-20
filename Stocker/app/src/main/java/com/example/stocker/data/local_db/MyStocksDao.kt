@@ -26,9 +26,6 @@ interface MyStocksDao {
     @Query("SELECT * FROM stocks_table ORDER BY ticker_symbol ASC")
     fun getStocks() : LiveData<List<Stock>>
 
-//    @Query("SELECT stockQuote FROM stocks_table WHERE ticker_symbol like :tickerSymbol")
-//    fun getStockQuote(tickerSymbol:String): LiveData<StockQuote>
-
     @Query("SELECT * FROM stocks_table WHERE favorite = 1 ORDER BY ticker_symbol ASC")
     fun getFavoriteStocks(): LiveData<List<Stock>>
 

@@ -14,8 +14,6 @@ class StockAdapter(private val stocks: List<Stock>, private val listener: ItemLi
 
     interface ItemListener {
         fun onItemClicked(index: Int)
-        //TODO: Delete if unnecessary
-        fun onItemLongClick(index: Int)
         fun onFavoriteClicked(index: Int)
     }
 
@@ -38,25 +36,23 @@ class StockAdapter(private val stocks: List<Stock>, private val listener: ItemLi
             }
         }
 
-        //TODO: Delete if unnecessary
-        override fun onLongClick(view: View): Boolean {
-            listener.onItemLongClick(adapterPosition)
-            return true
-        }
-
         fun bind(stock: Stock) {
             binding.tickerSymbol.text = stock.tickerSymbol
             binding.stockCompanyName?.text = stock.stockQuote?.name
             binding.buyingDate.text = stock.buyingDate
             binding.buyingPrice.text = stock.buyingPrice.toString()
             Glide.with(binding.root).load(stock.imageUri).circleCrop().into(binding.stockImage)
-            binding.favButton?.apply {
+            binding.favButton.apply {
                 if (stock.favorite) {
                     setBackgroundResource(R.drawable.baseline_star_yellow_24)
                 } else {
                     setBackgroundResource(R.drawable.baseline_star_grey_24)
                 }
             }
+        }
+
+        override fun onLongClick(p0: View?): Boolean {
+            return true
         }
     }
 

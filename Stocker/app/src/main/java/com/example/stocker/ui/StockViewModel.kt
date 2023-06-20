@@ -73,21 +73,6 @@ class StockViewModel @Inject constructor(
         return stockRepository.getStock(symbol)
     }
 
-    fun refreshStockData(symbol: String, context: Context, fragment:Fragment) {
-        setChosenStock(Stock(symbol))
-        stockQuote.observe(fragment.viewLifecycleOwner) {
-            when (it.status) {
-                is Loading -> {}
-                is Success -> {
-                    chosenStock.value?.stockQuote = it.status.data!!
-                }
-                is Error -> {
-                    Toast.makeText(context, it.status.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
     fun isStockEntryValid(stock: Stock): Boolean {
         if (stock.buyingAmount?.equals("")==true) {
             return false

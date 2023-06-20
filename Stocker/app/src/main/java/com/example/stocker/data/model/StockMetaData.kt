@@ -10,6 +10,7 @@ data class StockMetaData(
     val exchange_timezone: String,
     val country: String,
     val currency: String,
-    val access: StockAccess
 )
+
+
 
