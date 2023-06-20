@@ -1,5 +1,6 @@
 package com.example.stocker.ui.detailedstock
 
+import android.content.res.Configuration
 import com.example.stocker.R
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,8 +29,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.random.Random
-
 @AndroidEntryPoint
 class DetailedStockFragment : Fragment() {
 
@@ -45,7 +44,7 @@ class DetailedStockFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DetailedStockFragmentBinding.inflate(layoutInflater, container, false)
-        binding.editButton?.setOnClickListener {
+        binding.editButton.setOnClickListener {
             findNavController().navigate(R.id.action_detailedStockFragment_to_addEditStockFragment)
         }
         return binding.root
@@ -55,6 +54,12 @@ class DetailedStockFragment : Fragment() {
         val toolbar = (activity as AppCompatActivity).supportActionBar
         toolbar?.setTitle(R.string.title_stock_detail)
         stockViewModel.setChosenStock(stocksViewModel.chosenStock.value!!)
+
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+        }
+
 
 
 
@@ -85,15 +90,15 @@ class DetailedStockFragment : Fragment() {
                     if (it.status.data?.price != null) {
                         currentPrice = it.status.data.price.toFloat()
                         binding.currentPrice.text =
-                            String.format("%.3f", it.status.data.price.toFloat())
+                            String.format("%.2f", it.status.data.price.toFloat())
                     }
-                    binding.progressBarCyclic?.visibility = View.GONE
-                    binding.balanceLayout?.visibility = View.VISIBLE
+                    binding.progressBarCyclic.visibility = View.GONE
+                    binding.balanceLayout.visibility = View.VISIBLE
                 }
 
                 is Error -> {
-                    binding.progressBarCyclic?.visibility = View.GONE
-                    binding.balanceLayout?.visibility = View.VISIBLE
+                    binding.progressBarCyclic.visibility = View.GONE
+                    binding.balanceLayout.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT).show()
                 }
             }

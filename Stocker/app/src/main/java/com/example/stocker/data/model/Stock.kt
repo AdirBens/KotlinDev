@@ -6,12 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 
 @Entity(tableName = "stocks_table")
-@TypeConverters(
-    StockMetaDataConverter::class,
-    StockQuoteConverter::class,
-    StockTimeSeriesConverter::class,
-    StockCurrentPriceConverter::class,
-)
+@TypeConverters(ModelConverter::class)
 data class Stock(
     @PrimaryKey
     @ColumnInfo(name = "ticker_symbol")

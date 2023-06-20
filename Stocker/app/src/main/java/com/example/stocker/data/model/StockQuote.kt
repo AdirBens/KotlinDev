@@ -25,30 +25,4 @@ data class StockQuote(
     val rolling_period_change: String,
     val is_market_open: Boolean,
 
-){
-}
- class StockQuoteConverter {
-    private val gson = Gson()
-
-    @TypeConverter
-    fun fromString(value: String?): StockQuote? {
-        return gson.fromJson(value, StockQuote::class.java)
-    }
-
-    @TypeConverter
-    fun toString(value: StockQuote?): String? {
-        return gson.toJson(value)
-    }
-}
-//TODO: can add 52 weeks data if needed:
-//
-//data class FiftyTwoWeekData(
-//
-//    val low: String,
-//    val high: String,
-//    val low_change: String,
-//    val high_change: String,
-//    val low_change_percent: String,
-//    val high_change_percent: String,
-//    val range: String
-//)
+)

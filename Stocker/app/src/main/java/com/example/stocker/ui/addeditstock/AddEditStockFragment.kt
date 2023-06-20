@@ -41,8 +41,6 @@ class AddEditStockFragment : Fragment() {
     private var binding: AddEditStockFragmentBinding by autoCleared()
     private var tempImageUri: Uri? = null
     private var isEditFragment: Boolean = false
-
-    private var isDateSuccess: Boolean = false
     private lateinit var stock: Stock
 
     override fun onCreateView(
@@ -53,6 +51,8 @@ class AddEditStockFragment : Fragment() {
         binding = AddEditStockFragmentBinding.inflate(inflater, container, false)
         isEditFragment =
             (findNavController().previousBackStackEntry?.destination?.id == R.id.detailedStockFragment)
+
+
         binding.finishBtn.setOnClickListener {
             addStock()
         }
@@ -180,6 +180,14 @@ class AddEditStockFragment : Fragment() {
             }
         } else {
             if (isEntryValid(stock)) {
+                if (stock.buyingPrice == null) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Sorry not enough market data found for the parameters chosen, could not add stock",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
+                }
                 stocksViewModel.addStock(stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             } else {
@@ -201,17 +209,15 @@ class AddEditStockFragment : Fragment() {
                 "No market data found for the date chosen, entering last known price",
                 Toast.LENGTH_LONG
             ).show()
-            //TODO: add default price if no date or price were chosen/found
         }
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
-
         override fun handleOnBackPressed() {
             if (isEditFragment) {
-                showAbortAddDialog()
-            } else {
                 showDiscardChangesDialog()
+            } else {
+                showAbortAddDialog()
             }
         }
     }

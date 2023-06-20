@@ -14,12 +14,14 @@ import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stocker.R
 import com.example.stocker.databinding.SearchFragmentBinding
+import com.example.stocker.ui.StocksViewModel
 import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Success
 import com.example.stocker.utils.autoCleared
@@ -29,6 +31,7 @@ import com.example.stocker.utils.Error
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
     private val viewModel: SearchViewModel by viewModels()
+    val stocksViewModel: StocksViewModel by activityViewModels()
     private var binding: SearchFragmentBinding by autoCleared()
 
 
@@ -103,6 +106,10 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
     }
 
     override fun onItemClicked(stockSymbol: String) {
+        if(stocksViewModel.stocks.value!!.any { it.tickerSymbol == stockSymbol }) {
+            Toast.makeText(requireContext(), getString(R.string.stock_already_added), Toast.LENGTH_SHORT).show()
+            return
+        }
         findNavController().navigate(R.id.action_searchFragment_to_addEditStockFragment, bundleOf("symbol" to stockSymbol))
     }
 }

@@ -1,6 +1,8 @@
 package com.example.stocker.ui
 
+import android.content.Context
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +14,10 @@ import com.example.stocker.data.model.StockImageURL
 import com.example.stocker.data.model.StockQuote
 import com.example.stocker.data.model.StockTimeSeries
 import com.example.stocker.data.repository.StockRepository
+import com.example.stocker.utils.Error
+import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Resource
+import com.example.stocker.utils.Success
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -61,6 +66,25 @@ class StockViewModel @Inject constructor(
     {
         viewModelScope.launch {
             stockRepository.updateStock(stock)
+        }
+    }
+
+    fun getStock(symbol:String) : LiveData<Stock> {
+        return stockRepository.getStock(symbol)
+    }
+
+    fun refreshStockData(symbol: String, context: Context, fragment:Fragment) {
+        setChosenStock(Stock(symbol))
+        stockQuote.observe(fragment.viewLifecycleOwner) {
+            when (it.status) {
+                is Loading -> {}
+                is Success -> {
+                    chosenStock.value?.stockQuote = it.status.data!!
+                }
+                is Error -> {
+                    Toast.makeText(context, it.status.message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

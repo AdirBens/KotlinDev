@@ -36,7 +36,8 @@ class SearchItemAdapter(private val listener: SearchItemListener) :
             fun bind(searchItemMetaData: SearchItemMetaData) {
                 this.searchItemMetaData = searchItemMetaData
                 binding.searchItemSymbol.text = searchItemMetaData.symbol
-                binding.CountryName.text = searchItemMetaData.country
+                binding.countryName.text = searchItemMetaData.country
+                binding.companyName.text = searchItemMetaData.instrument_name
                 binding.searchItemCurrency.text = searchItemMetaData.currency
                 binding.searchItemExchange.text = searchItemMetaData.exchange
             }

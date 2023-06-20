@@ -21,14 +21,12 @@ class StockRepository @Inject constructor(
 
     fun getStocks() = localDataSource.getStocks()
 
+    fun getStock(symbol: String) = localDataSource.getStock(symbol)
 
     suspend fun addStock(stock: Stock) {
         localDataSource.addStock(stock)
     }
 
-    suspend fun getStock(symbol: String) {
-        localDataSource.getStock(symbol)
-    }
 
     suspend fun updateStock(stock: Stock) {
         localDataSource.updateStock(stock)
@@ -49,6 +47,12 @@ class StockRepository @Inject constructor(
     fun getQuote(symbol: String) = performRemoteFetching {
         remoteDataSource.getQuote(symbol)
     }
+
+//    fun getQuote(symbol: String) = performFetchingAndSaving(
+//        {localDataSource.getStockQuote(symbol)},
+//        {remoteDataSource.getQuote(symbol)},
+//        {localDataSource.updateStock(it)}
+//    }
 
     fun getTimeSeries(symbol: String, interval: String, outputSize:String) = performRemoteFetching {
         remoteDataSource.getTimeSeries(symbol, interval, outputSize)

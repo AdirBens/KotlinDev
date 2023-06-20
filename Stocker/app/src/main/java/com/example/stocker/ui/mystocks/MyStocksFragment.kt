@@ -32,7 +32,7 @@ class MyStocksFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = MyStocksFragmentBinding.inflate(inflater, container, false)
         binding.floatingAddButton.setOnClickListener {
             findNavController().navigate(R.id.action_myStocksFragment_to_searchFragment)
@@ -63,6 +63,7 @@ class MyStocksFragment : Fragment() {
                         showDeleteAllConfirmationDialog()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -70,84 +71,93 @@ class MyStocksFragment : Fragment() {
 
 
         stocksViewModel.stocks.observe(viewLifecycleOwner) {
-
-            binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
-
-                override fun onItemClicked(index: Int) {
-                    stocksViewModel.setChosenStock(it[index])
-                    findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
-                }
-
-                override fun onItemLongClick(index: Int) {
-                    //TODO: Implement this in project 03
-                }
-
-                override fun onFavoriteClicked(index: Int) {
-                    stockViewModel.setChosenStock(it[index])
-                    val stock = it[index]
-                    stock.favorite = !stock.favorite
-                    stockViewModel.updateStock(stock)
-                }
-            })
-
-
-            val currentOrientation = resources.configuration.orientation
-
-            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                binding.recycler.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            if (stocksViewModel.stocks.value.isNullOrEmpty()) {
+                binding.recycler.visibility = View.GONE
+                binding.stockListEmpty?.visibility = View.VISIBLE
             } else {
-                binding.recycler.layoutManager = LinearLayoutManager(requireContext())
+                binding.recycler.visibility = View.VISIBLE
+                binding.stockListEmpty?.visibility = View.GONE
+
+                binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
+
+                    override fun onItemClicked(index: Int) {
+                        stocksViewModel.setChosenStock(it[index])
+                        findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
+                    }
+
+                    override fun onItemLongClick(index: Int) {
+                        //TODO: Implement this in project 03
+                    }
+
+                    override fun onFavoriteClicked(index: Int) {
+                        stockViewModel.setChosenStock(it[index])
+                        val stock = it[index]
+                        stock.favorite = !stock.favorite
+                        stockViewModel.updateStock(stock)
+                    }
+                })
+
+
+                val currentOrientation = resources.configuration.orientation
+
+                if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    binding.recycler.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                } else {
+                    binding.recycler.layoutManager = LinearLayoutManager(requireContext())
+                }
+
+                ItemTouchHelper(object : ItemTouchHelper.Callback() {
+                    override fun getMovementFlags(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder
+                    ): Int {
+                        val swipeFlags = when (resources.configuration.orientation) {
+                            Configuration.ORIENTATION_PORTRAIT ->
+                                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+
+                            Configuration.ORIENTATION_LANDSCAPE ->
+                                ItemTouchHelper.UP or ItemTouchHelper.DOWN
+
+                            else -> 0
+                        }
+                        return makeMovementFlags(0, swipeFlags)
+                    }
+
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        TODO("Not yet implemented, Will Be Implemented in project 03")
+                    }
+
+                    override fun onSwiped(
+                        viewHolder: RecyclerView.ViewHolder,
+                        direction: Int
+                    ) {
+                        val stockToDelete = (binding.recycler.adapter as StockAdapter)
+                            .itemAt(viewHolder.adapterPosition)
+
+                        val dialogBuilder = AlertDialog.Builder(requireContext())
+                        dialogBuilder.setTitle(R.string.delete_one_stock)
+                        dialogBuilder.setMessage(R.string.delete_one_stock_msg)
+                        dialogBuilder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
+                            stocksViewModel.deleteStock(stockToDelete)
+                            binding.recycler.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
+                            dialog.dismiss()
+                        }
+                        dialogBuilder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->
+                            binding.recycler.adapter?.notifyItemChanged(viewHolder.adapterPosition)
+                            dialog.dismiss()
+                        }
+
+                        val dialog = dialogBuilder.create()
+                        dialog.show()
+                    }
+
+                }).attachToRecyclerView(binding.recycler)
             }
-
-            ItemTouchHelper(object : ItemTouchHelper.Callback() {
-                override fun getMovementFlags(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder
-                ): Int {
-                    val swipeFlags = when (resources.configuration.orientation) {
-                        Configuration.ORIENTATION_PORTRAIT ->
-                            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-                        Configuration.ORIENTATION_LANDSCAPE ->
-                            ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                        else -> 0
-                    }
-                    return makeMovementFlags(0, swipeFlags)
-                }
-
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    TODO("Not yet implemented, Will Be Implemented in project 03")
-                }
-
-                override fun onSwiped(
-                    viewHolder: RecyclerView.ViewHolder,
-                    direction: Int
-                ) {
-                    val stockToDelete = (binding.recycler.adapter as StockAdapter)
-                        .itemAt(viewHolder.adapterPosition)
-
-                    val dialogBuilder = AlertDialog.Builder(requireContext())
-                    dialogBuilder.setTitle(R.string.delete_one_stock)
-                    dialogBuilder.setMessage(R.string.delete_one_stock_msg)
-                    dialogBuilder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
-                        stocksViewModel.deleteStock(stockToDelete)
-                        binding.recycler.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
-                        dialog.dismiss()
-                    }
-                    dialogBuilder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->
-                        binding.recycler.adapter?.notifyItemChanged(viewHolder.adapterPosition)
-                        dialog.dismiss()
-                    }
-
-                    val dialog = dialogBuilder.create()
-                    dialog.show()
-                }
-
-            }).attachToRecyclerView(binding.recycler)
         }
     }
 

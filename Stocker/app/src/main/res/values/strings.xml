@@ -4,7 +4,7 @@
     // symbols
     <string name="currency_suffix">"$"</string>
     <string name="percents">"%"</string>
-    <string name="add_percents">"%s%%"</string>
+    <string name="add_percents" translatable="false">"%s%%"</string>
 
     // PageTitles
     <string name="title_your_stocks">Your Stocks</string>
@@ -75,6 +75,9 @@
     <string name="currency">Currency\t\t</string>
     <string name="enter_num_of_stocks">Enter number of stocks *</string>
     <string name="datetime_format">DD/MM/YYYY    HH:MM</string>
+    <string name="summary">Summary</string>
+    <string name="stock_list_empty_message">Your list is currently empty. \n\nAdd stocks to your list by clicking the + button.</string>
+    <string name="stock_already_added">Stock already added, please choose another</string>
 
 </resources>
 

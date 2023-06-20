@@ -15,21 +15,22 @@
             android:id="@+id/searchItemTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="4dp"
+
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/searchItemSymbol"
                 android:layout_width="213dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:text="@string/ticker_symbol"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/searchItemExchange"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="end"
-                android:padding="8dp"
                 android:text="@string/exchange" />
         </LinearLayout>
 
@@ -38,15 +39,18 @@
             android:layout_below="@id/searchItemTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/CountryName"
-                android:layout_width="211dp"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/country_name"
-                android:textColor="@color/black" />
+                android:id="@+id/companyName"
+                android:layout_width="259dp"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:text="@string/company_name"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/searchItemCurrency"
                 android:layout_width="match_parent"
@@ -54,7 +58,26 @@
                 android:gravity="end"
                 android:padding="8dp"
                 android:text="@string/currency" />
+
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/searchItemBottomLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:layout_below="@id/searchItemBottomLayout">
+
+
+            <TextView
+                android:id="@+id/countryName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/country_name"
+                android:textSize="12sp"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 

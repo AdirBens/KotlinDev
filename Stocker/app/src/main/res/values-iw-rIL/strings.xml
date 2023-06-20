@@ -65,4 +65,10 @@
     <string name="title_search">Search</string>
     <string name="country_name">Country Name</string>
     <string name="currency">Currency\t\t</string>
+    <string name="summary">Summary</string>
+    <string name="stock_list_empty_message">Your list is currently empty. \n\nAdd stocks to your list by clicking the + button.</string>
+    <string name="stock_already_added">Stock already added, please choose another</string>
+    <string name="edit_button">כפתור עריכה</string>
+    <string name="title_portfolio_summary">סיכום תיק</string>
+    <string name="portfolio_value_title">ערך תיק נוכחי:</string>
 </resources>
