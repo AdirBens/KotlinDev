@@ -11,9 +11,6 @@
         android:label="my_stocks_fragment"
         tools:layout="@layout/my_stocks_fragment" >
         <action
-            android:id="@+id/action_myStocksFragment_to_portfolioSummaryFragment"
-            app:destination="@id/portfolioSummaryFragment" />
-        <action
             android:id="@+id/action_myStocksFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
         <action
@@ -49,17 +46,6 @@
         <action
             android:id="@+id/action_detailedStockFragment_to_addEditStockFragment"
             app:destination="@id/addEditStockFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/portfolioSummaryFragment"
-        android:name="com.example.stocker.ui.portfolio.PortfolioSummaryFragment"
-        android:label="portfolio_summary_fragment"
-        tools:layout="@layout/portfolio_summary_fragment" >
-        <action
-            android:id="@+id/action_portfolioSummaryFragment_to_myStocksFragment"
-            app:destination="@id/myStocksFragment"
-            app:popUpTo="@id/myStocksFragment"
-            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

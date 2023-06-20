@@ -3,19 +3,20 @@ package com.example.stocker.ui.mystocks
 import  android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stocker.R
+import com.example.stocker.data.model.Portfolio
 import com.example.stocker.utils.autoCleared
 import com.example.stocker.databinding.MyStocksFragmentBinding
 import com.example.stocker.ui.StockViewModel
@@ -37,9 +38,6 @@ class MyStocksFragment : Fragment() {
         binding.floatingAddButton.setOnClickListener {
             findNavController().navigate(R.id.action_myStocksFragment_to_searchFragment)
         }
-        binding.portfolioSummaryButton.setOnClickListener {
-            findNavController().navigate(R.id.action_myStocksFragment_to_portfolioSummaryFragment)
-        }
         return binding.root
     }
 
@@ -48,6 +46,14 @@ class MyStocksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
 
+        stocksViewModel.portfolio.observe(viewLifecycleOwner) {
+            if (stocksViewModel.portfolio.value?.id != 1){
+            val portfolio = Portfolio(1, 0f, 0f, 0f)
+            stocksViewModel.addPortfolio(portfolio)
+            }
+            binding.currentPortfolioValue?.text = String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
+            binding.portfolioBuyinValue?.text = String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
+        }
 
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -84,17 +90,6 @@ class MyStocksFragment : Fragment() {
                         stocksViewModel.setChosenStock(it[index])
                         findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                     }
-
-                    override fun onItemLongClick(index: Int) {
-                        //TODO: Implement this in project 03
-                    }
-
-                    override fun onFavoriteClicked(index: Int) {
-                        stockViewModel.setChosenStock(it[index])
-                        val stock = it[index]
-                        stock.favorite = !stock.favorite
-                        stockViewModel.updateStock(stock)
-                    }
                 })
 
 
@@ -104,7 +99,7 @@ class MyStocksFragment : Fragment() {
                     binding.recycler.layoutManager =
                         LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 } else {
-                    binding.recycler.layoutManager = LinearLayoutManager(requireContext())
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 ItemTouchHelper(object : ItemTouchHelper.Callback() {
@@ -114,7 +109,7 @@ class MyStocksFragment : Fragment() {
                     ): Int {
                         val swipeFlags = when (resources.configuration.orientation) {
                             Configuration.ORIENTATION_PORTRAIT ->
-                                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+                                ItemTouchHelper.UP or ItemTouchHelper.DOWN
 
                             Configuration.ORIENTATION_LANDSCAPE ->
                                 ItemTouchHelper.UP or ItemTouchHelper.DOWN

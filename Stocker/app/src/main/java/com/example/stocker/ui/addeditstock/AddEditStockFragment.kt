@@ -32,7 +32,6 @@ import com.example.stocker.utils.showDatePicker
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class AddEditStockFragment : Fragment() {
 
@@ -174,6 +173,7 @@ class AddEditStockFragment : Fragment() {
         if (isEditFragment) {
             if (isEntryValid(stock)) {
                 stockViewModel.updateStock(stock)
+
                 findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
             } else {
                 raiseIncompleteForm()
@@ -188,6 +188,7 @@ class AddEditStockFragment : Fragment() {
                     ).show()
                     findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
                 }
+                stocksViewModel.updatePortfolio(stock, requireContext())
                 stocksViewModel.addStock(stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             } else {

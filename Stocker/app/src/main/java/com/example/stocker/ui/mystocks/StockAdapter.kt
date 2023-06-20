@@ -14,7 +14,6 @@ class StockAdapter(private val stocks: List<Stock>, private val listener: ItemLi
 
     interface ItemListener {
         fun onItemClicked(index: Int)
-        fun onFavoriteClicked(index: Int)
     }
 
     inner class ItemViewHolder(
@@ -26,29 +25,20 @@ class StockAdapter(private val stocks: List<Stock>, private val listener: ItemLi
         init {
             binding.root.setOnClickListener(this)
             binding.root.setOnLongClickListener(this)
-            binding.favButton.setOnClickListener(this)
         }
 
         override fun onClick(view: View) {
             when (view) {
                 binding.root -> listener.onItemClicked(adapterPosition)
-                binding.favButton -> listener.onFavoriteClicked(adapterPosition)
             }
         }
 
         fun bind(stock: Stock) {
             binding.tickerSymbol.text = stock.tickerSymbol
-            binding.stockCompanyName?.text = stock.stockQuote?.name
+            binding.stockName.text = stock.stockQuote?.name
             binding.buyingDate.text = stock.buyingDate
             binding.buyingPrice.text = stock.buyingPrice.toString()
             Glide.with(binding.root).load(stock.imageUri).circleCrop().into(binding.stockImage)
-            binding.favButton.apply {
-                if (stock.favorite) {
-                    setBackgroundResource(R.drawable.baseline_star_yellow_24)
-                } else {
-                    setBackgroundResource(R.drawable.baseline_star_grey_24)
-                }
-            }
         }
 
         override fun onLongClick(p0: View?): Boolean {

@@ -1,8 +1,11 @@
 package com.example.stocker.data.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import com.example.stocker.data.local_db.PortfolioDao
 
-import com.example.stocker.data.local_db.MyStocksDao
+import com.example.stocker.data.local_db.StocksDao
+import com.example.stocker.data.model.Portfolio
 import com.example.stocker.data.model.Stock
 import com.example.stocker.data.remote_db.StockRemoteDataSource
 import com.example.stocker.utils.performRemoteFetching
@@ -13,27 +16,44 @@ import javax.inject.Singleton
 class StockRepository @Inject constructor(
     application:Application,
     private val remoteDataSource: StockRemoteDataSource,
-    private val localDataSource: MyStocksDao
+    private val localStocksDataSource: StocksDao,
+    private val localPortfolioDataSource: PortfolioDao
     ) {
 
-    fun getStocks() = localDataSource.getStocks()
+    fun getStocks() = localStocksDataSource.getStocks()
 
-    fun getStock(symbol: String) = localDataSource.getStock(symbol)
+    fun getStock(symbol: String) = localStocksDataSource.getStock(symbol)
+
+    fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
 
     suspend fun addStock(stock: Stock) {
-        localDataSource.addStock(stock)
+        localStocksDataSource.addStock(stock)
     }
 
     suspend fun updateStock(stock: Stock) {
-        localDataSource.updateStock(stock)
+        localStocksDataSource.updateStock(stock)
     }
 
     suspend fun deleteStock(stock: Stock) {
-        localDataSource.deleteStock(stock)
+        localStocksDataSource.deleteStock(stock)
     }
 
     suspend fun deleteAll() {
-        localDataSource.deleteAll()
+        localStocksDataSource.deleteAll()
+    }
+
+    suspend fun updatePortfolio(portfolio: Portfolio) {
+        localPortfolioDataSource.updatePortfolio(portfolio)
+    }
+
+
+
+    suspend fun deletePortfolio(portfolio: Portfolio) {
+        localPortfolioDataSource.deletePortfolio(portfolio)
+    }
+
+    suspend fun addPortfolio(portfolio: Portfolio) {
+        localPortfolioDataSource.addPortfolio(portfolio)
     }
 
     fun getSymbolSearch (keyword: String) = performRemoteFetching {

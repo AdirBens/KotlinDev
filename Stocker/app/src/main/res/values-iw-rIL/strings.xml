@@ -71,4 +71,5 @@
     <string name="edit_button">כפתור עריכה</string>
     <string name="title_portfolio_summary">סיכום תיק</string>
     <string name="portfolio_value_title">ערך תיק נוכחי:</string>
+    <string name="portfolio_buying_value">Portfolio Buying Value</string>
 </resources>

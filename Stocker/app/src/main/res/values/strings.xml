@@ -12,7 +12,7 @@
     <string name="title_add_stock">Add Stock</string>
 
     // Stocks main
-    <string name="title_stocks_list">Your Tracking Stocks List</string>
+    <string name="title_stocks_list">Your Stocks</string>
 
     // OverView Card
     <string name="ov_title">"Portfolio Value"</string>
@@ -62,7 +62,7 @@
     <string name="edit_button">Edit button</string>
     <string name="title_portfolio_summary">Portfolio Summary</string>
     <string name="portfolio_value_title">Current Portfolio Value:</string>
-    <string name="current_portfolio_value_title">Portfolio Value:</string>
+    <string name="current_portfolio_value_title">Portfolio Current Value:</string>
     <string name="current_portfolio_value">00.00</string>
     <string name="portfolio_change">Porfolio Change:</string>
     <string name="refresh_button">REFRESH</string>
@@ -78,6 +78,7 @@
     <string name="summary">Summary</string>
     <string name="stock_list_empty_message">Your list is currently empty. \n\nAdd stocks to your list by clicking the + button.</string>
     <string name="stock_already_added">Stock already added, please choose another</string>
+    <string name="portfolio_buying_value">Portfolio Buying Value</string>
 
 </resources>
 

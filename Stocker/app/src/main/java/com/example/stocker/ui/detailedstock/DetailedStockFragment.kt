@@ -69,7 +69,7 @@ class DetailedStockFragment : Fragment() {
             setCurrentPrice(it)
             setBalance(it.buyingPrice!!, currentPrice)
             binding.tickerSymbol.text = it.tickerSymbol
-            binding.companyName?.text = it.stockQuote?.name
+            binding.companyName.text = it.stockQuote?.name
             binding.descriptionText.text = it.description
             binding.buyingDate.text = it.buyingDate
             binding.buyingPrice.text = it.buyingPrice.toString()

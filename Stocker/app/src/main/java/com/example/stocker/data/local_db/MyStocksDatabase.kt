@@ -4,23 +4,31 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.stocker.data.model.Portfolio
 import com.example.stocker.data.model.Stock
 
-@Database(entities = arrayOf(Stock::class), version = 1, exportSchema = false)
-abstract class MyStocksDatabase : RoomDatabase(){
+@Database(entities = [Stock::class, Portfolio::class], version = 1, exportSchema = false)
 
-    abstract fun myStockDao(): MyStocksDao
+abstract class MyStocksDatabase : RoomDatabase() {
 
-    companion object{
+    abstract fun portfolioDao(): PortfolioDao
+    abstract fun myStockDao(): StocksDao
+
+    companion object {
 
         @Volatile
-        private var instance: MyStocksDatabase? = null
+        private var INSTANCE: MyStocksDatabase? = null
 
-        fun getDatabase(context: Context) : MyStocksDatabase =
-            instance ?: synchronized(this) {
-            Room.databaseBuilder(context.applicationContext,
-                MyStocksDatabase::class.java,"stocks_database").fallbackToDestructiveMigration()
-                .build().also { instance = it }
+        fun getDatabase(context: Context): MyStocksDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    MyStocksDatabase::class.java,
+                    "stocks_database"
+                ).build()
+                INSTANCE = instance
+                instance
+            }
         }
     }
 }

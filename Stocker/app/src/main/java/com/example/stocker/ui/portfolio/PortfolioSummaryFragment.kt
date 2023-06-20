@@ -32,8 +32,6 @@ class PortfolioSummaryFragment : Fragment() {
     private val stocksViewModel: StocksViewModel by activityViewModels()
     private val stockViewModel: StockViewModel by activityViewModels()
     private var binding: PortfolioSummaryFragmentBinding by autoCleared()
-
-    private var totalNumOfStocks = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

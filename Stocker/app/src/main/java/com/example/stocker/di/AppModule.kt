@@ -52,5 +52,9 @@ object AppModule {
     @Singleton
     fun provideStockDao(database: MyStocksDatabase) = database.myStockDao()
 
+    @Provides
+    @Singleton
+    fun providePortfolioDao(database: MyStocksDatabase) = database.portfolioDao()
+
 
 }

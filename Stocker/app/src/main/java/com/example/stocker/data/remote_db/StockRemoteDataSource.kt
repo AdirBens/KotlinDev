@@ -10,11 +10,11 @@ class StockRemoteDataSource @Inject constructor(
     private val stockService: StockService
 ) : BaseDataSource() {
 
-
-
-
     suspend fun getSymbolSearchResult(keywords: String) =
         getResult { stockService.getSymbolSearch(keywords) }
+
+//    suspend fun refreshStock(symbol:String) {
+//        getQuote(symbol)
 
     suspend fun getQuote(symbol: String) = getResult { stockService.getQuote(symbol) }
 
@@ -26,5 +26,4 @@ class StockRemoteDataSource @Inject constructor(
 
     suspend fun getCurrentPrice(symbol: String) =
         getResult { stockService.getCurrentPrice(symbol) }
-
 }

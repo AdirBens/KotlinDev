@@ -61,7 +61,6 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
                     binding.progressBarCyclic.visibility = View.GONE
                     adapter.setStockSymbolList(it.status.data!!.data)
                 }
-
                 is Error -> {
                     binding.progressBarCyclic.visibility = View.GONE
                     Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT).show()
