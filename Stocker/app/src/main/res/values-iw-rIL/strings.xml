@@ -72,4 +72,7 @@
     <string name="title_portfolio_summary">סיכום תיק</string>
     <string name="portfolio_value_title">ערך תיק נוכחי:</string>
     <string name="portfolio_buying_value">Portfolio Buying Value</string>
+    <string name="delete_all">Delete All</string>
+    <string name="no_data_available">No data available</string>
+    <string name="enter_ticker_symbol">Enter ticker symbol</string>
 </resources>

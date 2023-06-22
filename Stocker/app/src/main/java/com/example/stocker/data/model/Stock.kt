@@ -3,10 +3,8 @@ package com.example.stocker.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 
 @Entity(tableName = "stocks_table")
-@TypeConverters(ModelConverter::class)
 data class Stock(
     @PrimaryKey
     @ColumnInfo(name = "ticker_symbol")

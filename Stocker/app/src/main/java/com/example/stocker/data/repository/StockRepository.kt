@@ -47,7 +47,6 @@ class StockRepository @Inject constructor(
     }
 
 
-
     suspend fun deletePortfolio(portfolio: Portfolio) {
         localPortfolioDataSource.deletePortfolio(portfolio)
     }

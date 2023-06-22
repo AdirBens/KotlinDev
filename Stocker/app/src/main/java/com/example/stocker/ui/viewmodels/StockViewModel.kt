@@ -1,4 +1,4 @@
-package com.example.stocker.ui
+package com.example.stocker.ui.viewmodels
 
 import android.content.Context
 import android.widget.Toast
@@ -62,12 +62,7 @@ class StockViewModel @Inject constructor(
         setSymbol(stock.tickerSymbol)
     }
 
-    fun updateStock(stock: Stock)
-    {
-        viewModelScope.launch {
-            stockRepository.updateStock(stock)
-        }
-    }
+
 
     fun getStock(symbol:String) : LiveData<Stock> {
         return stockRepository.getStock(symbol)

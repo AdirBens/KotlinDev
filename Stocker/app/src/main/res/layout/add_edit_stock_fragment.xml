@@ -66,8 +66,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:required="true"
-                        app:errorEnabled="true"
-                        app:suffixText="@string/currency_suffix">
+                        app:errorEnabled="true">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/buying_amount"

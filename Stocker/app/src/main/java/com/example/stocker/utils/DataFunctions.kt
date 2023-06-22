@@ -1,19 +1,9 @@
 package com.example.stocker.utils
 
-import android.content.Context
-import android.provider.MediaStore.Audio.Media
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.example.stocker.data.model.Stock
-import com.example.stocker.data.repository.StockRepository
-import com.example.stocker.ui.StockViewModel
 import kotlinx.coroutines.Dispatchers
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.MediaType
-import okhttp3.RequestBody
 
 fun <T,A> performFetchingAndSaving (localDbFetch: () -> LiveData<T>,
                                    remoteDbFetch: suspend () -> Resource<A>,
@@ -38,12 +28,17 @@ fun <T,A> performFetchingAndSaving (localDbFetch: () -> LiveData<T>,
         }
     }
 
+fun <T> performLocalFetching(localDbFetch: () -> LiveData<T>): LiveData<Resource<T>> =
+    liveData(Dispatchers.IO) {
+        emit(Resource.loading())
+        val source = localDbFetch().map { Resource.success(it) }
+        emitSource(source)
+    }
+
 fun <A> performRemoteFetching(remoteDbFetch: suspend () -> Resource<A>): LiveData<Resource<A>> =
     liveData(Dispatchers.IO) {
         emit(Resource.loading())
-
         val fetchResource = remoteDbFetch()
-        Log.d("PRF", "This is a debug message inside performRemoteFetch" + fetchResource.status.data.toString()) // Debug log
         if (fetchResource.status is Success) {
             emit(Resource.success(fetchResource.status.data!!))
         } else if (fetchResource.status is Error) {

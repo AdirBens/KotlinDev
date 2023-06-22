@@ -17,11 +17,12 @@ import com.bumptech.glide.Glide
 import com.example.stocker.data.model.Stock
 import com.example.stocker.utils.autoCleared
 import com.example.stocker.databinding.DetailedStockFragmentBinding
-import com.example.stocker.ui.StockViewModel
-import com.example.stocker.ui.StocksViewModel
+import com.example.stocker.ui.viewmodels.StockViewModel
+import com.example.stocker.ui.viewmodels.StocksViewModel
 import com.example.stocker.utils.Error
 import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Success
+import com.example.stocker.utils.convertLongToShortDateFormat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -35,6 +36,7 @@ class DetailedStockFragment : Fragment() {
     private var binding: DetailedStockFragmentBinding by autoCleared()
     private val stockViewModel: StockViewModel by viewModels()
     private val stocksViewModel: StocksViewModel by activityViewModels()
+
 
     private var currentPrice = 0.0f
 
@@ -55,18 +57,10 @@ class DetailedStockFragment : Fragment() {
         toolbar?.setTitle(R.string.title_stock_detail)
         stockViewModel.setChosenStock(stocksViewModel.chosenStock.value!!)
 
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-        }
-
-
-
-
         stockViewModel.chosenStock.observe(viewLifecycleOwner) {
             stockViewModel.setSymbol(it.tickerSymbol)
             currentPrice = it.stockQuote!!.close.toFloat()
-            setCurrentPrice(it)
+            setCurrentPrice()
             setBalance(it.buyingPrice!!, currentPrice)
             binding.tickerSymbol.text = it.tickerSymbol
             binding.companyName.text = it.stockQuote?.name
@@ -82,7 +76,7 @@ class DetailedStockFragment : Fragment() {
         }
     }
 
-    private fun setCurrentPrice(stock: Stock) {
+    private fun setCurrentPrice() {
         stockViewModel.stockCurrentPrice.observe(viewLifecycleOwner) {
             when (it.status) {
                 is Loading -> {}
@@ -123,36 +117,52 @@ class DetailedStockFragment : Fragment() {
     }
 
     private fun setupLineChart(stock: Stock) {
+        val orientation = resources.configuration.orientation
+        val bind = binding.portfolioGraph
         val timeSeries = stock.stockTimeSeries?.values
         if (timeSeries != null) {
+            val buyingPriceEntries = mutableListOf<Entry>()
             val entries = mutableListOf<Entry>()
             val labels = mutableListOf<String>()
 
             timeSeries.forEachIndexed { index, data ->
-                entries.add(Entry(index.toFloat(), data.avgprice.toFloat()))
-                labels.add(data.datetime)
+                entries.add(Entry(index.toFloat(), data.close.toFloat()))
+                labels.add(convertLongToShortDateFormat(data.datetime))
+                buyingPriceEntries.add(Entry(index.toFloat(), stock.buyingPrice!!))
             }
 
 
+
+
             val lineDataSet = LineDataSet(entries, "Stock Price")
+            val lineDataSetBuyingPrice = LineDataSet(buyingPriceEntries, "Buying Price")
+
             lineDataSet.setDrawCircles(false)
             lineDataSet.setDrawValues(false)
             lineDataSet.color = R.color.black
 
+            lineDataSetBuyingPrice.setDrawCircles(false)
+            lineDataSetBuyingPrice.setDrawValues(false)
+            lineDataSetBuyingPrice.color = R.color.teal_200
+
             val lineDataSets = ArrayList<ILineDataSet>()
             lineDataSets.add(lineDataSet)
+            lineDataSets.add(lineDataSetBuyingPrice)
 
             val lineData = LineData(lineDataSets)
 
-            binding.portfolioGraph?.data = lineData
-            binding.portfolioGraph?.legend?.isEnabled = false
-            binding.portfolioGraph?.description?.isEnabled = false
-            binding.portfolioGraph?.xAxis?.position = XAxis.XAxisPosition.BOTTOM
-            binding.portfolioGraph?.xAxis?.valueFormatter = IndexAxisValueFormatter(labels)
-            binding.portfolioGraph?.xAxis?.setDrawGridLines(false)
-            binding.portfolioGraph?.axisRight?.isEnabled = false
+            bind.data = lineData
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            bind.setTouchEnabled(false)
+            }
+            bind.legend?.isEnabled = false
+            bind.description?.isEnabled = false
+            bind.xAxis?.position = XAxis.XAxisPosition.BOTTOM
+            bind.xAxis?.valueFormatter = IndexAxisValueFormatter(labels)
+            bind.xAxis?.setDrawGridLines(false)
+            bind.axisRight?.isEnabled = false
 
-            binding.portfolioGraph?.invalidate()
+            bind.invalidate()
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.stocker.ui.addeditstock
 
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,24 +11,23 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.stocker.R
 import com.example.stocker.data.model.Stock
 import com.example.stocker.utils.autoCleared
-import com.example.stocker.ui.StockViewModel
+import com.example.stocker.ui.viewmodels.StockViewModel
 import com.example.stocker.databinding.AddEditStockFragmentBinding
-import com.example.stocker.ui.StocksViewModel
+import com.example.stocker.ui.viewmodels.StocksViewModel
 import com.example.stocker.utils.Error
 import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Success
 import com.example.stocker.utils.convertDateFormat
 import com.example.stocker.utils.showDatePicker
 import com.google.android.material.snackbar.Snackbar
+import org.apache.commons.validator.routines.UrlValidator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,6 +39,7 @@ class AddEditStockFragment : Fragment() {
     private var tempImageUri: Uri? = null
     private var isEditFragment: Boolean = false
     private lateinit var stock: Stock
+    private lateinit var oldStock:Stock
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +72,7 @@ class AddEditStockFragment : Fragment() {
             onBackPressedCallback
         )
         if (isEditFragment) {
+            oldStock = stocksViewModel.chosenStock.value!!.copy()
             stock = stocksViewModel.chosenStock.value!!
         } else {
             arguments?.getString("symbol")?.let {
@@ -91,9 +91,9 @@ class AddEditStockFragment : Fragment() {
 
     private fun setupTextFields() {
         if (isEditFragment) {
-            binding.buyingAmount?.setText(stock.buyingAmount.toString())
+            binding.buyingAmount.setText(stock.buyingAmount.toString())
             binding.buyingDate.setText(stock.buyingDate)
-            binding.stockDescription?.setText(stock.description)
+            binding.stockDescription.setText(stock.description)
         }
         binding.tickerSymbol.setText(stockViewModel.chosenStockSymbol.value)
     }
@@ -109,20 +109,20 @@ class AddEditStockFragment : Fragment() {
                 when (it.status) {
                     is Loading -> {
                         binding.chosenStockImage.visibility = View.GONE
-                        binding.progressBarCyclic?.visibility = View.VISIBLE
+                        binding.progressBarCyclic.visibility = View.VISIBLE
                     }
                     is Success -> {
-                        binding.progressBarCyclic?.visibility = View.GONE
+                        binding.progressBarCyclic.visibility = View.GONE
                         binding.chosenStockImage.visibility = View.VISIBLE
-                        tempImageUri = if (it.status.data?.url != "") {
-                            Uri.parse(it.status.data?.url)
+                        tempImageUri = if (it.status.data?.url != "" && it.status.data?.url != null) {
+                            Uri.parse(it.status.data.url)
                         } else {
                             getDefaultUri()
                         }
                     }
 
                     is Error -> {
-                        binding.progressBarCyclic?.visibility = View.GONE
+                        binding.progressBarCyclic.visibility = View.GONE
                         tempImageUri = getDefaultUri()
                         Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT)
                             .show()
@@ -149,6 +149,7 @@ class AddEditStockFragment : Fragment() {
                 }
             }
         }
+        stockViewModel.setChosenStock(stock)
     }
 
     private fun setupStockTimeSeries(stock: Stock) {
@@ -164,16 +165,17 @@ class AddEditStockFragment : Fragment() {
                 }
             }
         }
+        stockViewModel.setChosenStock(stock)
+
     }
 
     private fun addStock() {
-        stock.description = binding.stockDescription?.text.toString()
-        stock.buyingAmount = binding.buyingAmount?.text.toString()
+        stock.description = binding.stockDescription.text.toString()
+        stock.buyingAmount = binding.buyingAmount.text.toString()
         stock.imageUri = tempImageUri.toString()
         if (isEditFragment) {
             if (isEntryValid(stock)) {
-                stockViewModel.updateStock(stock)
-
+                stocksViewModel.updateStock(oldStock, stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
             } else {
                 raiseIncompleteForm()
@@ -188,7 +190,7 @@ class AddEditStockFragment : Fragment() {
                     ).show()
                     findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
                 }
-                stocksViewModel.updatePortfolio(stock, requireContext())
+                stocksViewModel.addStockDataToPortfolio(stock)
                 stocksViewModel.addStock(stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             } else {
@@ -202,7 +204,7 @@ class AddEditStockFragment : Fragment() {
         val filteredValues = values?.filter { it.datetime == convertDateFormat(stock.buyingDate!!) }
 
         if (filteredValues?.isNotEmpty() == true) {
-            stock.buyingPrice = filteredValues.map { it.avgprice.toFloat() }.first()
+            stock.buyingPrice = filteredValues.map { it.close.toFloat() }.first()
         } else {
             stock.buyingPrice = stock.stockQuote?.close?.toFloat()
             Toast.makeText(
@@ -245,7 +247,7 @@ class AddEditStockFragment : Fragment() {
     private fun isEntryValid(stock: Stock): Boolean {
 
         if (stock.buyingAmount == "") {
-            binding.buyingAmount?.error = getString(R.string.required)
+            binding.buyingAmount.error = getString(R.string.required)
         }
         if (stock.buyingDate == null) {
             binding.buyingDate.error = getString(R.string.required)

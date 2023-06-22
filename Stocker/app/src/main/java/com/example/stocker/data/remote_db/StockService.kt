@@ -23,7 +23,7 @@ interface StockService {
         @Query("symbol") symbol: String
     ): Response<StockQuote>
 
-    @GET("avgprice")
+    @GET("time_series")
     suspend fun getTimeSeries(
         @Query("symbol") symbol: String,
         @Query("interval") interval: String,

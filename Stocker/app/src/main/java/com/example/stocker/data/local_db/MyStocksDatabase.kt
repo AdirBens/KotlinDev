@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.stocker.data.model.ModelConverter
 import com.example.stocker.data.model.Portfolio
 import com.example.stocker.data.model.Stock
 
 @Database(entities = [Stock::class, Portfolio::class], version = 1, exportSchema = false)
-
+@TypeConverters(ModelConverter::class)
 abstract class MyStocksDatabase : RoomDatabase() {
 
     abstract fun portfolioDao(): PortfolioDao

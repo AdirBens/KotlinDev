@@ -19,5 +19,13 @@ data class Portfolio(
     @ColumnInfo(name = "portfolio_change_percent")
     var portfolioChangePercent: Float,
 
+    @ColumnInfo(name = "portfolio_value_time_series")
+    var portfolioValueTimeSeries: ArrayList<PortfolioTimeSeriesValue> = ArrayList(),
+)
 
+data class PortfolioTimeSeriesValue (
+    val date : String,
+    var open: Float,
+    var close: Float,
+    var numOfStocks: Int
 )

@@ -21,7 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.stocker.R
 import com.example.stocker.databinding.SearchFragmentBinding
-import com.example.stocker.ui.StocksViewModel
+import com.example.stocker.ui.viewmodels.StocksViewModel
 import com.example.stocker.utils.Loading
 import com.example.stocker.utils.Success
 import com.example.stocker.utils.autoCleared
@@ -76,8 +76,7 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val search = menu.findItem(R.id.appSearchBar)
                 val searchView = search.actionView as SearchView
-                //TODO: move to resource
-                searchView.queryHint = "Enter ticker symbol"
+                searchView.queryHint = getString(R.string.enter_ticker_symbol)
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
@@ -92,7 +91,6 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
                 })
             }
 
-            //TODO: how to get rid of this?
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return false
             }

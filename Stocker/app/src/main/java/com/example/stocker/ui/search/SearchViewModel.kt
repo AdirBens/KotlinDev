@@ -20,7 +20,6 @@ class SearchViewModel @Inject constructor(
     private val _searchResults = _keyword.switchMap {
         stockRepository.getSymbolSearch(it)
     }
-
     val searchResults : LiveData<Resource<SymbolSearch>> = _searchResults
 
     fun setKeyword(keyword: String) {

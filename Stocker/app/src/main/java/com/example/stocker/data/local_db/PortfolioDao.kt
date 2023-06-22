@@ -23,5 +23,4 @@ interface PortfolioDao {
 
     @Query("SELECT * FROM portfolio_table WHERE id like :id")
     fun getPortfolio(id: Int): LiveData<Portfolio>
-
 }

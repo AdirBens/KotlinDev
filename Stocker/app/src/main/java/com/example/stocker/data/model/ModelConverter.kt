@@ -2,9 +2,23 @@ package com.example.stocker.data.model
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class ModelConverter {
     private val gson = Gson()
+
+    @TypeConverter
+    fun fromArrayListToString(value: ArrayList<PortfolioTimeSeriesValue>?): String? {
+        return gson.toJson(value)
+    }
+
+    @TypeConverter
+    fun fromStringToArrayList(value: String?): ArrayList<PortfolioTimeSeriesValue>? {
+        val type = object : TypeToken<ArrayList<PortfolioTimeSeriesValue>?>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+
 
     @TypeConverter
     fun fromStringToStockTimeSeries(value: String?): StockTimeSeries? {

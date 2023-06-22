@@ -33,3 +33,19 @@ fun convertDateFormat(date: String): String {
         val parsedDate = inputFormat.parse(date)
         return outputFormat.format(parsedDate)
 }
+
+fun convertLongToShortDateFormat(date: String): String {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd.M", Locale.getDefault())
+
+        val parsedDate = inputFormat.parse(date)
+        return outputFormat.format(parsedDate)
+}
+
+fun convertStringToDate(date: String): Calendar {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val parsedDate = inputFormat.parse(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = parsedDate
+        return calendar
+}

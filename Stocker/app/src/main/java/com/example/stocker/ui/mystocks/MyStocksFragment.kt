@@ -1,11 +1,14 @@
 package com.example.stocker.ui.mystocks
 
 import  android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -19,20 +22,28 @@ import com.example.stocker.R
 import com.example.stocker.data.model.Portfolio
 import com.example.stocker.utils.autoCleared
 import com.example.stocker.databinding.MyStocksFragmentBinding
-import com.example.stocker.ui.StockViewModel
-import com.example.stocker.ui.StocksViewModel
+import com.example.stocker.ui.viewmodels.StocksViewModel
+import com.example.stocker.utils.convertLongToShortDateFormat
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @AndroidEntryPoint
 class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
     private val stocksViewModel: StocksViewModel by activityViewModels()
-    private val stockViewModel: StockViewModel by activityViewModels()
+    private lateinit var lineChart: LineChart
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = MyStocksFragmentBinding.inflate(inflater, container, false)
         binding.floatingAddButton.setOnClickListener {
@@ -47,12 +58,20 @@ class MyStocksFragment : Fragment() {
         setupToolbar()
 
         stocksViewModel.portfolio.observe(viewLifecycleOwner) {
-            if (stocksViewModel.portfolio.value?.id != 1){
-            val portfolio = Portfolio(1, 0f, 0f, 0f)
-            stocksViewModel.addPortfolio(portfolio)
+            if (stocksViewModel.portfolio.value?.id != 1) {
+                val portfolio = Portfolio(1, 0f, 0f, 0f)
+                stocksViewModel.addPortfolio(portfolio)
             }
-            binding.currentPortfolioValue?.text = String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
-            binding.portfolioBuyinValue?.text = String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
+            binding.currentPortfolioValue?.text =
+                String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
+            binding.portfolioBuyinValue?.text =
+                String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
+
+            if (binding.portfolioGraph != null) {
+                lineChart = binding.portfolioGraph!!
+            }
+            setupLineChart()
+            buildGraph()
         }
 
         val menuHost: MenuHost = requireActivity()
@@ -104,15 +123,12 @@ class MyStocksFragment : Fragment() {
 
                 ItemTouchHelper(object : ItemTouchHelper.Callback() {
                     override fun getMovementFlags(
-                        recyclerView: RecyclerView,
-                        viewHolder: RecyclerView.ViewHolder
+                        recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder
                     ): Int {
                         val swipeFlags = when (resources.configuration.orientation) {
-                            Configuration.ORIENTATION_PORTRAIT ->
-                                ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                            Configuration.ORIENTATION_PORTRAIT -> ItemTouchHelper.UP or ItemTouchHelper.DOWN
 
-                            Configuration.ORIENTATION_LANDSCAPE ->
-                                ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                            Configuration.ORIENTATION_LANDSCAPE -> ItemTouchHelper.UP or ItemTouchHelper.DOWN
 
                             else -> 0
                         }
@@ -124,15 +140,14 @@ class MyStocksFragment : Fragment() {
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder
                     ): Boolean {
-                        TODO("Not yet implemented, Will Be Implemented in project 03")
+                            TODO("Not yet implemented")
                     }
 
                     override fun onSwiped(
-                        viewHolder: RecyclerView.ViewHolder,
-                        direction: Int
+                        viewHolder: RecyclerView.ViewHolder, direction: Int
                     ) {
-                        val stockToDelete = (binding.recycler.adapter as StockAdapter)
-                            .itemAt(viewHolder.adapterPosition)
+                        val stockToDelete =
+                            (binding.recycler.adapter as StockAdapter).itemAt(viewHolder.adapterPosition)
 
                         val dialogBuilder = AlertDialog.Builder(requireContext())
                         dialogBuilder.setTitle(R.string.delete_one_stock)
@@ -140,6 +155,10 @@ class MyStocksFragment : Fragment() {
                         dialogBuilder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
                             stocksViewModel.deleteStock(stockToDelete)
                             binding.recycler.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
+                            binding.currentPortfolioValue?.text =
+                                String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
+                            binding.portfolioBuyinValue?.text =
+                                String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
                             dialog.dismiss()
                         }
                         dialogBuilder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->
@@ -166,7 +185,7 @@ class MyStocksFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(R.string.delete_all_title)
         builder.setMessage(R.string.delete_all_msg)
-        builder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
+        builder.setPositiveButton(getString(R.string.delete_all)) { dialog, _ ->
             stocksViewModel.deleteAllStocks()
             dialog.dismiss()
         }
@@ -176,4 +195,96 @@ class MyStocksFragment : Fragment() {
         val dialog = builder.create()
         dialog.show()
     }
+
+    private fun setupLineChart() {
+        lineChart.apply {
+            setNoDataText(getString(R.string.no_data_available))
+            setNoDataTextColor(R.color.red)
+            description.isEnabled = false
+            setTouchEnabled(false)
+            isDragEnabled = false
+            setScaleEnabled(false)
+            legend.isEnabled = false
+
+            xAxis.apply {
+                position = XAxis.XAxisPosition.BOTTOM
+                setDrawGridLines(false)
+                granularity = 1f
+                axisLineColor = Color.BLUE
+                valueFormatter = object : ValueFormatter() {
+                    private val dateFormatter = SimpleDateFormat("dd/MM/yy", Locale.getDefault())
+                    override fun getFormattedValue(value: Float): String {
+                        val timestamp = value.toLong()
+                        return dateFormatter.format(Date(timestamp))
+                    }
+                }
+            }
+
+
+            axisLeft.apply {
+                setDrawGridLines(true)
+                gridColor = Color.LTGRAY
+                textColor = Color.DKGRAY
+                valueFormatter = object : ValueFormatter() {
+                    override fun getFormattedValue(value: Float): String {
+                        return getString(R.string.add_percents, value.toInt().toString())
+
+                    }
+                }
+            }
+
+            axisRight.apply {
+                isEnabled = false
+            }
+        }
+    }
+
+    private fun buildGraph() {
+        val portfolioValueTimeSeries = stocksViewModel.portfolio.value?.portfolioValueTimeSeries
+
+        if (!portfolioValueTimeSeries.isNullOrEmpty()) {
+            val entries = mutableListOf<Entry>()
+            val labels = mutableListOf<String>()
+
+            portfolioValueTimeSeries.forEachIndexed { index, data ->
+                val value = 100 * (1 - (data.close / data.open))
+                entries.add(Entry(index.toFloat(), value))
+                labels.add(convertLongToShortDateFormat(data.date))
+            }
+
+            val dataSet = LineDataSet(entries, "Portfolio Value")
+            dataSet.apply {
+                setDrawValues(false)
+                setDrawFilled(true) // Enable filled drawing
+                color = Color.TRANSPARENT // Set line color to transparent
+                fillColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.green
+                ) // Set fill color above the x-axis
+                fillDrawable = createGradientDrawable() // Set the fill drawable
+                lineWidth = 4f
+                setDrawCircles(false)
+                mode = LineDataSet.Mode.LINEAR
+            }
+
+            val lineData = LineData(dataSet)
+            lineChart.xAxis.valueFormatter = IndexAxisValueFormatter(labels)
+            lineChart.data = lineData
+            lineChart.invalidate()
+            lineChart.visibility = View.VISIBLE
+        } else {
+            lineChart.clear()
+            lineChart.invalidate()
+            lineChart.visibility = View.GONE
+        }
+    }
+
+    private fun createGradientDrawable(): Drawable {
+        val colors = intArrayOf(
+            ContextCompat.getColor(requireContext(), R.color.green),
+            ContextCompat.getColor(requireContext(), R.color.red)
+        )
+        return GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
+    }
+
 }
