@@ -27,6 +27,7 @@ import com.yehudadir.stocker.common.Success
 import com.yehudadir.stocker.utils.convertDateFormat
 import com.yehudadir.stocker.utils.showDatePicker
 import com.google.android.material.snackbar.Snackbar
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockTimeSeriesValue
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -87,6 +88,7 @@ class AddEditStockFragment : Fragment() {
         setupToolbar()
         setupTextFields()
         setupLogoImage()
+
         if (!isEditFragment) {
             setupStockQuote(stock)
             setupStockTimeSeries(stock)
@@ -200,9 +202,11 @@ class AddEditStockFragment : Fragment() {
                     ).show()
                     findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
                 }
-                portfolioViewModel.addStockDataToPortfolio(stock)
-                portfolioViewModel.addStock(stock)
-                findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
+                else {
+                    portfolioViewModel.addStockDataToPortfolio(stock)
+                    portfolioViewModel.addStock(stock)
+                    findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
+                }
             } else {
                 raiseIncompleteForm()
             }
@@ -212,11 +216,12 @@ class AddEditStockFragment : Fragment() {
     // TODO: change filter to binarySearch on buyingDate
     private fun setBuyingPrice(stock: Stock) {
         val values = stock.stockTimeSeries?.values
-        val filteredValues = values?.filter { it.datetime == convertDateFormat(stock.buyingDate!!) }
+        val stockByDate = values?.let { getStockValueByDate(it, convertDateFormat(stock.buyingDate!!)) }
 
-        if (filteredValues?.isNotEmpty() == true) {
-            stock.buyingPrice = filteredValues.map { it.close.toFloat() }.first()
-        } else {
+        if (stockByDate != null) {
+            stock.buyingPrice = stockByDate.close.toFloat()
+        }
+        else {
             stock.buyingPrice = stock.stockQuote?.close?.toFloat()
             Toast.makeText(
                 requireContext(),
@@ -295,5 +300,14 @@ class AddEditStockFragment : Fragment() {
             R.string.incomplete_add_stock_form,
             Snackbar.LENGTH_LONG
         ).show()
+    }
+
+    private fun getStockValueByDate(stocksSeriesValues:  List<StockTimeSeriesValue>,
+                                    buyingDate: String) : StockTimeSeriesValue? {
+        val index = stocksSeriesValues.binarySearch {
+            String.CASE_INSENSITIVE_ORDER.reversed().compare(it.datetime, buyingDate)
+        }
+
+        return stocksSeriesValues.getOrNull(index)
     }
 }

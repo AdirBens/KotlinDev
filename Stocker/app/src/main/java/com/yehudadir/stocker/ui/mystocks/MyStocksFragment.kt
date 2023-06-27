@@ -31,6 +31,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.yehudadir.stocker.utils.GraphHelpers
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -41,6 +42,7 @@ class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
     private val portfolioViewModel: PortfolioViewModel by activityViewModels()
     private lateinit var lineChart: LineChart
+    private lateinit var graph: GraphHelpers
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -70,6 +72,12 @@ class MyStocksFragment : Fragment() {
             if (binding.portfolioGraph != null) {
                 lineChart = binding.portfolioGraph!!
             }
+
+            val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
+
+//            graph = GraphHelpers(requireContext())
+//            graph.ShowGraph("Portfolio Value",
+//                             portfolioValueTimeSeries)
             setupLineChart()
             buildGraph()
         }
@@ -272,6 +280,7 @@ class MyStocksFragment : Fragment() {
             lineChart.data = lineData
             lineChart.invalidate()
             lineChart.visibility = View.VISIBLE
+
         } else {
             lineChart.clear()
             lineChart.invalidate()
@@ -286,5 +295,4 @@ class MyStocksFragment : Fragment() {
         )
         return GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
     }
-
 }

@@ -30,6 +30,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import dagger.hilt.android.AndroidEntryPoint
+
 @AndroidEntryPoint
 class DetailedStockFragment : Fragment() {
 

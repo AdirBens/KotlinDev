@@ -11,6 +11,8 @@ import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.data.remote_db.StockRemoteDataSource
 import com.yehudadir.stocker.utils.performLocalFetching
 import com.yehudadir.stocker.utils.performRemoteFetching
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 @Singleton
@@ -34,35 +36,36 @@ class StockRepository @Inject constructor(
 
     fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
 
+
 //    fun getPortfolio(id:Int) = performLocalFetching {
 //        localPortfolioDataSource.getPortfolio(id)
 //    }
 
-    suspend fun addStock(stock: Stock) {
+    suspend fun addStock(stock: Stock)  = withContext(Dispatchers.IO) {
         localStocksDataSource.addStock(stock)
     }
 
-    suspend fun updateStock(stock: Stock) {
+    suspend fun updateStock(stock: Stock)  = withContext(Dispatchers.IO) {
         localStocksDataSource.updateStock(stock)
     }
 
-    suspend fun deleteStock(stock: Stock) {
+    suspend fun deleteStock(stock: Stock)  = withContext(Dispatchers.IO) {
         localStocksDataSource.deleteStock(stock)
     }
 
-    suspend fun deleteAll() {
+    suspend fun deleteAll() = withContext(Dispatchers.IO) {
         localStocksDataSource.deleteAll()
     }
 
-    suspend fun updatePortfolio(portfolio: Portfolio) {
+    suspend fun updatePortfolio(portfolio: Portfolio) = withContext(Dispatchers.IO) {
         localPortfolioDataSource.updatePortfolio(portfolio)
     }
 
-    suspend fun deletePortfolio(portfolio: Portfolio) {
+    suspend fun deletePortfolio(portfolio: Portfolio) = withContext(Dispatchers.IO) {
         localPortfolioDataSource.deletePortfolio(portfolio)
     }
 
-    suspend fun addPortfolio(portfolio: Portfolio) {
+    suspend fun addPortfolio(portfolio: Portfolio) = withContext(Dispatchers.IO) {
         localPortfolioDataSource.addPortfolio(portfolio)
     }
 

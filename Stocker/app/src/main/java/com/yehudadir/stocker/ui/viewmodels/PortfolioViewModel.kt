@@ -68,7 +68,6 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
 
     fun addStockDataToPortfolio(stock: Stock) {
         viewModelScope.launch {
-//            val portfolioValueTimeSeries = portfolio.value?.status?.data?.portfolioValueTimeSeries ?: mutableListOf()
             val portfolioValueTimeSeries = portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
             val currentDateTime = Calendar.getInstance()
             val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
@@ -99,9 +98,6 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
             val buyingPrice = stock.buyingPrice ?: 0.0
             val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
 
-//            portfolio.value!!.status.data!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
-//            portfolio.value!!.status.data!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
-//            stockRepository.updatePortfolio(portfolio.value!!.status.data!!)
             portfolio.value!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
             portfolio.value!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
             stockRepository.updatePortfolio(portfolio.value!!)

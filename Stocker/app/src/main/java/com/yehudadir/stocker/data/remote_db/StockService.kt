@@ -10,7 +10,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface StockService {
-
     @GET("symbol_search")
     suspend fun getSymbolSearch(
         @Query("symbol") keywords: String,
