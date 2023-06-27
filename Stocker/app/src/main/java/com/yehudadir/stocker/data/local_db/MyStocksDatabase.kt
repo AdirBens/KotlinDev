@@ -13,22 +13,22 @@ import com.yehudadir.stocker.data.model.Stock
 @TypeConverters(ModelConverter::class)
 abstract class MyStocksDatabase : RoomDatabase() {
 
-    abstract fun portfolioDao(): com.yehudadir.stocker.data.local_db.PortfolioDao
-    abstract fun myStockDao(): com.yehudadir.stocker.data.local_db.StocksDao
+    abstract fun portfolioDao(): PortfolioDao
+    abstract fun myStockDao(): StocksDao
 
     companion object {
 
         @Volatile
-        private var INSTANCE: com.yehudadir.stocker.data.local_db.MyStocksDatabase? = null
+        private var INSTANCE: MyStocksDatabase? = null
 
-        fun getDatabase(context: Context): com.yehudadir.stocker.data.local_db.MyStocksDatabase {
-            return com.yehudadir.stocker.data.local_db.MyStocksDatabase.Companion.INSTANCE ?: synchronized(this) {
+        fun getDatabase(context: Context): MyStocksDatabase {
+            return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    com.yehudadir.stocker.data.local_db.MyStocksDatabase::class.java,
+                    MyStocksDatabase::class.java,
                     "stocks_database"
                 ).build()
-                com.yehudadir.stocker.data.local_db.MyStocksDatabase.Companion.INSTANCE = instance
+                INSTANCE = instance
                 instance
             }
         }

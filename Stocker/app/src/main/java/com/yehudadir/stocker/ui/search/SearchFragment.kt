@@ -22,11 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yehudadir.stocker.R
 import com.yehudadir.stocker.databinding.SearchFragmentBinding
 import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.stocker.utils.Loading
-import com.yehudadir.stocker.utils.Success
+import com.yehudadir.common.Loading
+import com.yehudadir.common.Success
 import com.yehudadir.stocker.utils.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
-import com.yehudadir.stocker.utils.Error
+import com.yehudadir.common.Error
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {

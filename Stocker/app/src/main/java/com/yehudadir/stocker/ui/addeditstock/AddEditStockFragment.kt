@@ -21,13 +21,12 @@ import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.ui.viewmodels.StockViewModel
 import com.yehudadir.stocker.databinding.AddEditStockFragmentBinding
 import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.stocker.utils.Error
-import com.yehudadir.stocker.utils.Loading
-import com.yehudadir.stocker.utils.Success
+import com.yehudadir.common.Error
+import com.yehudadir.common.Loading
+import com.yehudadir.common.Success
 import com.yehudadir.stocker.utils.convertDateFormat
 import com.yehudadir.stocker.utils.showDatePicker
 import com.google.android.material.snackbar.Snackbar
-import org.apache.commons.validator.routines.UrlValidator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

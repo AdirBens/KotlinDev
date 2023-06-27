@@ -1,7 +1,7 @@
 package com.yehudadir.stocker.data.remote_db
 
 
-import com.yehudadir.stocker.utils.Resource
+import com.yehudadir.common.Resource
 import retrofit2.Response
 
 abstract class BaseDataSource {

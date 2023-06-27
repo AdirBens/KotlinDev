@@ -19,9 +19,9 @@ import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.databinding.DetailedStockFragmentBinding
 import com.yehudadir.stocker.ui.viewmodels.StockViewModel
 import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.stocker.utils.Error
-import com.yehudadir.stocker.utils.Loading
-import com.yehudadir.stocker.utils.Success
+import com.yehudadir.common.Error
+import com.yehudadir.common.Loading
+import com.yehudadir.common.Success
 import com.yehudadir.stocker.utils.convertLongToShortDateFormat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import com.yehudadir.stocker.utils.Resource
+import com.yehudadir.common.Resource
 import com.yehudadir.stocker.data.model.SymbolSearch
 import com.yehudadir.stocker.data.repository.StockRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

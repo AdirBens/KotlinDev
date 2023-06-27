@@ -1,4 +1,4 @@
-package com.yehudadir.stocker.utils
+package com.yehudadir.common
 
 class Constants {
     companion object{

@@ -1,27 +1,18 @@
 package com.yehudadir.stocker.ui.viewmodels
 
-import android.content.Context
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
-import androidx.lifecycle.viewModelScope
 import com.yehudadir.stocker.data.model.Stock
 import com.yehudadir.stocker.data.model.StockCurrentPrice
 import com.yehudadir.stocker.data.model.StockImageURL
 import com.yehudadir.stocker.data.model.StockQuote
 import com.yehudadir.stocker.data.model.StockTimeSeries
 import com.yehudadir.stocker.data.repository.StockRepository
-import com.yehudadir.stocker.utils.Error
-import com.yehudadir.stocker.utils.Loading
-import com.yehudadir.stocker.utils.Resource
-import com.yehudadir.stocker.utils.Success
+import com.yehudadir.common.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class StockViewModel @Inject constructor(
