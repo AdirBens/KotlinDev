@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/myStocksFragment"
-        android:name="com.example.stocker.ui.mystocks.MyStocksFragment"
+        android:name="com.yehudadir.stocker.ui.mystocks.MyStocksFragment"
         android:label="my_stocks_fragment"
         tools:layout="@layout/my_stocks_fragment" >
         <action
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/addEditStockFragment"
-        android:name="com.example.stocker.ui.addeditstock.AddEditStockFragment"
+        android:name="com.yehudadir.stocker.ui.addeditstock.AddEditStockFragment"
         android:label="add_edit_stock_fragment"
         tools:layout="@layout/add_edit_stock_fragment" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailedStockFragment"
-        android:name="com.example.stocker.ui.detailedstock.DetailedStockFragment"
+        android:name="com.yehudadir.stocker.ui.detailedstock.DetailedStockFragment"
         android:label="detailed_stock_fragment"
         tools:layout="@layout/detailed_stock_fragment" >
         <action
@@ -73,7 +73,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.stocker.ui.search.SearchFragment"
+        android:name="com.yehudadir.stocker.ui.search.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" >
         <action
