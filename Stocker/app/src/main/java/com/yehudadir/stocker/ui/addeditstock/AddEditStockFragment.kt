@@ -59,9 +59,10 @@ class AddEditStockFragment : Fragment() {
 
         binding.buyingDate.setOnClickListener {
             showDatePicker(requireContext()) { dateTime ->
-                binding.buyingDate.setText(dateTime)
-                stock.buyingDate = dateTime
-                setBuyingPrice(stock)
+                if (setBuyingPrice(stock, dateTime)) {
+                    binding.buyingDate.setText(dateTime)
+                    stock.buyingDate = dateTime
+                }
             }
         }
 
@@ -142,7 +143,6 @@ class AddEditStockFragment : Fragment() {
                 .load(tempImageUri)
                 .into(binding.chosenStockImage)
         }
-
         stockViewModel.setChosenStock(stock)
     }
 
@@ -176,7 +176,6 @@ class AddEditStockFragment : Fragment() {
                 }
             }
         }
-
         stockViewModel.setChosenStock(stock)
     }
 
@@ -214,20 +213,21 @@ class AddEditStockFragment : Fragment() {
     }
 
     // TODO: change filter to binarySearch on buyingDate
-    private fun setBuyingPrice(stock: Stock) {
+    private fun setBuyingPrice(stock: Stock, buyingDate: String ) :Boolean {
         val values = stock.stockTimeSeries?.values
-        val stockByDate = values?.let { getStockValueByDate(it, convertDateFormat(stock.buyingDate!!)) }
+        val stockByDate = values?.let { getStockValueByDate(it, convertDateFormat(buyingDate)) }
 
         if (stockByDate != null) {
             stock.buyingPrice = stockByDate.close.toFloat()
+            return true
         }
         else {
-            stock.buyingPrice = stock.stockQuote?.close?.toFloat()
             Toast.makeText(
                 requireContext(),
                 "No market data found for the date chosen, entering last known price",
                 Toast.LENGTH_LONG
             ).show()
+            return false
         }
     }
 

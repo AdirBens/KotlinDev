@@ -13,6 +13,7 @@ import com.yehudadir.stocker.utils.convertDateFormat
 import com.yehudadir.stocker.utils.convertStringToDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -28,17 +29,18 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
 
     var portfolio: LiveData<Portfolio> = stockRepository.getPortfolio(1)
 
+    private val portfolioLock = Any()
+
     fun addStock(stock: Stock) {
         viewModelScope.launch {
             stockRepository.addStock(stock)
         }
     }
 
-    fun updateStock(oldStock: Stock, stock: Stock)
-    {
-        viewModelScope.launch {
-            removeStockDataFromPortfolio(oldStock)
-            addStockDataToPortfolio(stock)
+    fun updateStock(oldStock: Stock, stock: Stock) {
+        removeStockDataFromPortfolio(oldStock)
+        addStockDataToPortfolio(stock)
+        viewModelScope.launch(Dispatchers.IO) {
             stockRepository.updateStock(stock)
         }
     }
@@ -67,33 +69,34 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
     }
 
     fun addStockDataToPortfolio(stock: Stock) {
-        viewModelScope.launch {
-            val portfolioValueTimeSeries = portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+        GlobalScope.launch(Dispatchers.IO) {
+            val portfolioValueTimeSeries =
+                portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
             val currentDateTime = Calendar.getInstance()
             val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
+            synchronized(portfolioLock) {
+                stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
+                    val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
+                    if (timeSeriesDateTime >= buyingDate && timeSeriesDateTime < currentDateTime) {
+                        val currentTimeSeriesValue =
+                            portfolioValueTimeSeries.find { it.date == timeSeriesValue.datetime }
 
-            stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
-                val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
-
-                if (timeSeriesDateTime >= buyingDate && timeSeriesDateTime < currentDateTime) {
-                    val currentTimeSeriesValue = portfolioValueTimeSeries.find { it.date == timeSeriesValue.datetime }
-
-                    if (currentTimeSeriesValue != null) {
-                        currentTimeSeriesValue.close += timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toFloat()
-                        currentTimeSeriesValue.open += timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toFloat()
-                        currentTimeSeriesValue.numOfStocks += 1
-                    } else {
-                        val timeSeriesToAdd = PortfolioTimeSeriesValue(
-                            timeSeriesValue.datetime,
-                            timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toFloat(),
-                            timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toFloat(),
-                            1
-                        )
-                        portfolioValueTimeSeries.add(timeSeriesToAdd)
+                        if (currentTimeSeriesValue != null) {
+                            currentTimeSeriesValue.close += timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toFloat()
+                            currentTimeSeriesValue.open += timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toFloat()
+                            currentTimeSeriesValue.numOfStocks += 1
+                        } else {
+                            val timeSeriesToAdd = PortfolioTimeSeriesValue(
+                                timeSeriesValue.datetime,
+                                timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toFloat(),
+                                timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toFloat(),
+                                1
+                            )
+                            portfolioValueTimeSeries.add(timeSeriesToAdd)
+                        }
                     }
                 }
             }
-
             val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
             val buyingPrice = stock.buyingPrice ?: 0.0
             val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
@@ -101,27 +104,31 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
             portfolio.value!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
             portfolio.value!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
             stockRepository.updatePortfolio(portfolio.value!!)
+
         }
     }
 
-    fun removeStockDataFromPortfolio(stock: Stock) {
-        viewModelScope.launch {
-            val portfolioValueTimeSeries = portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+    private fun removeStockDataFromPortfolio(stock: Stock) {
+        GlobalScope.launch(Dispatchers.IO) {
+            val portfolioValueTimeSeries =
+                portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
             val currentDateTime = Calendar.getInstance()
             val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
+            synchronized(portfolioLock) {
+                stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
+                    val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
 
-            stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
-                val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
+                    if (timeSeriesDateTime >= buyingDate && timeSeriesDateTime != currentDateTime) {
+                        val currentTimeSeriesValue =
+                            portfolioValueTimeSeries.find { it.date == timeSeriesValue.datetime }
+                        currentTimeSeriesValue!!.close -= timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toInt()
+                        currentTimeSeriesValue!!.open -= timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toInt()
 
-                if (timeSeriesDateTime >= buyingDate && timeSeriesDateTime != currentDateTime) {
-                    val currentTimeSeriesValue = portfolioValueTimeSeries.find { it.date == timeSeriesValue.datetime }
-                    currentTimeSeriesValue!!.close -= timeSeriesValue.close.toFloat() * stock.buyingAmount!!.toInt()
-                    currentTimeSeriesValue!!.open -= timeSeriesValue.open.toFloat() * stock.buyingAmount!!.toInt()
-
-                    if (currentTimeSeriesValue?.numOfStocks == 1) {
-                        portfolioValueTimeSeries.remove(currentTimeSeriesValue)
-                    } else {
-                        currentTimeSeriesValue!!.numOfStocks -= 1
+                        if (currentTimeSeriesValue?.numOfStocks == 1) {
+                            portfolioValueTimeSeries.remove(currentTimeSeriesValue)
+                        } else {
+                            currentTimeSeriesValue!!.numOfStocks -= 1
+                        }
                     }
                 }
             }
@@ -133,10 +140,11 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
             portfolio.value!!.buyingValue -= buyingPrice.toFloat() * buyingAmount.toFloat()
             stockRepository.updatePortfolio(portfolio.value!!)
         }
+
     }
 
     fun addPortfolio(portfolio: Portfolio) {
-        viewModelScope.launch (Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
             stockRepository.addPortfolio(portfolio)
         }
     }

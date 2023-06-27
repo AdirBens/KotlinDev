@@ -69,9 +69,9 @@ class MyStocksFragment : Fragment() {
             binding.portfolioBuyinValue?.text =
                 String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
 
-            if (binding.portfolioGraph != null) {
-                lineChart = binding.portfolioGraph!!
-            }
+//            if (binding.portfolioGraph != null) {
+                lineChart = binding.portfolioGraph
+//            }
 
             val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
 
