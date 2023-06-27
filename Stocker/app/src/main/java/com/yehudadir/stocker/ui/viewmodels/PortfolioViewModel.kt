@@ -13,9 +13,9 @@ import com.yehudadir.stocker.utils.convertDateFormat
 import com.yehudadir.stocker.utils.convertStringToDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.Inject
 
 @HiltViewModel
@@ -54,27 +54,19 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
 
     fun deleteAllStocks() {
         viewModelScope.launch {
-//            portfolio.value!!.status.data!!.currentValue = 0f
-//            portfolio.value!!.status.data!!.buyingValue = 0f
-//            portfolio.value!!.status.data!!.portfolioValueTimeSeries.clear()
-//
-//            stockRepository.updatePortfolio(portfolio.value!!.status.data!!)
-            portfolio.value!!.currentValue = 0f
-            portfolio.value!!.buyingValue = 0f
-            portfolio.value!!.portfolioValueTimeSeries.clear()
-
-            stockRepository.updatePortfolio(portfolio.value!!)
+            val emptyPortfolio = Portfolio(1, 0f, 0f, 0f, ConcurrentLinkedQueue())
+            stockRepository.updatePortfolio(emptyPortfolio)
             stockRepository.deleteAll()
         }
     }
 
     fun addStockDataToPortfolio(stock: Stock) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val portfolioValueTimeSeries =
-                portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
-            val currentDateTime = Calendar.getInstance()
-            val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
-            synchronized(portfolioLock) {
+        viewModelScope.launch(Dispatchers.IO) {
+//            synchronized(portfolioLock) {
+                val portfolioValueTimeSeries =
+                    portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+                val currentDateTime = Calendar.getInstance()
+                val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
                 stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
                     val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
                     if (timeSeriesDateTime >= buyingDate && timeSeriesDateTime < currentDateTime) {
@@ -95,7 +87,7 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
                             portfolioValueTimeSeries.add(timeSeriesToAdd)
                         }
                     }
-                }
+//                }
             }
             val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
             val buyingPrice = stock.buyingPrice ?: 0.0
@@ -104,17 +96,16 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
             portfolio.value!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
             portfolio.value!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
             stockRepository.updatePortfolio(portfolio.value!!)
-
         }
     }
 
     private fun removeStockDataFromPortfolio(stock: Stock) {
-        GlobalScope.launch(Dispatchers.IO) {
-            val portfolioValueTimeSeries =
-                portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
-            val currentDateTime = Calendar.getInstance()
-            val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
-            synchronized(portfolioLock) {
+        viewModelScope.launch(Dispatchers.IO) {
+//            synchronized(portfolioLock) {
+                val portfolioValueTimeSeries =
+                    portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+                val currentDateTime = Calendar.getInstance()
+                val buyingDate = convertStringToDate(convertDateFormat(stock.buyingDate!!))
                 stock.stockTimeSeries?.values?.forEach { timeSeriesValue ->
                     val timeSeriesDateTime = convertStringToDate(timeSeriesValue.datetime)
 
@@ -131,7 +122,7 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
                         }
                     }
                 }
-            }
+//            }
             val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
             val buyingPrice = stock.buyingPrice ?: 0.0
             val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
@@ -153,4 +144,3 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
         _chosenStock.value = stock
     }
 }
-

@@ -101,6 +101,9 @@ class DetailedStockFragment : Fragment() {
     }
 
     private fun calcBalance(buyingPrice: Float, currentPrice: Float): Float {
+        if(currentPrice > buyingPrice) {
+            return 100 * ((currentPrice / buyingPrice)-1)
+        }
         return 100 * (1 - (buyingPrice / currentPrice))
     }
 
