@@ -14,14 +14,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.yehudadir.stocker.data.model.Stock
+import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.databinding.DetailedStockFragmentBinding
 import com.yehudadir.stocker.ui.viewmodels.StockViewModel
-import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.common.Error
-import com.yehudadir.common.Loading
-import com.yehudadir.common.Success
+import com.yehudadir.stocker.ui.viewmodels.PortfolioViewModel
+import com.yehudadir.stocker.common.Error
+import com.yehudadir.stocker.common.Loading
+import com.yehudadir.stocker.common.Success
 import com.yehudadir.stocker.utils.convertLongToShortDateFormat
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -35,7 +35,7 @@ class DetailedStockFragment : Fragment() {
 
     private var binding: DetailedStockFragmentBinding by autoCleared()
     private val stockViewModel: StockViewModel by viewModels()
-    private val stocksViewModel: StocksViewModel by activityViewModels()
+    private val portfolioViewModel: PortfolioViewModel by activityViewModels()
 
 
     private var currentPrice = 0.0f
@@ -55,7 +55,7 @@ class DetailedStockFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val toolbar = (activity as AppCompatActivity).supportActionBar
         toolbar?.setTitle(R.string.title_stock_detail)
-        stockViewModel.setChosenStock(stocksViewModel.chosenStock.value!!)
+        stockViewModel.setChosenStock(portfolioViewModel.chosenStock.value!!)
 
         stockViewModel.chosenStock.observe(viewLifecycleOwner) {
             stockViewModel.setSymbol(it.tickerSymbol)

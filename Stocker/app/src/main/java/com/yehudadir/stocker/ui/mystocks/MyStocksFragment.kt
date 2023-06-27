@@ -19,10 +19,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yehudadir.stocker.R
-import com.yehudadir.stocker.data.model.Portfolio
+import com.yehudadir.stocker.data.model.entities.Portfolio
 import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.databinding.MyStocksFragmentBinding
-import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
+import com.yehudadir.stocker.ui.viewmodels.PortfolioViewModel
 import com.yehudadir.stocker.utils.convertLongToShortDateFormat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -39,7 +39,7 @@ import java.util.Locale
 @AndroidEntryPoint
 class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
-    private val stocksViewModel: StocksViewModel by activityViewModels()
+    private val portfolioViewModel: PortfolioViewModel by activityViewModels()
     private lateinit var lineChart: LineChart
 
     override fun onCreateView(
@@ -57,15 +57,15 @@ class MyStocksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar()
 
-        stocksViewModel.portfolio.observe(viewLifecycleOwner) {
-            if (stocksViewModel.portfolio.value?.id != 1) {
+        portfolioViewModel.portfolio.observe(viewLifecycleOwner) {
+            if (portfolioViewModel.portfolio.value?.id != 1) {
                 val portfolio = Portfolio(1, 0f, 0f, 0f)
-                stocksViewModel.addPortfolio(portfolio)
+                portfolioViewModel.addPortfolio(portfolio)
             }
             binding.currentPortfolioValue?.text =
-                String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
+                String.format("%.2f", portfolioViewModel.portfolio.value?.currentValue)
             binding.portfolioBuyinValue?.text =
-                String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
+                String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
 
             if (binding.portfolioGraph != null) {
                 lineChart = binding.portfolioGraph!!
@@ -95,18 +95,18 @@ class MyStocksFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
 
-        stocksViewModel.stocks.observe(viewLifecycleOwner) {
-            if (stocksViewModel.stocks.value.isNullOrEmpty()) {
+        portfolioViewModel.stocks.observe(viewLifecycleOwner) {
+            if (portfolioViewModel.stocks.value?.status!!.data.isNullOrEmpty()) {
                 binding.recycler.visibility = View.GONE
                 binding.stockListEmpty?.visibility = View.VISIBLE
             } else {
                 binding.recycler.visibility = View.VISIBLE
                 binding.stockListEmpty?.visibility = View.GONE
 
-                binding.recycler.adapter = StockAdapter(it, object : StockAdapter.ItemListener {
+                binding.recycler.adapter = StockAdapter(it.status.data!!, object : StockAdapter.ItemListener {
 
                     override fun onItemClicked(index: Int) {
-                        stocksViewModel.setChosenStock(it[index])
+                        portfolioViewModel.setChosenStock(it.status.data!![index])
                         findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                     }
                 })
@@ -153,12 +153,12 @@ class MyStocksFragment : Fragment() {
                         dialogBuilder.setTitle(R.string.delete_one_stock)
                         dialogBuilder.setMessage(R.string.delete_one_stock_msg)
                         dialogBuilder.setPositiveButton(R.string.delete_del_btn) { dialog, _ ->
-                            stocksViewModel.deleteStock(stockToDelete)
+                            portfolioViewModel.deleteStock(stockToDelete)
                             binding.recycler.adapter?.notifyItemRemoved(viewHolder.adapterPosition)
                             binding.currentPortfolioValue?.text =
-                                String.format("%.2f", stocksViewModel.portfolio.value?.currentValue)
+                                String.format("%.2f", portfolioViewModel.portfolio.value?.currentValue)
                             binding.portfolioBuyinValue?.text =
-                                String.format("%.2f", stocksViewModel.portfolio.value?.buyingValue)
+                                String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
                             dialog.dismiss()
                         }
                         dialogBuilder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->
@@ -186,7 +186,7 @@ class MyStocksFragment : Fragment() {
         builder.setTitle(R.string.delete_all_title)
         builder.setMessage(R.string.delete_all_msg)
         builder.setPositiveButton(getString(R.string.delete_all)) { dialog, _ ->
-            stocksViewModel.deleteAllStocks()
+            portfolioViewModel.deleteAllStocks()
             dialog.dismiss()
         }
         builder.setNegativeButton(R.string.delete_cancel_btn) { dialog, _ ->
@@ -240,7 +240,7 @@ class MyStocksFragment : Fragment() {
     }
 
     private fun buildGraph() {
-        val portfolioValueTimeSeries = stocksViewModel.portfolio.value?.portfolioValueTimeSeries
+        val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
 
         if (!portfolioValueTimeSeries.isNullOrEmpty()) {
             val entries = mutableListOf<Entry>()

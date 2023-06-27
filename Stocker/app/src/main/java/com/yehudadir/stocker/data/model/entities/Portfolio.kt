@@ -1,4 +1,4 @@
-package com.yehudadir.stocker.data.model
+package com.yehudadir.stocker.data.model.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

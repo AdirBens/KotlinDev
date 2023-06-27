@@ -3,7 +3,7 @@ package com.yehudadir.stocker.di
 import ApiKeyInterceptor
 import android.content.Context
 import com.yehudadir.stocker.data.remote_db.StockService
-import com.yehudadir.common.Constants
+import com.yehudadir.stocker.common.Constants
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module

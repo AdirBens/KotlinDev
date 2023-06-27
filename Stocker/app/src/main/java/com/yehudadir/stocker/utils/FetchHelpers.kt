@@ -3,9 +3,9 @@ package com.yehudadir.stocker.utils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import com.yehudadir.common.Error
-import com.yehudadir.common.Resource
-import com.yehudadir.common.Success
+import com.yehudadir.stocker.common.Error
+import com.yehudadir.stocker.common.Resource
+import com.yehudadir.stocker.common.Success
 import kotlinx.coroutines.Dispatchers
 
 fun <T,A> performFetchingAndSaving (localDbFetch: () -> LiveData<T>,

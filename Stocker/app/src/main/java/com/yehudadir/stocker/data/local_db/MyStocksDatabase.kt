@@ -5,11 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.yehudadir.stocker.data.model.ModelConverter
-import com.yehudadir.stocker.data.model.Portfolio
-import com.yehudadir.stocker.data.model.Stock
 
-@Database(entities = [Stock::class, Portfolio::class], version = 1, exportSchema = false)
+import com.yehudadir.stocker.data.model.ModelConverter
+import com.yehudadir.stocker.data.model.entities.Portfolio
+import com.yehudadir.stocker.data.model.entities.Stock
+
+
+@Database(entities = [Stock::class, Portfolio::class],
+           version = 1,
+      exportSchema = false)
 @TypeConverters(ModelConverter::class)
 abstract class MyStocksDatabase : RoomDatabase() {
 

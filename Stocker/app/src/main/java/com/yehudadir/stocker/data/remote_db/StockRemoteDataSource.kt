@@ -6,12 +6,13 @@ import javax.inject.Singleton
 @Singleton
 class StockRemoteDataSource @Inject constructor(
     private val stockService: StockService
-) : BaseDataSource() {
+) : BaseRemoteDataSource() {
 
     suspend fun getSymbolSearchResult(keywords: String) =
         getResult { stockService.getSymbolSearch(keywords) }
 
-    suspend fun getQuote(symbol: String) = getResult { stockService.getQuote(symbol) }
+    suspend fun getQuote(symbol: String) =
+        getResult { stockService.getQuote(symbol) }
 
     suspend fun getTimeSeries(symbol: String, interval: String, outputSize:String) =
         getResult { stockService.getTimeSeries(symbol, interval, outputSize) }

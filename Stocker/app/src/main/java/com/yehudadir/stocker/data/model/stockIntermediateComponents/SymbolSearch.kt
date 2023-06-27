@@ -1,4 +1,4 @@
-package com.yehudadir.stocker.data.model
+package com.yehudadir.stocker.data.model.stockIntermediateComponents
 
 data class SymbolSearch(
     val data: ArrayList<SearchItemMetaData>,

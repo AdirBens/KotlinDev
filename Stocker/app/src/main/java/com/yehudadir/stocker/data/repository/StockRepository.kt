@@ -1,16 +1,17 @@
 package com.yehudadir.stocker.data.repository
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import com.yehudadir.stocker.data.local_db.PortfolioDao
-
-import com.yehudadir.stocker.data.local_db.StocksDao
-import com.yehudadir.stocker.data.model.Portfolio
-import com.yehudadir.stocker.data.model.Stock
-import com.yehudadir.stocker.data.remote_db.StockRemoteDataSource
-import com.yehudadir.stocker.utils.performRemoteFetching
 import javax.inject.Inject
 import javax.inject.Singleton
+
+import com.yehudadir.stocker.data.local_db.PortfolioDao
+import com.yehudadir.stocker.data.local_db.StocksDao
+import com.yehudadir.stocker.data.model.entities.Portfolio
+import com.yehudadir.stocker.data.model.entities.Stock
+import com.yehudadir.stocker.data.remote_db.StockRemoteDataSource
+import com.yehudadir.stocker.utils.performLocalFetching
+import com.yehudadir.stocker.utils.performRemoteFetching
+
 
 @Singleton
 class StockRepository @Inject constructor(
@@ -20,11 +21,22 @@ class StockRepository @Inject constructor(
     private val localPortfolioDataSource: PortfolioDao
     ) {
 
-    fun getStocks() = localStocksDataSource.getStocks()
+    // ==============================
+    //      On Local Database
+    // ==============================
+    fun getStock(symbol: String) = performLocalFetching {
+        localStocksDataSource.getStock(symbol)
+    }
 
-    fun getStock(symbol: String) = localStocksDataSource.getStock(symbol)
+    fun getAllStocks() = performLocalFetching {
+        localStocksDataSource.getStocks()
+    }
 
     fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
+
+//    fun getPortfolio(id:Int) = performLocalFetching {
+//        localPortfolioDataSource.getPortfolio(id)
+//    }
 
     suspend fun addStock(stock: Stock) {
         localStocksDataSource.addStock(stock)
@@ -46,7 +58,6 @@ class StockRepository @Inject constructor(
         localPortfolioDataSource.updatePortfolio(portfolio)
     }
 
-
     suspend fun deletePortfolio(portfolio: Portfolio) {
         localPortfolioDataSource.deletePortfolio(portfolio)
     }
@@ -55,6 +66,9 @@ class StockRepository @Inject constructor(
         localPortfolioDataSource.addPortfolio(portfolio)
     }
 
+    // ==============================
+    //      On Remote Source
+    // ==============================
     fun getSymbolSearch (keyword: String) = performRemoteFetching {
         remoteDataSource.getSymbolSearchResult(keyword)
     }
@@ -74,5 +88,4 @@ class StockRepository @Inject constructor(
     fun getCurrentPrice(symbol: String) = performRemoteFetching {
         remoteDataSource.getCurrentPrice(symbol)
     }
-
 }

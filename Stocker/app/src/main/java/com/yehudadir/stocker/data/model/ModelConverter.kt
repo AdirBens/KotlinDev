@@ -3,6 +3,11 @@ package com.yehudadir.stocker.data.model
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.yehudadir.stocker.data.model.entities.PortfolioTimeSeriesValue
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockCurrentPrice
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockImageURL
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockQuote
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockTimeSeries
 
 class ModelConverter {
     private val gson = Gson()

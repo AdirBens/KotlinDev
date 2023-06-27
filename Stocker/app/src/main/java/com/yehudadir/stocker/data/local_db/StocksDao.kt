@@ -7,11 +7,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.yehudadir.stocker.data.model.Stock
+import com.yehudadir.stocker.data.model.entities.Stock
 
 @Dao
 interface StocksDao {
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addStock(stock: Stock)
 
@@ -21,6 +20,9 @@ interface StocksDao {
     @Update
     suspend fun updateStock(updatedStock: Stock)
 
+    @Query("DELETE FROM stocks_table")
+    suspend fun deleteAll()
+
     @Query("SELECT * FROM stocks_table ORDER BY ticker_symbol ASC")
     fun getStocks() : LiveData<List<Stock>>
 
@@ -29,7 +31,4 @@ interface StocksDao {
 
     @Query("SELECT * FROM stocks_table WHERE ticker_symbol like :tickerSymbol")
     fun getStock(tickerSymbol:String): LiveData<Stock>
-
-    @Query("DELETE FROM stocks_table")
-    suspend fun deleteAll()
 }

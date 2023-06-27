@@ -1,11 +1,11 @@
 package com.yehudadir.stocker.data.remote_db
 
-import com.yehudadir.stocker.data.model.StockCurrentPrice
-import com.yehudadir.stocker.data.model.StockImageURL
-import com.yehudadir.stocker.data.model.StockQuote
-import com.yehudadir.stocker.data.model.StockTimeSeries
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockCurrentPrice
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockImageURL
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockQuote
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.StockTimeSeries
 import retrofit2.Response
-import com.yehudadir.stocker.data.model.SymbolSearch
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.SymbolSearch
 import retrofit2.http.GET
 import retrofit2.http.Query
 

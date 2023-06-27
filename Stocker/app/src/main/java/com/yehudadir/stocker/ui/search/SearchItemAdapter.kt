@@ -4,8 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yehudadir.stocker.data.model.SearchItemMetaData
-import com.yehudadir.stocker.data.model.StockMetaData
+import com.yehudadir.stocker.data.model.stockIntermediateComponents.SearchItemMetaData
 import com.yehudadir.stocker.databinding.SearchItemLayoutBinding
 
 class SearchItemAdapter(private val listener: SearchItemListener) :

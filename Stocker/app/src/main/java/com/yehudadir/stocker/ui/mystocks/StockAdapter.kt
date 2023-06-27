@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.yehudadir.stocker.R
-import com.yehudadir.stocker.data.model.Stock
+import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.databinding.SingleStockLayoutBinding
 
 class StockAdapter(private val stocks: List<Stock>, private val listener: ItemListener) :

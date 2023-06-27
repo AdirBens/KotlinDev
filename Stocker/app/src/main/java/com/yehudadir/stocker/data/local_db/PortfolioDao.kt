@@ -7,7 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.yehudadir.stocker.data.model.Portfolio
+import com.yehudadir.stocker.data.model.entities.Portfolio
 
 @Dao
 interface PortfolioDao {

@@ -21,17 +21,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yehudadir.stocker.R
 import com.yehudadir.stocker.databinding.SearchFragmentBinding
-import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.common.Loading
-import com.yehudadir.common.Success
+import com.yehudadir.stocker.ui.viewmodels.PortfolioViewModel
+import com.yehudadir.stocker.common.Loading
+import com.yehudadir.stocker.common.Success
 import com.yehudadir.stocker.utils.autoCleared
 import dagger.hilt.android.AndroidEntryPoint
-import com.yehudadir.common.Error
+import com.yehudadir.stocker.common.Error
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
     private val viewModel: SearchViewModel by viewModels()
-    val stocksViewModel: StocksViewModel by activityViewModels()
+    val portfolioViewModel: PortfolioViewModel by activityViewModels()
     private var binding: SearchFragmentBinding by autoCleared()
 
 
@@ -103,7 +103,7 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
     }
 
     override fun onItemClicked(stockSymbol: String) {
-        if(stocksViewModel.stocks.value!!.any { it.tickerSymbol == stockSymbol }) {
+        if(portfolioViewModel.stocks.value?.status?.data!!.any { it.tickerSymbol == stockSymbol }) {
             Toast.makeText(requireContext(), getString(R.string.stock_already_added), Toast.LENGTH_SHORT).show()
             return
         }

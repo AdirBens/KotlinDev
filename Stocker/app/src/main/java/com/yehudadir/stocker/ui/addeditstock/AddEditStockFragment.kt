@@ -16,14 +16,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.yehudadir.stocker.R
-import com.yehudadir.stocker.data.model.Stock
+import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.ui.viewmodels.StockViewModel
 import com.yehudadir.stocker.databinding.AddEditStockFragmentBinding
-import com.yehudadir.stocker.ui.viewmodels.StocksViewModel
-import com.yehudadir.common.Error
-import com.yehudadir.common.Loading
-import com.yehudadir.common.Success
+import com.yehudadir.stocker.ui.viewmodels.PortfolioViewModel
+import com.yehudadir.stocker.common.Error
+import com.yehudadir.stocker.common.Loading
+import com.yehudadir.stocker.common.Success
 import com.yehudadir.stocker.utils.convertDateFormat
 import com.yehudadir.stocker.utils.showDatePicker
 import com.google.android.material.snackbar.Snackbar
@@ -33,12 +33,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddEditStockFragment : Fragment() {
 
     private val stockViewModel: StockViewModel by viewModels()
-    private val stocksViewModel: StocksViewModel by activityViewModels()
+    private val portfolioViewModel: PortfolioViewModel by activityViewModels()
+
     private var binding: AddEditStockFragmentBinding by autoCleared()
     private var tempImageUri: Uri? = null
     private var isEditFragment: Boolean = false
+
     private lateinit var stock: Stock
-    private lateinit var oldStock:Stock
+    private lateinit var oldStock: Stock
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +55,7 @@ class AddEditStockFragment : Fragment() {
         binding.finishBtn.setOnClickListener {
             addStock()
         }
+
         binding.buyingDate.setOnClickListener {
             showDatePicker(requireContext()) { dateTime ->
                 binding.buyingDate.setText(dateTime)
@@ -60,6 +63,7 @@ class AddEditStockFragment : Fragment() {
                 setBuyingPrice(stock)
             }
         }
+
         return binding.root
     }
 
@@ -71,13 +75,14 @@ class AddEditStockFragment : Fragment() {
             onBackPressedCallback
         )
         if (isEditFragment) {
-            oldStock = stocksViewModel.chosenStock.value!!.copy()
-            stock = stocksViewModel.chosenStock.value!!
+            oldStock = portfolioViewModel.chosenStock.value!!.copy()
+            stock = portfolioViewModel.chosenStock.value!!
         } else {
             arguments?.getString("symbol")?.let {
                 stock = Stock(it)
             }
         }
+
         stockViewModel.setChosenStock(stock)
         setupToolbar()
         setupTextFields()
@@ -94,6 +99,7 @@ class AddEditStockFragment : Fragment() {
             binding.buyingDate.setText(stock.buyingDate)
             binding.stockDescription.setText(stock.description)
         }
+
         binding.tickerSymbol.setText(stockViewModel.chosenStockSymbol.value)
     }
 
@@ -101,37 +107,40 @@ class AddEditStockFragment : Fragment() {
         stockViewModel.stockLogo.observe(viewLifecycleOwner) {
             if (isEditFragment) {
                 tempImageUri = Uri.parse(stock.imageUri)
-                Glide.with(requireContext())
-                    .load(tempImageUri)
-                    .into(binding.chosenStockImage)
-            } else {
+            }
+
+            if (tempImageUri == null || tempImageUri == getFallbackImageUri()) {
                 when (it.status) {
                     is Loading -> {
                         binding.chosenStockImage.visibility = View.GONE
                         binding.progressBarCyclic.visibility = View.VISIBLE
                     }
+
                     is Success -> {
-                        binding.progressBarCyclic.visibility = View.GONE
                         binding.chosenStockImage.visibility = View.VISIBLE
+                        binding.progressBarCyclic.visibility = View.GONE
                         tempImageUri = if (it.status.data?.url != "" && it.status.data?.url != null) {
                             Uri.parse(it.status.data.url)
                         } else {
-                            getDefaultUri()
+                            getFallbackImageUri()
                         }
                     }
 
                     is Error -> {
                         binding.progressBarCyclic.visibility = View.GONE
-                        tempImageUri = getDefaultUri()
+                        tempImageUri = getFallbackImageUri()
+
                         Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT)
                             .show()
                     }
                 }
-                Glide.with(requireContext())
-                    .load(tempImageUri)
-                    .into(binding.chosenStockImage)
             }
+
+            Glide.with(requireContext())
+                .load(tempImageUri)
+                .into(binding.chosenStockImage)
         }
+
         stockViewModel.setChosenStock(stock)
     }
 
@@ -148,6 +157,7 @@ class AddEditStockFragment : Fragment() {
                 }
             }
         }
+
         stockViewModel.setChosenStock(stock)
     }
 
@@ -164,17 +174,18 @@ class AddEditStockFragment : Fragment() {
                 }
             }
         }
-        stockViewModel.setChosenStock(stock)
 
+        stockViewModel.setChosenStock(stock)
     }
 
     private fun addStock() {
         stock.description = binding.stockDescription.text.toString()
         stock.buyingAmount = binding.buyingAmount.text.toString()
         stock.imageUri = tempImageUri.toString()
+
         if (isEditFragment) {
             if (isEntryValid(stock)) {
-                stocksViewModel.updateStock(oldStock, stock)
+                portfolioViewModel.updateStock(oldStock, stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
             } else {
                 raiseIncompleteForm()
@@ -189,8 +200,8 @@ class AddEditStockFragment : Fragment() {
                     ).show()
                     findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
                 }
-                stocksViewModel.addStockDataToPortfolio(stock)
-                stocksViewModel.addStock(stock)
+                portfolioViewModel.addStockDataToPortfolio(stock)
+                portfolioViewModel.addStock(stock)
                 findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             } else {
                 raiseIncompleteForm()
@@ -198,6 +209,7 @@ class AddEditStockFragment : Fragment() {
         }
     }
 
+    // TODO: change filter to binarySearch on buyingDate
     private fun setBuyingPrice(stock: Stock) {
         val values = stock.stockTimeSeries?.values
         val filteredValues = values?.filter { it.datetime == convertDateFormat(stock.buyingDate!!) }
@@ -234,12 +246,13 @@ class AddEditStockFragment : Fragment() {
     }
 
 
-    private fun getDefaultUri(): Uri? {
+    private fun getFallbackImageUri(): Uri? {
         val drawableResId = R.drawable.defualt_stock_image
         val uriString = ContentResolver.SCHEME_ANDROID_RESOURCE +
                 "://" + requireContext().resources.getResourcePackageName(drawableResId) +
                 "/" + requireContext().resources.getResourceTypeName(drawableResId) +
                 "/" + requireContext().resources.getResourceEntryName(drawableResId)
+
         return Uri.parse(uriString)
     }
 

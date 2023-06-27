@@ -1,4 +1,4 @@
-package com.yehudadir.stocker.data.model
+package com.yehudadir.stocker.data.model.stockIntermediateComponents
 
 data class StockQuote(
     val symbol: String,
@@ -21,5 +21,4 @@ data class StockQuote(
     val rolling_7d_change: String,
     val rolling_period_change: String,
     val is_market_open: Boolean,
-
 )

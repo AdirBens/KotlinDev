@@ -1,4 +1,4 @@
-package com.yehudadir.common
+package com.yehudadir.stocker.common
 
 class Resource<out T> private constructor(val status: Status<T>){
 
