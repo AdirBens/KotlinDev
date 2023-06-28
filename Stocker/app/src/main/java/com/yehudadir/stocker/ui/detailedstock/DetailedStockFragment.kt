@@ -29,6 +29,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.yehudadir.stocker.utils.GraphHelpers
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -73,7 +74,9 @@ class DetailedStockFragment : Fragment() {
             binding.dayLow.text = it.stockQuote?.low.toString()
             binding.dayHigh.text = it.stockQuote?.high.toString()
             Glide.with(requireContext()).load(it?.imageUri).circleCrop().into(binding.stockImage)
-            setupLineChart(it)
+
+            val graph = GraphHelpers(requireContext(), binding.portfolioGraph)
+            graph.buildStockGraph(it)
         }
     }
 
@@ -117,56 +120,6 @@ class DetailedStockFragment : Fragment() {
         } else {
             binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_upward_24)
             binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.teal_700))
-        }
-    }
-
-    private fun setupLineChart(stock: Stock) {
-        val orientation = resources.configuration.orientation
-        val bind = binding.portfolioGraph
-        val timeSeries = stock.stockTimeSeries?.values
-        if (timeSeries != null) {
-            val buyingPriceEntries = mutableListOf<Entry>()
-            val entries = mutableListOf<Entry>()
-            val labels = mutableListOf<String>()
-
-            timeSeries.forEachIndexed { index, data ->
-                entries.add(Entry(index.toFloat(), data.close.toFloat()))
-                labels.add(convertLongToShortDateFormat(data.datetime))
-                buyingPriceEntries.add(Entry(index.toFloat(), stock.buyingPrice!!))
-            }
-
-
-
-
-            val lineDataSet = LineDataSet(entries, "Stock Price")
-            val lineDataSetBuyingPrice = LineDataSet(buyingPriceEntries, "Buying Price")
-
-            lineDataSet.setDrawCircles(false)
-            lineDataSet.setDrawValues(false)
-            lineDataSet.color = R.color.black
-
-            lineDataSetBuyingPrice.setDrawCircles(false)
-            lineDataSetBuyingPrice.setDrawValues(false)
-            lineDataSetBuyingPrice.color = R.color.teal_200
-
-            val lineDataSets = ArrayList<ILineDataSet>()
-            lineDataSets.add(lineDataSet)
-            lineDataSets.add(lineDataSetBuyingPrice)
-
-            val lineData = LineData(lineDataSets)
-
-            bind.data = lineData
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            bind.setTouchEnabled(false)
-            }
-            bind.legend?.isEnabled = false
-            bind.description?.isEnabled = false
-            bind.xAxis?.position = XAxis.XAxisPosition.BOTTOM
-            bind.xAxis?.valueFormatter = IndexAxisValueFormatter(labels)
-            bind.xAxis?.setDrawGridLines(false)
-            bind.axisRight?.isEnabled = false
-
-            bind.invalidate()
         }
     }
 }

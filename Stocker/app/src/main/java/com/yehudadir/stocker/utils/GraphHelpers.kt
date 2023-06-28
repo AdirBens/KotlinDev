@@ -1,6 +1,8 @@
 package com.yehudadir.stocker.utils
 
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -13,8 +15,10 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.yehudadir.stocker.R
 import com.yehudadir.stocker.data.model.entities.PortfolioTimeSeriesValue
+import com.yehudadir.stocker.data.model.entities.Stock
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -25,7 +29,7 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
                   timeSeries: ConcurrentLinkedQueue<PortfolioTimeSeriesValue>?,
                   timeSpan: Int = 5000) {
         setupLineChart()
-        buildGraph(graphLabel, timeSeries, timeSpan)
+        buildPortfolioGraph(graphLabel, timeSeries, timeSpan)
     }
 
     private fun setupLineChart() {
@@ -35,9 +39,9 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
         setYAxis()
     }
 
-    private fun buildGraph(graphLabel: String,
-                           timeSeries: ConcurrentLinkedQueue<PortfolioTimeSeriesValue>?,
-                           timeSpan: Int) {
+    private fun buildPortfolioGraph(graphLabel: String,
+                                    timeSeries: ConcurrentLinkedQueue<PortfolioTimeSeriesValue>?,
+                                    timeSpan: Int) {
         if (timeSeries.isNullOrEmpty()) {
             hideGraph()
         }
@@ -45,7 +49,7 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
             val entries = mutableListOf<Entry>()
             val labels = mutableListOf<String>()
 
-            timeSeries?.take(timeSpan)?.forEachIndexed { index, data ->
+            timeSeries?.take(timeSpan)?.asReversed()?.forEachIndexed { index, data ->
                 val entryValue = 100 * (1 - (data.close / data.open))
                 entries.add(Entry(index.toFloat(), entryValue))
                 labels.add(convertLongToShortDateFormat(data.date))
@@ -131,5 +135,51 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
         )
 
         return GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)
+    }
+
+    fun buildStockGraph(stock: Stock) {
+            val orientation = Resources.getSystem().configuration.orientation
+            val timeSeries = stock.stockTimeSeries?.values
+            if (timeSeries != null) {
+                val buyingPriceEntries = mutableListOf<Entry>()
+                val entries = mutableListOf<Entry>()
+                val labels = mutableListOf<String>()
+
+                timeSeries.asReversed().forEachIndexed { index, data ->
+                    entries.add(Entry(index.toFloat(), data.close.toFloat()))
+                    labels.add(convertLongToShortDateFormat(data.datetime))
+                    buyingPriceEntries.add(Entry(index.toFloat(), stock.buyingPrice!!))
+                }
+
+                val lineDataSet = LineDataSet(entries, "Stock Price")
+                val lineDataSetBuyingPrice = LineDataSet(buyingPriceEntries, "Buying Price")
+
+                lineDataSet.setDrawCircles(false)
+                lineDataSet.setDrawValues(false)
+                lineDataSet.color = R.color.black
+
+                lineDataSetBuyingPrice.setDrawCircles(false)
+                lineDataSetBuyingPrice.setDrawValues(false)
+                lineDataSetBuyingPrice.color = R.color.teal_200
+
+                val lineDataSets = ArrayList<ILineDataSet>()
+                lineDataSets.add(lineDataSet)
+                lineDataSets.add(lineDataSetBuyingPrice)
+
+                val lineData = LineData(lineDataSets)
+
+                lineChart.data = lineData
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    lineChart.setTouchEnabled(false)
+                }
+                lineChart.legend?.isEnabled = false
+                lineChart.description?.isEnabled = false
+                lineChart.xAxis?.position = XAxis.XAxisPosition.BOTTOM
+                lineChart.xAxis?.valueFormatter = IndexAxisValueFormatter(labels)
+                lineChart.xAxis?.setDrawGridLines(false)
+                lineChart.axisRight?.isEnabled = false
+
+                lineChart.invalidate()
+            }
     }
 }
