@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="10dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/cool_blue_light"
     android:elevation="8dp"
     app:cardCornerRadius="8dp">
 
@@ -15,7 +17,7 @@
             android:id="@+id/searchItemTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="5dp"
 
             android:orientation="horizontal">
             <TextView
@@ -23,14 +25,15 @@
                 android:layout_width="213dp"
                 android:layout_height="wrap_content"
                 android:text="@string/ticker_symbol"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                style="@style/subTitleStyleH1"
+                />
 
             <TextView
                 android:id="@+id/searchItemExchange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
+                style="@style/body2"
                 android:text="@string/exchange" />
         </LinearLayout>
 
@@ -39,17 +42,15 @@
             android:layout_below="@id/searchItemTopLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="5dp"
             android:orientation="horizontal">
-
             <TextView
                 android:id="@+id/companyName"
                 android:layout_width="259dp"
                 android:layout_height="match_parent"
                 android:singleLine="true"
                 android:text="@string/company_name"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
+                style="@style/subTitleStyleH2"/>
 
             <TextView
                 android:id="@+id/searchItemCurrency"
@@ -57,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:padding="8dp"
+                style="@style/body2"
                 android:text="@string/currency" />
 
         </LinearLayout>
@@ -65,17 +67,14 @@
             android:id="@+id/searchItemBottomLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:padding="5dp"
             android:layout_below="@id/searchItemBottomLayout">
-
-
             <TextView
                 android:id="@+id/countryName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/country_name"
-                android:textSize="12sp"
-                android:textColor="@color/black" />
+                style="@style/body2" />
         </LinearLayout>
 
 

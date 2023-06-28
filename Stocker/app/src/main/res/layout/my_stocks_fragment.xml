@@ -9,13 +9,15 @@
     android:layout_margin="10dp">
 
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-
+        app:strokeWidth="0.8dp"
+        app:strokeColor="@color/cool_blue_light"
+        app:cardElevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -25,6 +27,12 @@
             android:orientation="vertical"
             android:padding="8dp"
             tools:context=".ui.portfolio.PortfolioSummaryFragment">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/Portfolio"
+                style="@style/TitleStyle"/>
 
             <LinearLayout
                 android:id="@+id/balanceSection"
@@ -98,7 +106,7 @@
         </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/yourListSubTitle"
@@ -134,7 +142,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/empty_state_img"/>
         <TextView
-            style="@style/TextAppearance.MaterialComponents.Body1"
+            style="@style/body1"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="2"
@@ -167,6 +175,7 @@
         android:contentDescription="@string/title_add_stock"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:backgroundTint="@color/cool_green"
         android:src="@android:drawable/ic_input_add"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

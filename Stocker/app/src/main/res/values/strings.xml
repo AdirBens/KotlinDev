@@ -82,6 +82,7 @@
     <string name="delete_all">Delete All</string>
     <string name="no_data_available">No data available</string>
     <string name="enter_ticker_symbol">Enter ticker symbol</string>
+    <string name="Portfolio">Portfolio</string>
 
 </resources>
 

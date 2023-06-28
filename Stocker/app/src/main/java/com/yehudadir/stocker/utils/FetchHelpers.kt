@@ -48,3 +48,9 @@ fun <A> performRemoteFetching(remoteDbFetch: suspend () -> Resource<A>): LiveDat
             emit(Resource.error(fetchResource.status.message))
         }
     }
+
+fun <T> performLocalFetchingNoResource(localDbFetch: () -> LiveData<T>): LiveData<T> =
+    liveData(Dispatchers.IO) {
+        val source = localDbFetch().map { it }
+        emitSource(source)
+    }

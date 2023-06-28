@@ -104,6 +104,7 @@ class AddEditStockFragment : Fragment() {
         }
 
         binding.tickerSymbol.setText(stockViewModel.chosenStockSymbol.value)
+        binding.tickerTitle?.setText(stockViewModel.chosenStockSymbol.value)
     }
 
     private fun setupLogoImage() {

@@ -38,8 +38,8 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/ticker_symbol"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    style="@style/subTitleStyleH1"
+                    />
 
                 <TextView
                     android:id="@+id/stock_name"
@@ -49,7 +49,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@string/company_name"
-                    android:textSize="18sp" />
+                    style="@style/subTitleStyleH2" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/buying_date"
-                        android:textSize="14sp" />
+                        style="@style/body2" />
 
                     <TextView
                         android:id="@+id/buying_date"
@@ -73,7 +73,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/date_format"
-                        android:textSize="14sp"
+                        style="@style/body2"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -90,7 +90,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/buying_price"
-                        android:textSize="14sp" />
+                        style="@style/body2" />
 
                     <TextView
                         android:id="@+id/buying_price"
@@ -99,7 +99,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/price_zero"
-                        android:textSize="14sp"
+                        style="@style/body2"
                         android:textStyle="bold" />
                 </LinearLayout>
 

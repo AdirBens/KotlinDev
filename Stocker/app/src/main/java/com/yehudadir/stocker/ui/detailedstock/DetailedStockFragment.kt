@@ -70,9 +70,9 @@ class DetailedStockFragment : Fragment() {
             binding.buyingDate.text = it.buyingDate
             binding.buyingPrice.text = it.buyingPrice.toString()
             binding.currentPrice.text = currentPrice.toString()
-            binding.dayStart.text = it.stockQuote?.open.toString()
-            binding.dayLow.text = it.stockQuote?.low.toString()
-            binding.dayHigh.text = it.stockQuote?.high.toString()
+            binding.dayStart.text = String.format("%.2f", it.stockQuote?.open?.toFloat())
+            binding.dayLow.text = String.format("%.2f", it.stockQuote?.low?.toFloat())
+            binding.dayHigh.text = String.format("%.2f",it.stockQuote?.high?.toFloat())
             Glide.with(requireContext()).load(it?.imageUri).circleCrop().into(binding.stockImage)
 
             val graph = GraphHelpers(requireContext(), binding.portfolioGraph)

@@ -120,6 +120,8 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
                 }
             }
         }
+
+        lineChart.axisRight.isEnabled = false
     }
 
     private fun hideGraph() {
@@ -130,8 +132,10 @@ class GraphHelpers constructor(private val context: Context, private val lineCha
 
     private fun createGradientDrawable(): Drawable {
         val colors = intArrayOf(
-            ContextCompat.getColor(context, R.color.green),
-            ContextCompat.getColor(context, R.color.red)
+            ContextCompat.getColor(context, R.color.cool_green),
+            ContextCompat.getColor(context, R.color.cool_green_light),
+            ContextCompat.getColor(context, R.color.cool_blue_light),
+            ContextCompat.getColor(context, R.color.cool_blue)
         )
 
         return GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors)

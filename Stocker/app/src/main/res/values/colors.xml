@@ -13,4 +13,8 @@
     
     
     <color name="cool_blue">#03314B</color>
+    <color name="cool_blue_semilight">#B303314B</color>
+    <color name="cool_blue_light">#3303314B</color>
+    <color name="cool_green">#1ECB96</color>
+    <color name="cool_green_light">#331ECB96</color>
 </resources>

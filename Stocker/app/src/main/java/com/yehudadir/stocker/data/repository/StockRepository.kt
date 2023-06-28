@@ -10,6 +10,7 @@ import com.yehudadir.stocker.data.model.entities.Portfolio
 import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.data.remote_db.StockRemoteDataSource
 import com.yehudadir.stocker.utils.performLocalFetching
+import com.yehudadir.stocker.utils.performLocalFetchingNoResource
 import com.yehudadir.stocker.utils.performRemoteFetching
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,10 +35,9 @@ class StockRepository @Inject constructor(
         localStocksDataSource.getStocks()
     }
 
-    fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
-//    fun getPortfolio(id:Int) = performLocalFetching {
-//        localPortfolioDataSource.getPortfolio(id)
-//    }
+    fun getPortfolio(id:Int) = performLocalFetchingNoResource {
+        localPortfolioDataSource.getPortfolio(id)
+    }
 
     suspend fun addStock(stock: Stock)  = withContext(Dispatchers.IO) {
         localStocksDataSource.addStock(stock)
