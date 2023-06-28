@@ -48,7 +48,14 @@
     <string name="portfolio_change">השינוי בתיק</string>
     <string name="refresh_button">רענן</string>
     <string name="current_portfolio_value_title">שווי התיק הנוכחי</string>
-
+    <string name="abort_adding">ביטול הוספת מניה</string>
+    <string name="abort_msg">האם אתה בטוח שתרצה לבטל את הוספת המניה?</string>
+    <string name="abort_yes">כן</string>
+    <string name="abort_no">לא</string>
+    <string name="discard_changes">בטל שינויים</string>
+    <string name="discard_msg">האם אתה בטוח שתרצה לבטל את כל השינויים?</string>
+    <string name="discard_yes">כן</string>
+    <string name="discard_no">חזור</string>
 
     //Detailed stock Fragment
     <string name="stock_description">תיאור</string>

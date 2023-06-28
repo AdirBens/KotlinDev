@@ -40,7 +40,14 @@
     <string name="finish">Finish</string>
     <string name="ticker_symbol">Ticker Symbol</string>
     <string name="required">"Required"</string>
-
+    <string name="abort_adding">Abort Adding Stock</string>
+    <string name="abort_msg">Are you sure you want to cancel adding a new stock?</string>
+    <string name="abort_yes">Yes</string>
+    <string name="abort_no">No</string>
+    <string name="discard_changes">Discard Changes</string>
+    <string name="discard_msg">Are you sure you want to discard the changes?</string>
+    <string name="discard_yes">Discard</string>
+    <string name="discard_no">Cancel</string>
 
     //Detailed stock Fragment
     <string name="stock_description">Description</string>

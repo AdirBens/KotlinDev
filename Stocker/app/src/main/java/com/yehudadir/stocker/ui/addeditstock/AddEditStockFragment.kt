@@ -213,7 +213,6 @@ class AddEditStockFragment : Fragment() {
         }
     }
 
-    // TODO: change filter to binarySearch on buyingDate
     private fun setBuyingPrice(stock: Stock, buyingDate: String ) :Boolean {
         val values = stock.stockTimeSeries?.values
         val stockByDate = values?.let { getStockValueByDate(it, convertDateFormat(buyingDate)) }
@@ -275,23 +274,23 @@ class AddEditStockFragment : Fragment() {
 
     fun showAbortAddDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Abort Adding Stock")
-            .setMessage("Are you sure you want to cancel adding a new stock?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(R.string.abort_adding)
+            .setMessage(R.string.abort_msg)
+            .setPositiveButton(R.string.abort_yes) { _, _ ->
                 findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
             }
-            .setNegativeButton("No", null)
+            .setNegativeButton(R.string.abort_no, null)
             .show()
     }
 
     fun showDiscardChangesDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Discard Changes")
-            .setMessage("Are you sure you want to discard the changes?")
-            .setPositiveButton("Discard") { _, _ ->
+            .setTitle(R.string.discard_changes)
+            .setMessage(R.string.discard_msg)
+            .setPositiveButton(R.string.discard_yes) { _, _ ->
                 findNavController().navigate(R.id.action_addEditStockFragment_to_detailedStockFragment)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.discard_no, null)
             .show()
     }
 
