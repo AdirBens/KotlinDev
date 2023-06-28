@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TitleStyle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/lato_bold</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:textColor">@color/cool_blue</item>
+        <item name="android:letterSpacing">0.05</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+</resources>

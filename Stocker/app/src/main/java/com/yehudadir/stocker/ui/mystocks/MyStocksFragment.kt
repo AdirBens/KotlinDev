@@ -29,7 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
     private val portfolioViewModel: PortfolioViewModel by activityViewModels()
-    private lateinit var portfolioData : Portfolio
     private lateinit var lineChart: LineChart
     private lateinit var graph: GraphHelpers
 
@@ -50,9 +49,7 @@ class MyStocksFragment : Fragment() {
         setupToolbar()
         setupNavHost()
         portfolioViewModel.portfolio.observe(viewLifecycleOwner) {
-            portfolioData = portfolioViewModel.portfolio.value?.status?.data!!
-
-            if (portfolioData.id != 1) {
+            if (portfolioViewModel.portfolio.value?.id != 1) {
                 val portfolio = Portfolio(1, 0f, 0f, 0f)
 
                 portfolioViewModel.addPortfolio(portfolio)
@@ -93,9 +90,9 @@ class MyStocksFragment : Fragment() {
 
     private fun updatePortfolioValue() {
         binding.currentPortfolioValue?.text =
-            String.format("%.2f", portfolioData.currentValue)
+            String.format("%.2f", portfolioViewModel.portfolio.value?.currentValue)
         binding.portfolioBuyinValue?.text =
-            String.format("%.2f", portfolioData.buyingValue)
+            String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
     }
 
     private fun showDeleteStockDialog(stockToDelete: Stock, viewHolder: ViewHolder) {
@@ -133,7 +130,7 @@ class MyStocksFragment : Fragment() {
     }
 
     private fun setupPortfolioGraph() {
-        val portfolioValueTimeSeries = portfolioData.portfolioValueTimeSeries
+        val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
         val graphTimeSpan = 30
         val graphLabel = "Portfolio Value"  // TODO: get from strings
 
@@ -204,11 +201,13 @@ class MyStocksFragment : Fragment() {
 
     private fun setEmptyStateView() {
         binding.recycler.visibility = View.GONE
-        binding.stockListEmpty?.visibility = View.VISIBLE
+        binding.cardView.visibility = View.GONE
+        binding.stockListEmpty.visibility = View.VISIBLE
     }
 
     private fun unsetEmptyStateView() {
         binding.recycler.visibility = View.VISIBLE
-        binding.stockListEmpty?.visibility = View.GONE
+        binding.cardView.visibility = View.VISIBLE
+        binding.stockListEmpty.visibility = View.GONE
     }
 }
