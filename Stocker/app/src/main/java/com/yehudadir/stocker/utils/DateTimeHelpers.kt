@@ -26,7 +26,7 @@ fun convertDateFormat(date: String): String {
         val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
         val parsedDate = inputFormat.parse(date)
-        return outputFormat.format(parsedDate)
+        return outputFormat.format(parsedDate!!)
 }
 
 fun convertLongToShortDateFormat(date: String): String {
@@ -34,5 +34,5 @@ fun convertLongToShortDateFormat(date: String): String {
         val outputFormat = SimpleDateFormat("dd.M", Locale.getDefault())
 
         val parsedDate = inputFormat.parse(date)
-        return outputFormat.format(parsedDate)
+        return outputFormat.format(parsedDate!!)
 }

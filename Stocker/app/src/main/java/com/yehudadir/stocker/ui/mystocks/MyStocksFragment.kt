@@ -1,6 +1,5 @@
 package com.yehudadir.stocker.ui.mystocks
 
-import  android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
@@ -12,7 +11,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.yehudadir.stocker.R
@@ -66,32 +64,20 @@ class MyStocksFragment : Fragment() {
                 unsetEmptyStateView()
                 binding.recycler.adapter = StockAdapter(it.status.data!!, object : StockAdapter.ItemListener {
                     override fun onItemClicked(index: Int) {
-                        portfolioViewModel.setChosenStock(it.status.data!![index])
+                        portfolioViewModel.setChosenStock(it.status.data[index])
                         findNavController().navigate(R.id.action_myStocksFragment_to_detailedStockFragment)
                     }
                 })
 
-                handleOrientation()
                 setTouchHelper()
             }
         }
     }
 
-    private fun handleOrientation() {
-        val currentOrientation = resources.configuration.orientation
-
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.recycler.layoutManager =
-                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        } else {
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        }
-    }
-
     private fun updatePortfolioValue() {
-        binding.currentPortfolioValue?.text =
+        binding.currentPortfolioValue.text =
             String.format("%.2f", portfolioViewModel.portfolio.value?.currentValue)
-        binding.portfolioBuyinValue?.text =
+        binding.portfolioBuyinValue.text =
             String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
     }
 
@@ -172,11 +158,7 @@ class MyStocksFragment : Fragment() {
             override fun getMovementFlags(
                 recyclerView: RecyclerView, viewHolder: ViewHolder
             ): Int {
-                val swipeFlags = when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_PORTRAIT -> ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                    Configuration.ORIENTATION_LANDSCAPE -> ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                    else -> 0
-                }
+                val swipeFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
                 return makeMovementFlags(0, swipeFlags)
             }
 
@@ -200,13 +182,13 @@ class MyStocksFragment : Fragment() {
     }
 
     private fun setEmptyStateView() {
-        binding.recycler.visibility = View.GONE
+        binding.recyclerLayout.visibility = View.GONE
         binding.cardView.visibility = View.GONE
         binding.stockListEmpty.visibility = View.VISIBLE
     }
 
     private fun unsetEmptyStateView() {
-        binding.recycler.visibility = View.VISIBLE
+        binding.recyclerLayout.visibility = View.VISIBLE
         binding.cardView.visibility = View.VISIBLE
         binding.stockListEmpty.visibility = View.GONE
     }

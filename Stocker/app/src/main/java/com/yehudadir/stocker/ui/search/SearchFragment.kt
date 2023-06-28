@@ -31,7 +31,7 @@ import com.yehudadir.stocker.common.Error
 @AndroidEntryPoint
 class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
     private val viewModel: SearchViewModel by viewModels()
-    val portfolioViewModel: PortfolioViewModel by activityViewModels()
+    private val portfolioViewModel: PortfolioViewModel by activityViewModels()
     private var binding: SearchFragmentBinding by autoCleared()
 
 
@@ -41,7 +41,7 @@ class SearchFragment : Fragment(), SearchItemAdapter.SearchItemListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         setupToolbar()
         binding = SearchFragmentBinding.inflate(inflater, container, false)
         return binding.root

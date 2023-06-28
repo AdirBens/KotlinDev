@@ -58,9 +58,9 @@ class DetailedStockFragment : Fragment() {
             binding.tickerSymbol.text = it.tickerSymbol
             binding.companyName.text = it.stockQuote?.name
             binding.descriptionText?.text = it.description
-            binding.buyingDate.text = it.buyingDate
-            binding.buyingPrice.text = it.buyingPrice.toString()
-            binding.currentPrice.text = currentPrice.toString()
+            binding.buyingDate?.text = it.buyingDate
+            binding.buyingPrice?.text = it.buyingPrice.toString()
+            binding.currentPrice?.text = currentPrice.toString()
             binding.dayStart.text = String.format("%.2f", it.stockQuote?.open?.toFloat())
             binding.dayLow.text = String.format("%.2f", it.stockQuote?.low?.toFloat())
             binding.dayHigh.text = String.format("%.2f",it.stockQuote?.high?.toFloat())
@@ -78,16 +78,16 @@ class DetailedStockFragment : Fragment() {
                 is Success -> {
                     if (it.status.data?.price != null) {
                         currentPrice = it.status.data.price.toFloat()
-                        binding.currentPrice.text =
+                        binding.currentPrice?.text =
                             String.format("%.2f", it.status.data.price.toFloat())
                     }
-                    binding.progressBarCyclic.visibility = View.GONE
-                    binding.balanceLayout.visibility = View.VISIBLE
+                    binding.progressBarCyclic?.visibility = View.GONE
+                    binding.balanceLayout?.visibility = View.VISIBLE
                 }
 
                 is Error -> {
-                    binding.progressBarCyclic.visibility = View.GONE
-                    binding.balanceLayout.visibility = View.VISIBLE
+                    binding.progressBarCyclic?.visibility = View.GONE
+                    binding.balanceLayout?.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), it.status.message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -103,14 +103,14 @@ class DetailedStockFragment : Fragment() {
 
     private fun setBalance(buyingPrice: Float, currentPrice: Float) {
         val balance = String.format("%.2f", calcBalance(buyingPrice, currentPrice))
-        binding.balance.text = getString(R.string.add_percents, balance)
+        binding.balance?.text = getString(R.string.add_percents, balance)
 
         if (buyingPrice > currentPrice) {
-            binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_downward_24)
-            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            binding.balanceArrow?.setImageResource(R.drawable.baseline_arrow_downward_24)
+            binding.balance?.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         } else {
-            binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_upward_24)
-            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.cool_green))
+            binding.balanceArrow?.setImageResource(R.drawable.baseline_arrow_upward_24)
+            binding.balance?.setTextColor(ContextCompat.getColor(requireContext(), R.color.cool_green))
         }
     }
 }

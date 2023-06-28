@@ -18,22 +18,21 @@ import javax.inject.Inject
 class StockViewModel @Inject constructor(
     private val stockRepository: StockRepository
 ) : ViewModel() {
+
     private val _chosenStockSymbol = MutableLiveData<String>()
     private val _chosenStock = MutableLiveData<Stock>()
+    private var _stockLogo = _chosenStockSymbol.switchMap { stockRepository.getStockLogo(it) }
+    private var _stockQuote = _chosenStockSymbol.switchMap { stockRepository.getQuote(it) }
 
-    private var _stockLogo = _chosenStockSymbol.switchMap {
-        stockRepository.getStockLogo(it)
-    }
-    private var _stockQuote = _chosenStockSymbol.switchMap {
-        stockRepository.getQuote(it)
-    }
+    private var _stockCurrentPrice =
+        _chosenStockSymbol.switchMap { stockRepository.getCurrentPrice(it)
+        }
+
     private var _stockTimeSeries = _chosenStockSymbol.switchMap {
         stockRepository.getTimeSeries(it, interval = "1day", outputSize = "5000")
     }
-    private var _stockCurrentPrice = _chosenStockSymbol.switchMap {
-        stockRepository.getCurrentPrice(it)
-    }
 
+    
     val stockLogo: LiveData<Resource<StockImageURL>> = _stockLogo
     val chosenStockSymbol: MutableLiveData<String> get() = _chosenStockSymbol
     val stockQuote: LiveData<Resource<StockQuote>> = _stockQuote
@@ -54,9 +53,11 @@ class StockViewModel @Inject constructor(
         if (stock.buyingAmount?.equals("") == true) {
             return false
         }
+
         if (stock.buyingDate?.equals("") == true) {
             return false
         }
+
         return true
     }
 }

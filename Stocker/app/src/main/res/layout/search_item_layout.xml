@@ -7,7 +7,8 @@
     app:strokeWidth="1dp"
     app:strokeColor="@color/cool_blue_light"
     android:elevation="8dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    android:layoutDirection="ltr">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 style="@style/body2"
-                android:text="@string/exchange" />
+                android:text="@string/exchange"/>
         </LinearLayout>
 
         <LinearLayout

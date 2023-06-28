@@ -75,7 +75,7 @@
     <string name="current_portfolio_value_title">Portfolio Current Value:</string>
     <string name="portfolio_value">Portfolio Value</string>
     <string name="current_portfolio_value">00.00</string>
-    <string name="portfolio_change">Porfolio Change:</string>
+    <string name="portfolio_change">Portfolio Change:</string>
     <string name="refresh_button">REFRESH</string>
     <string name="title_edit_stock">Edit Stock</string>
     <string name="company_name">Company Name</string>
