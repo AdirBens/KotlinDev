@@ -6,6 +6,7 @@
     <string name="currency_suffix">₪</string>
     <string name="percents">%</string>
     <string name="add_percents" translatable="false">"%s%%"</string>
+    <string name="datetime_format">DD/MM/YYYY    HH:MM</string>
 
     // PageTitles
     <string name="title_your_stocks">המניות שלך</string>
@@ -37,10 +38,17 @@
     <string name="enter_stock_description">תיאור המניה</string>
     <string name="enter_stock_buying_price">מחיר הרכישה *</string>
     <string name="select_buying_date">תאריך הרכישה *</string>
+    <string name="enter_num_of_stocks">מספר המניות שנרכשו *</string>
     <string name="pick_image">בחר תמונה</string>
     <string name="finish">סיים</string>
     <string name="ticker_symbol">מזהה המניה</string>
     <string name="required">"נדרש"</string>
+    <string name="title_edit_stock">ערוך מניה</string>
+    <string name="current_portfolio_value">00.00</string>
+    <string name="portfolio_change">השינוי בתיק</string>
+    <string name="refresh_button">רענן</string>
+    <string name="current_portfolio_value_title">שווי התיק הנוכחי</string>
+
 
     //Detailed stock Fragment
     <string name="stock_description">תיאור</string>
@@ -57,31 +65,33 @@
     <string name="delete_all_msg">האם אתה בטוח שאתה רוצה למחוק את כל המניות?</string>
     <string name="delete_del_btn">מחיקה</string>
     <string name="delete_cancel_btn">ביטול</string>
-    <string name="noMarketData">No market data found for the date chosen, entering last known price</string>
-    <string name="noEnoughData">"Sorry not enough market data found for the parameters chosen, could not add stock"</string>
+    <string name="noMarketData">לא מצאנו את נתוני השוק המבוקשים. הנתונים האחרונים שידועים הם אלו שיוכנסו</string>
+    <string name="noEnoughData">"מצטערים, לא הצלחנו לאסוף מספיק מידע כדי להוסיף את המניה."</string>
+
+    <string name="out_of_credit">מכסת הבקשות לדקה הקרובה אזלה</string>
 
 
     <string name="delete_one_stock">מחק מניה</string>
     <string name="delete_one_stock_msg">האם אתה בטוח שאתה רוצה למחוק את המניה?</string>
-    <string name="company_name">Company Name</string>
-    <string name="exchange">Exchange</string>
-    <string name="search">Search</string>
-    <string name="title_search">Search</string>
-    <string name="country_name">Country Name</string>
-    <string name="currency">Currency\t\t</string>
-    <string name="summary">Summary</string>
-    <string name="stock_list_empty_message">Your list is currently empty. \n\nAdd stocks to your list by clicking the + button.</string>
-    <string name="stock_already_added">Stock already added, please choose another</string>
+    <string name="company_name">שם החברה</string>
+    <string name="exchange">בורסה</string>
+    <string name="search">חפש</string>
+    <string name="title_search">חיפוש</string>
+    <string name="country_name">מדינה</string>
+    <string name="currency">מטבע\t\t</string>
+    <string name="summary">סיכום</string>
+    <string name="stock_list_empty_message">רשימת המניות שלך ריקה\nלחץ על כפתור ה + כדי להוסיף מניה לתיק</string>
+    <string name="stock_already_added">המניה כבר נמצאת בתיק שלך. אנא בחר אחת אחרת</string>
     <string name="edit_button">כפתור עריכה</string>
     <string name="title_portfolio_summary">סיכום תיק</string>
     <string name="portfolio_value_title">ערך תיק נוכחי:</string>
-    <string name="portfolio_buying_value">Portfolio Buying Value</string>
-    <string name="delete_all">Delete All</string>
-    <string name="no_data_available">No data available</string>
-    <string name="enter_ticker_symbol">Enter ticker symbol</string>
-    <string name="Portfolio">Portfolio</string>
-    <string name="stock_price">Stock Price\n</string>
+    <string name="portfolio_buying_value">סכום קניית התיק</string>
+    <string name="delete_all">מחק הכל</string>
+    <string name="no_data_available">אין מידע זמין</string>
+    <string name="enter_ticker_symbol">הכנס מזהה מניה</string>
+    <string name="Portfolio">תיק מניות</string>
+    <string name="stock_price">מחיר המניה\n</string>
 
-    <string name="portfolio_value">Portfolio Value</string>
+    <string name="portfolio_value">שווי התיק</string>
 
 </resources>

@@ -88,5 +88,6 @@
     <string name="enter_ticker_symbol">Enter ticker symbol</string>
     <string name="Portfolio">Portfolio</string>
     <string name="stock_price">Stock Price\n</string>
+    <string name="out_of_credit">Out of Api Credits.</string>
 </resources>
 

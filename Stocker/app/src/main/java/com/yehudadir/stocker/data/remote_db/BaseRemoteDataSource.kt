@@ -1,5 +1,7 @@
 package com.yehudadir.stocker.data.remote_db
 
+import android.content.res.Resources
+import com.yehudadir.stocker.R
 import retrofit2.Response
 import java.lang.Exception
 
@@ -16,7 +18,7 @@ abstract class BaseRemoteDataSource {
                 val body = results.body()
 
                 if (headers["Api-Credits-Left"] == "0") {
-                    return Resource.error("Out of Api Credits.")
+                    return Resource.error(Resources.getSystem().getString(R.string.out_of_credit))
                 }
 
                 else if (body != null) {
