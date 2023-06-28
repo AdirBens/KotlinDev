@@ -40,7 +40,6 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
         }
     }
 
-    /// TODO: why not use this in updateStock ,instead of removeStockDataFromPortfolio directly?
     fun deleteStock(stock: Stock) {
         removeStockDataFromPortfolio(stock)
         viewModelScope.launch {
@@ -119,39 +118,39 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
                     }
             }
 
-        val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
-        val buyingPrice = stock.buyingPrice ?: 0.0
-        val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
+            val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
+            val buyingPrice = stock.buyingPrice ?: 0.0
+            val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
 
-        portfolio.value!!.currentValue -= stockQuoteClose * buyingAmount.toFloat()
-        portfolio.value!!.buyingValue -= buyingPrice.toFloat() * buyingAmount.toFloat()
-        stockRepository.updatePortfolio(portfolio.value!!)
-    }
-}
-
-fun addPortfolio(portfolio: Portfolio) {
-    viewModelScope.launch(Dispatchers.IO) {
-        stockRepository.addPortfolio(portfolio)
-    }
-}
-
-fun setChosenStock(stock: Stock) {
-    _chosenStock.value = stock
-}
-
-private fun getIndexByDate(
-    stocksSeriesValues: List<StockTimeSeriesValue>,
-    buyingDate: String
-): Int {
-    val searchDate = convertDateFormat(buyingDate)
-    var index = stocksSeriesValues.binarySearch {
-        String.CASE_INSENSITIVE_ORDER.reversed().compare(it.datetime, searchDate)
+            portfolio.value!!.currentValue -= stockQuoteClose * buyingAmount.toFloat()
+            portfolio.value!!.buyingValue -= buyingPrice.toFloat() * buyingAmount.toFloat()
+            stockRepository.updatePortfolio(portfolio.value!!)
+        }
     }
 
-    if (index < 0) {
-        index = stocksSeriesValues.size - 1
+    fun addPortfolio(portfolio: Portfolio) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stockRepository.addPortfolio(portfolio)
+        }
     }
 
-    return index
-}
+    fun setChosenStock(stock: Stock) {
+        _chosenStock.value = stock
+    }
+
+    private fun getIndexByDate(
+        stocksSeriesValues: List<StockTimeSeriesValue>,
+        buyingDate: String
+    ): Int {
+        val searchDate = convertDateFormat(buyingDate)
+        var index = stocksSeriesValues.binarySearch {
+            String.CASE_INSENSITIVE_ORDER.reversed().compare(it.datetime, searchDate)
+        }
+
+        if (index < 0) {
+            index = stocksSeriesValues.size - 1
+        }
+
+        return index
+    }
 }

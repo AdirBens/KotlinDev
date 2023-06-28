@@ -6,11 +6,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-fun getCurrentDate(): String {
-        val currentDate = Calendar.getInstance().time
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return dateFormat.format(currentDate)
-    }
 fun showDatePicker(context: Context, callback: (String) -> Unit) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -40,12 +35,4 @@ fun convertLongToShortDateFormat(date: String): String {
 
         val parsedDate = inputFormat.parse(date)
         return outputFormat.format(parsedDate)
-}
-
-fun convertStringToDate(date: String): Calendar {
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val parsedDate = inputFormat.parse(date)
-        val calendar = Calendar.getInstance()
-        calendar.time = parsedDate
-        return calendar
 }

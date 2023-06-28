@@ -16,8 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StockViewModel @Inject constructor(
-        private val stockRepository : StockRepository
-    ) : ViewModel() {
+    private val stockRepository: StockRepository
+) : ViewModel() {
     private val _chosenStockSymbol = MutableLiveData<String>()
     private val _chosenStock = MutableLiveData<Stock>()
 
@@ -50,15 +50,11 @@ class StockViewModel @Inject constructor(
         setSymbol(stock.tickerSymbol)
     }
 
-    fun getStock(symbol:String) : LiveData<Resource<Stock>> {
-        return stockRepository.getStock(symbol)
-    }
-
     fun isStockEntryValid(stock: Stock): Boolean {
-        if (stock.buyingAmount?.equals("")==true) {
+        if (stock.buyingAmount?.equals("") == true) {
             return false
         }
-        if (stock.buyingDate?.equals("")==true) {
+        if (stock.buyingDate?.equals("") == true) {
             return false
         }
         return true

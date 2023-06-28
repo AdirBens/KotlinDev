@@ -3,7 +3,6 @@ package com.yehudadir.stocker.data.model.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Entity(tableName = "portfolio_table")

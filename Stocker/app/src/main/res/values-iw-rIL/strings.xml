@@ -5,6 +5,7 @@
     // symbols
     <string name="currency_suffix">₪</string>
     <string name="percents">%</string>
+    <string name="add_percents" translatable="false">"%s%%"</string>
 
     // PageTitles
     <string name="title_your_stocks">המניות שלך</string>
@@ -12,7 +13,7 @@
     <string name="title_add_stock">הוסף מניה</string>
 
     // Stocks main
-    <string name="title_stocks_list">רשימת המניות במעקב</string>
+    <string name="title_stocks_list">מניות במעקב</string>
 
     // OverView Card
     <string name="ov_title">"ערך תיק המניות"</string>
@@ -56,6 +57,9 @@
     <string name="delete_all_msg">האם אתה בטוח שאתה רוצה למחוק את כל המניות?</string>
     <string name="delete_del_btn">מחיקה</string>
     <string name="delete_cancel_btn">ביטול</string>
+    <string name="noMarketData">No market data found for the date chosen, entering last known price</string>
+    <string name="noEnoughData">"Sorry not enough market data found for the parameters chosen, could not add stock"</string>
+
 
     <string name="delete_one_stock">מחק מניה</string>
     <string name="delete_one_stock_msg">האם אתה בטוח שאתה רוצה למחוק את המניה?</string>
@@ -76,4 +80,8 @@
     <string name="no_data_available">No data available</string>
     <string name="enter_ticker_symbol">Enter ticker symbol</string>
     <string name="Portfolio">Portfolio</string>
+    <string name="stock_price">Stock Price\n</string>
+
+    <string name="portfolio_value">Portfolio Value</string>
+
 </resources>

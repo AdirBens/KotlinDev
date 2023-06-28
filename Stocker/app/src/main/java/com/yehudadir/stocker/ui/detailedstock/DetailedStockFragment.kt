@@ -1,6 +1,5 @@
 package com.yehudadir.stocker.ui.detailedstock
 
-import android.content.res.Configuration
 import com.yehudadir.stocker.R
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +13,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.yehudadir.stocker.data.model.entities.Stock
 import com.yehudadir.stocker.utils.autoCleared
 import com.yehudadir.stocker.databinding.DetailedStockFragmentBinding
 import com.yehudadir.stocker.ui.viewmodels.StockViewModel
@@ -22,13 +20,6 @@ import com.yehudadir.stocker.ui.viewmodels.PortfolioViewModel
 import com.yehudadir.stocker.common.Error
 import com.yehudadir.stocker.common.Loading
 import com.yehudadir.stocker.common.Success
-import com.yehudadir.stocker.utils.convertLongToShortDateFormat
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.yehudadir.stocker.utils.GraphHelpers
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +29,7 @@ class DetailedStockFragment : Fragment() {
     private var binding: DetailedStockFragmentBinding by autoCleared()
     private val stockViewModel: StockViewModel by viewModels()
     private val portfolioViewModel: PortfolioViewModel by activityViewModels()
-
+    private val graphTimeSpan = 90
 
     private var currentPrice = 0.0f
 
@@ -66,7 +57,7 @@ class DetailedStockFragment : Fragment() {
             setBalance(it.buyingPrice!!, currentPrice)
             binding.tickerSymbol.text = it.tickerSymbol
             binding.companyName.text = it.stockQuote?.name
-            binding.descriptionText.text = it.description
+            binding.descriptionText?.text = it.description
             binding.buyingDate.text = it.buyingDate
             binding.buyingPrice.text = it.buyingPrice.toString()
             binding.currentPrice.text = currentPrice.toString()
@@ -76,7 +67,7 @@ class DetailedStockFragment : Fragment() {
             Glide.with(requireContext()).load(it?.imageUri).circleCrop().into(binding.stockImage)
 
             val graph = GraphHelpers(requireContext(), binding.portfolioGraph)
-            graph.buildStockGraph(it)
+            graph.buildStockGraph(it, graphTimeSpan)
         }
     }
 
@@ -119,7 +110,7 @@ class DetailedStockFragment : Fragment() {
             binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         } else {
             binding.balanceArrow.setImageResource(R.drawable.baseline_arrow_upward_24)
-            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.teal_700))
+            binding.balance.setTextColor(ContextCompat.getColor(requireContext(), R.color.cool_green))
         }
     }
 }

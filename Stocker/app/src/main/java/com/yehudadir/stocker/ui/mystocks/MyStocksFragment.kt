@@ -132,7 +132,7 @@ class MyStocksFragment : Fragment() {
     private fun setupPortfolioGraph() {
         val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
         val graphTimeSpan = 30
-        val graphLabel = "Portfolio Value"  // TODO: get from strings
+        val graphLabel = getString(R.string.portfolio_value)
 
         lineChart = binding.portfolioGraph
         graph = GraphHelpers(requireContext(), lineChart)

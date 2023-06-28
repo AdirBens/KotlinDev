@@ -197,7 +197,7 @@ class AddEditStockFragment : Fragment() {
                 if (stock.buyingPrice == null) {
                     Toast.makeText(
                         requireContext(),
-                        "Sorry not enough market data found for the parameters chosen, could not add stock",
+                        R.string.noEnoughData,
                         Toast.LENGTH_SHORT
                     ).show()
                     findNavController().navigate(R.id.action_addEditStockFragment_to_myStocksFragment)
@@ -225,7 +225,7 @@ class AddEditStockFragment : Fragment() {
         else {
             Toast.makeText(
                 requireContext(),
-                "No market data found for the date chosen, entering last known price",
+                R.string.noMarketData,
                 Toast.LENGTH_LONG
             ).show()
             return false
