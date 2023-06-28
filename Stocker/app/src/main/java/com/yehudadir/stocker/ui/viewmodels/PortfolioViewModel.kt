@@ -23,7 +23,9 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
     private val _chosenStock = MutableLiveData<Stock>()
     val chosenStock: MutableLiveData<Stock> get() = _chosenStock
     val stocks: LiveData<Resource<List<Stock>>> = stockRepository.getAllStocks()
-    var portfolio: LiveData<Portfolio> = stockRepository.getPortfolio(1)
+    val portfolio: LiveData<Resource<Portfolio>> = stockRepository.getPortfolio(1)
+    val portfolioData = portfolio.value?.status?.data
+
     private val portfolioLock = Any()
 
     fun addStock(stock: Stock) {
@@ -60,7 +62,7 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
         viewModelScope.launch(Dispatchers.IO) {
             synchronized(portfolioLock) {
                 val portfolioValueTimeSeries =
-                    portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+                    portfolioData?.portfolioValueTimeSeries ?: mutableListOf()
                 val stocksSeriesValues = stock.stockTimeSeries?.values!!
                 val index = getIndexByDate(stocksSeriesValues, stock.buyingDate!!)
 
@@ -89,9 +91,9 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
             val buyingPrice = stock.buyingPrice ?: 0.0
             val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
 
-            portfolio.value!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
-            portfolio.value!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
-            stockRepository.updatePortfolio(portfolio.value!!)
+            portfolioData!!.currentValue += stockQuoteClose * buyingAmount.toFloat()
+            portfolioData!!.buyingValue += buyingPrice.toFloat() * buyingAmount.toFloat()
+            stockRepository.updatePortfolio(portfolioData!!)
         }
     }
 
@@ -99,7 +101,7 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
         viewModelScope.launch(Dispatchers.IO) {
             synchronized(portfolioLock) {
                 val portfolioValueTimeSeries =
-                    portfolio.value?.portfolioValueTimeSeries ?: mutableListOf()
+                    portfolioData?.portfolioValueTimeSeries ?: mutableListOf()
                 val stocksSeriesValues = stock.stockTimeSeries?.values!!
                 val index = getIndexByDate(stocksSeriesValues, stock.buyingDate!!)
 
@@ -119,39 +121,39 @@ class PortfolioViewModel @Inject constructor(private val stockRepository: StockR
                     }
             }
 
-        val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
-        val buyingPrice = stock.buyingPrice ?: 0.0
-        val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
+            val stockQuoteClose = stock.stockQuote?.close?.toFloat() ?: 0.0f
+            val buyingPrice = stock.buyingPrice ?: 0.0
+            val buyingAmount = stock.buyingAmount?.toFloat() ?: 0
 
-        portfolio.value!!.currentValue -= stockQuoteClose * buyingAmount.toFloat()
-        portfolio.value!!.buyingValue -= buyingPrice.toFloat() * buyingAmount.toFloat()
-        stockRepository.updatePortfolio(portfolio.value!!)
-    }
-}
-
-fun addPortfolio(portfolio: Portfolio) {
-    viewModelScope.launch(Dispatchers.IO) {
-        stockRepository.addPortfolio(portfolio)
-    }
-}
-
-fun setChosenStock(stock: Stock) {
-    _chosenStock.value = stock
-}
-
-private fun getIndexByDate(
-    stocksSeriesValues: List<StockTimeSeriesValue>,
-    buyingDate: String
-): Int {
-    val searchDate = convertDateFormat(buyingDate)
-    var index = stocksSeriesValues.binarySearch {
-        String.CASE_INSENSITIVE_ORDER.reversed().compare(it.datetime, searchDate)
+            portfolioData!!.currentValue -= stockQuoteClose * buyingAmount.toFloat()
+            portfolioData!!.buyingValue -= buyingPrice.toFloat() * buyingAmount.toFloat()
+            stockRepository.updatePortfolio(portfolioData!!)
+        }
     }
 
-    if (index < 0) {
-        index = stocksSeriesValues.size - 1
+    fun addPortfolio(portfolio: Portfolio) {
+        viewModelScope.launch(Dispatchers.IO) {
+            stockRepository.addPortfolio(portfolio)
+        }
     }
 
-    return index
-}
+    fun setChosenStock(stock: Stock) {
+        _chosenStock.value = stock
+    }
+
+    private fun getIndexByDate(
+        stocksSeriesValues: List<StockTimeSeriesValue>,
+        buyingDate: String
+    ): Int {
+        val searchDate = convertDateFormat(buyingDate)
+        var index = stocksSeriesValues.binarySearch {
+            String.CASE_INSENSITIVE_ORDER.reversed().compare(it.datetime, searchDate)
+        }
+
+        if (index < 0) {
+            index = stocksSeriesValues.size - 1
+        }
+
+        return index
+    }
 }

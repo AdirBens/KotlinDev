@@ -34,12 +34,10 @@ class StockRepository @Inject constructor(
         localStocksDataSource.getStocks()
     }
 
-    fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
-
-
-//    fun getPortfolio(id:Int) = performLocalFetching {
-//        localPortfolioDataSource.getPortfolio(id)
-//    }
+//    fun getPortfolio(id:Int) = localPortfolioDataSource.getPortfolio(id)
+    fun getPortfolio(id:Int) = performLocalFetching {
+        localPortfolioDataSource.getPortfolio(id)
+    }
 
     suspend fun addStock(stock: Stock)  = withContext(Dispatchers.IO) {
         localStocksDataSource.addStock(stock)

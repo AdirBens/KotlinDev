@@ -29,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MyStocksFragment : Fragment() {
     private var binding: MyStocksFragmentBinding by autoCleared()
     private val portfolioViewModel: PortfolioViewModel by activityViewModels()
+    private lateinit var portfolioData : Portfolio
     private lateinit var lineChart: LineChart
     private lateinit var graph: GraphHelpers
 
@@ -49,7 +50,9 @@ class MyStocksFragment : Fragment() {
         setupToolbar()
         setupNavHost()
         portfolioViewModel.portfolio.observe(viewLifecycleOwner) {
-            if (portfolioViewModel.portfolio.value?.id != 1) {
+            portfolioData = portfolioViewModel.portfolio.value?.status?.data!!
+
+            if (portfolioData.id != 1) {
                 val portfolio = Portfolio(1, 0f, 0f, 0f)
 
                 portfolioViewModel.addPortfolio(portfolio)
@@ -90,9 +93,9 @@ class MyStocksFragment : Fragment() {
 
     private fun updatePortfolioValue() {
         binding.currentPortfolioValue?.text =
-            String.format("%.2f", portfolioViewModel.portfolio.value?.currentValue)
+            String.format("%.2f", portfolioData.currentValue)
         binding.portfolioBuyinValue?.text =
-            String.format("%.2f", portfolioViewModel.portfolio.value?.buyingValue)
+            String.format("%.2f", portfolioData.buyingValue)
     }
 
     private fun showDeleteStockDialog(stockToDelete: Stock, viewHolder: ViewHolder) {
@@ -130,7 +133,7 @@ class MyStocksFragment : Fragment() {
     }
 
     private fun setupPortfolioGraph() {
-        val portfolioValueTimeSeries = portfolioViewModel.portfolio.value?.portfolioValueTimeSeries
+        val portfolioValueTimeSeries = portfolioData.portfolioValueTimeSeries
         val graphTimeSpan = 30
         val graphLabel = "Portfolio Value"  // TODO: get from strings
 
@@ -185,7 +188,7 @@ class MyStocksFragment : Fragment() {
                 viewHolder: ViewHolder,
                 target: ViewHolder
             ): Boolean {
-                TODO("Not yet implemented")
+                return false
             }
 
             override fun onSwiped(
